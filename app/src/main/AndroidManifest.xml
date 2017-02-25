@@ -30,6 +30,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.MyProfileActivity"></activity>
+        ChooseCityActivity
+        <activity android:name=".activity.ChooseCityActivity" />
         <activity android:name=".activity.TempActivity" />
         <activity android:name=".activity.LoginActivity" />
 

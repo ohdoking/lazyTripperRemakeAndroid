@@ -1,5 +1,7 @@
 package com.yapp.lazitripper.activity;
 
+import android.widget.ListView;
+
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
@@ -7,6 +9,10 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
+import android.os.Bundle;
+import android.util.Log;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -17,6 +23,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.yapp.lazitripper.R;
+import com.yapp.lazitripper.common.ConstantIntent;
 import com.yapp.lazitripper.dto.PlaceInfoDto;
 
 import java.util.ArrayList;
@@ -67,6 +74,10 @@ public class TravelSummaryActivity extends FragmentActivity implements OnMapRead
 
 
 
+        Intent intent = getIntent();
+        ArrayList<PlaceInfoDto> list =
+                (ArrayList<PlaceInfoDto>)intent.getSerializableExtra(ConstantIntent.PLACELIST);
+        Log.i("ohdoking",list.get(0).getTitle());
 
     }
 

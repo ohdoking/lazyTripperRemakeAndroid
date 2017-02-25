@@ -1,5 +1,7 @@
 package com.yapp.lazitripper.dto;
 
+import java.io.Serializable;
+
 /**
  * Created by ohdok on 2017-02-25.
  */
@@ -29,8 +31,11 @@ package com.yapp.lazitripper.dto;
     title	제목	콘텐츠 제목
 
 * */
-public class PlaceInfoDto {
+public class PlaceInfoDto implements Serializable {
 
+    public PlaceInfoDto(){
+
+    }
     private String addr1;
     private String addr2;
     private Integer areacode;
