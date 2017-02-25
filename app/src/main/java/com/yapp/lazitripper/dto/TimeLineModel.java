@@ -1,4 +1,4 @@
-package com.yapp.lazitripper.activity;
+package com.yapp.lazitripper.dto;
 
 import java.io.Serializable;
 

@@ -1,4 +1,4 @@
-package com.yapp.lazitripper.activity;
+package com.yapp.lazitripper.util;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.vipul.hp_hp.timelineview.TimelineView;
 import com.yapp.lazitripper.R;
+import com.yapp.lazitripper.dto.TimeLineModel;
 
 import java.util.List;
 
@@ -35,7 +36,6 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineViewHolder> {
         mFeedList.remove(mFeedList.size()-1);
         notifyDataSetChanged();
     }
-
 
     @Override
     public long getItemId(int position) {
@@ -70,9 +70,6 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineViewHolder> {
             public void onClick(View view) {
 
                 Toast.makeText(mContext, "Recycle Click" + position, Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(mContext, test.class);
-                intent.putExtra("test", String.valueOf(position));
-                mContext.startActivity(intent);
             }
         });
     }

@@ -1,4 +1,4 @@
-package com.yapp.lazitripper.activity;
+package com.yapp.lazitripper.util;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
