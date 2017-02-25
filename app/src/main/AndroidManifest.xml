@@ -65,7 +65,8 @@
         <activity
             android:name=".activity.TravelSummaryActivity"
             android:label="@string/title_activity_travel_summary" />
-        <activity android:name=".activity.KeywordSelectActivity"></activity>
+        <activity android:name=".activity.KeywordSelectActivity" />
+        <activity android:name=".activity.HomeActivity"></activity>
     </application>
 
 </manifest>

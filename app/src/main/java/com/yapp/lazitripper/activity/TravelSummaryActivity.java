@@ -1,5 +1,6 @@
 package com.yapp.lazitripper.activity;
 
+import android.graphics.Color;
 import android.widget.ListView;
 
 import android.os.Bundle;
@@ -22,6 +23,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.yapp.lazitripper.R;
 import com.yapp.lazitripper.common.ConstantIntent;
 import com.yapp.lazitripper.dto.PlaceInfoDto;
@@ -43,41 +46,22 @@ public class TravelSummaryActivity extends FragmentActivity implements OnMapRead
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_travel_summary);
 
-
+        Intent intent = getIntent();
+        ArrayList<PlaceInfoDto> list2 =
+                (ArrayList<PlaceInfoDto>)intent.getSerializableExtra(ConstantIntent.PLACELIST);
 
         //리스트뷰
         list = (ListView) findViewById(R.id.listview);
 
         adapter = new PlaceInfoAdapter();
-
-        PlaceInfoDto a = new PlaceInfoDto();
-        PlaceInfoDto b = new PlaceInfoDto();
-        PlaceInfoDto c = new PlaceInfoDto();
-        a.setAddr1("???");a.setMapx(37.555744f);a.setMapy(126.970431f);
-        b.setAddr1("adf");b.setMapx(37.755744f);b.setMapy(126.970431f);
-        c.setAddr1("sefes");c.setMapx(37.855744f);c.setMapy(126.970431f);
-
-
-        adapter.addItem(a);
-        adapter.addItem(b);
-        adapter.addItem(c);
+        adapter.addAllItem(list2);
 
         list.setAdapter(adapter);
-
-
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-
-
-
-        Intent intent = getIntent();
-        ArrayList<PlaceInfoDto> list =
-                (ArrayList<PlaceInfoDto>)intent.getSerializableExtra(ConstantIntent.PLACELIST);
-        Log.i("ohdoking",list.get(0).getTitle());
 
     }
 
@@ -95,14 +79,9 @@ public class TravelSummaryActivity extends FragmentActivity implements OnMapRead
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(
-                new LatLng(37.555744, 126.970431)   // 위도, 경도
-        ));
 
-        // 구글지도(지구) 에서의 zoom 레벨은 1~23 까지 가능합니다.
-        // 여러가지 zoom 레벨은 직접 테스트해보세요
-        CameraUpdate zoom = CameraUpdateFactory.zoomTo(15);
-        googleMap.animateCamera(zoom);   // moveCamera 는 바로 변경하지만,
+
+
         // animateCamera() 는 근거리에선 부드럽게 변경합니다
 
         // marker 표시
@@ -126,11 +105,27 @@ public class TravelSummaryActivity extends FragmentActivity implements OnMapRead
         //makeMarker(37.2f,127.1f,"aersdf","gEsfsf");
         //makeMarker(37.3f,127.2f,"awesfsag","qEsf");
 
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(
+                new LatLng(adapter.getItem(0).getMapy(), adapter.getItem(0).getMapx())   // 위도, 경도
+        ));
+//        View v = getSupportFragmentManager().findFragmentById(R.id.map).getView();
+//        v.setAlpha(0.5f);
+        // 구글지도(지구) 에서의 zoom 레벨은 1~23 까지 가능합니다.
+        // 여러가지 zoom 레벨은 직접 테스트해보세요
+        CameraUpdate zoom = CameraUpdateFactory.zoomTo(9);
+        googleMap.animateCamera(zoom);   // moveCamera 는 바로 변경하지만,
+        int index = adapter.getCount();
+        LatLng[] latLngList = new LatLng[index];
         for(int i=0;i<adapter.getCount();i++){
-            PlaceInfoDto temp = (PlaceInfoDto)adapter.getItem(i);
-            makeMarker(temp.getMapx(), temp.getMapy(), temp.getAddr1(), null);
-
+            PlaceInfoDto temp = adapter.getItem(i);
+            makeMarker(temp.getMapy(), temp.getMapx(), temp.getAddr1(), null);
+            latLngList[i] = new LatLng(temp.getMapy(), temp.getMapx());
         }
+
+        Polyline line = mMap.addPolyline(new PolylineOptions()
+                .add(latLngList)
+                .width(30)
+                .color(Color.parseColor("#FEDF6B")));
         // 마커클릭 이벤트 처리
         // GoogleMap 에 마커클릭 이벤트 설정 가능.
         googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
@@ -152,10 +147,11 @@ public class TravelSummaryActivity extends FragmentActivity implements OnMapRead
     }
 
 
-    private void makeMarker(float lat,float lng,String title,String sni){
+    void makeMarker(float lat,float lng,String title,String sni){
 
         MarkerOptions temp = new MarkerOptions();
         temp.position(new LatLng(lat, lng)).title(title).snippet(sni);
+        Log.i("ohdoking-lat",lat+" / " + lng);
         mMap.addMarker(temp).showInfoWindow();
 
     }
@@ -170,13 +166,17 @@ public class TravelSummaryActivity extends FragmentActivity implements OnMapRead
             items.add(dto);
         }
 
+        public void addAllItem(ArrayList<PlaceInfoDto> dto){
+            items.addAll(dto);
+        }
+
         @Override
         public int getCount() {
             return items.size();
         }
 
         @Override
-        public Object getItem(int position) {
+        public PlaceInfoDto getItem(int position) {
             return items.get(position);
         }
 
@@ -198,6 +198,8 @@ public class TravelSummaryActivity extends FragmentActivity implements OnMapRead
             view.setName(curItem.getAddr1());
             view.setLat(curItem.getMapx().toString());
             view.setLng(curItem.getMapy().toString());
+            Log.i("ohdoking-lat","!!!");
+//            makeMarker(curItem.getMapx(), curItem.getMapy(), curItem.getAddr1(), null);
 
 
             return view;
