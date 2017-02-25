@@ -88,7 +88,8 @@ public interface LaziTripperKoreanTourService {
             @Query("listYN") String listYN,
             @Query("MobileOS") String MobileOS,
             @Query("MobileApp") String MobileApp,
-            @Query("areaCode") Integer areaCode);
+            @Query("areaCode") Integer areaCode,
+            @Query("contentTypeId") Integer contentTypeId);
 
     /*
         위치 기준으로 장소 정보 제공

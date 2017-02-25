@@ -17,6 +17,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 import com.yapp.lazitripper.R;
 import com.yapp.lazitripper.common.ConstantIntent;
@@ -46,38 +50,47 @@ public class ChoosePlaceActivity extends AppCompatActivity {
     public static ViewHolder viewHolder;
     private List<PlaceInfoDto> array;
     SwipeFlingAdapterView flingContainer;
-    SharedPreferences pref;
-    SharedPreferences.Editor editor;
 
     public PlaceInfoDto placeInfoDto;
     public LaziTripperKoreanTourClient laziTripperKoreanTourClient;
     public LaziTripperKoreanTourService laziTripperKoreanTourService;
 
     Integer cityCode;
+    TextView kindTextVeiw;
 
+    /*
+        기본 선택 값들
+    * */
+    Integer landMarkCount = 4;
+    Integer restaurantCount = 3;
+    Integer hotelCount = 1;
 
+    Integer locationCount = 0;
+    //0. 랜드마크, 1. 레스토랑 2. 호텔
+    Integer locationFlag = 0;
+    Integer count = 0;
+
+    ArrayList<PlaceInfoDto> placeInfoDtoList = new ArrayList<PlaceInfoDto>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_place);
-
-        pref = getPreferences(MODE_PRIVATE);
-        editor = pref.edit();
-
+        kindTextVeiw = (TextView) findViewById(R.id.kindTextView);
         //이전 엑티비티에서 city code를 가져옴
         cityCode = getIntent().getIntExtra(ConstantIntent.CITYCODE,1);
         flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
         array = new ArrayList<>();
-        getCityData();
+        //12 관광지
+        getPlaceData(12);
         renderItem();
 
     }
 
-    void getCityData(){
+    void getPlaceData(Integer cat){
         laziTripperKoreanTourClient = new LaziTripperKoreanTourClient(getApplicationContext());
         laziTripperKoreanTourService = laziTripperKoreanTourClient.getLiziTripperService();
         //@TODO 국가 정보를 받아서 지역을 뿌려준다.
-        Call<CommonResponse<PlaceInfoDto>> callRelionInfo = laziTripperKoreanTourService.getPlaceInfoByCity(20,1,"B","Y","AND","LaziTripper",cityCode);
+        Call<CommonResponse<PlaceInfoDto>> callRelionInfo = laziTripperKoreanTourService.getPlaceInfoByCity(20,1,"B","Y","AND","LaziTripper",cityCode, cat);
 
         callRelionInfo.enqueue(new Callback<CommonResponse<PlaceInfoDto>>() {
             @Override
@@ -117,8 +130,8 @@ public class ChoosePlaceActivity extends AppCompatActivity {
             return list.size();
         }
 
-        public Object getItem(int position){
-            return position;
+        public PlaceInfoDto getItem(int position){
+            return list.get(position);
         }
 
         public long getItemId(int position){
@@ -176,25 +189,52 @@ public class ChoosePlaceActivity extends AppCompatActivity {
                 //You also have access to the original object.
                 //If you want to use it just cast it (String) dataObject
                 Toast.makeText(ChoosePlaceActivity.this, "Left!", Toast.LENGTH_SHORT).show();
-                editor.putString("ID","아이디~!~");
-                editor.commit();
             }
 
             @Override
             public void onRightCardExit(Object dataObject) {
-                Toast.makeText(ChoosePlaceActivity.this, "Right!", Toast.LENGTH_SHORT).show();
-                String s = pref.getString("ID","없음");
-                Log.d("test",s+"ddddddddddddd");
+                Toast.makeText(ChoosePlaceActivity.this, dataObject.toString(), Toast.LENGTH_SHORT).show();
+                placeInfoDtoList.add((PlaceInfoDto) dataObject);
+                count++;
+                locationCount++;
+                if(locationFlag == 0){
+                    if(landMarkCount == locationCount || array.size() == count){
+                        locationCount = 0;
+                        locationFlag = 1;
+                        count = 0;
+                        kindTextVeiw.setText("음식");
+                        //39 음식
+                        getPlaceData(39);
+                    }
+                }
+                else if(locationFlag == 1){
+                    if(restaurantCount == locationCount || array.size() == count) {
+                        locationCount = 0;
+                        locationFlag = 2;
+                        count = 0;
+                        kindTextVeiw.setText("숙박");
+                        //32 숙박
+                        getPlaceData(32);
+                    }
+                }
+                else if(locationFlag == 2){
+                    if(hotelCount == locationCount || array.size() == count){
+                        locationCount = 0;
+                        count = 0;
+                        Intent i = new Intent(ChoosePlaceActivity.this, TravelSummaryActivity.class);
+                        i.putExtra(ConstantIntent.PLACELIST,placeInfoDtoList);
+                        startActivity(i);
+                    }
+                }
+
             }
 
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
-
                 myAdapter.notifyDataSetChanged();
                 i++;
             }
         });
-
 
         flingContainer.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
             @Override
