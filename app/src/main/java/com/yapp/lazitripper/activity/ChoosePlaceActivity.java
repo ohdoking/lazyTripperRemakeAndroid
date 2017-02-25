@@ -31,7 +31,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ChoosePlaceActivity extends AppCompatActivity {
+public class ChoosePlaceActivity extends BaseAppCompatActivity {
 
     //private ArrayList<ChosenPlaceItem> a;
     private ArrayList<String> b;
@@ -40,7 +40,7 @@ public class ChoosePlaceActivity extends AppCompatActivity {
     int i=0;
 
     public MyAdapter myAdapter;
-    public static ViewHolder viewHolder;
+    public ViewHolder viewHolder;
     private List<PlaceInfoDto> array;
     SwipeFlingAdapterView flingContainer;
 
@@ -68,6 +68,7 @@ public class ChoosePlaceActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_place);
+        setHeader();
         kindTextVeiw = (ImageView) findViewById(R.id.kindTextView);
         //이전 엑티비티에서 city code를 가져옴
         cityCode = getIntent().getIntExtra(ConstantIntent.CITYCODE,1);
@@ -103,7 +104,7 @@ public class ChoosePlaceActivity extends AppCompatActivity {
 
 
     public static class ViewHolder{
-        public static FrameLayout background;
+        public ImageView background;
         public TextView name;
         public ImageView image;
         public TextView _addr;
@@ -142,13 +143,13 @@ public class ChoosePlaceActivity extends AppCompatActivity {
                 rowView = inflater.inflate(R.layout.chosen_place, parent, false);
 
                 viewHolder = new ViewHolder();
-                viewHolder.background = (FrameLayout) findViewById(R.id.background);
-                viewHolder.name = (TextView) findViewById(R.id.name);
+                viewHolder.background = (ImageView) rowView.findViewById(R.id.backgroundImage);
+                viewHolder.name = (TextView) rowView.findViewById(R.id.name);
                 viewHolder.image = (ImageView) rowView.findViewById(R.id.image);
                 viewHolder._addr = (TextView) rowView.findViewById(R.id._addr);
                 viewHolder.addr = (TextView) rowView.findViewById(R.id.addr);
-                viewHolder._tel = (TextView) findViewById(R.id._tel);
-                viewHolder.tel = (TextView) findViewById(R.id.tel);
+                viewHolder._tel = (TextView) rowView.findViewById(R.id._tel);
+                viewHolder.tel = (TextView) rowView.findViewById(R.id.tel);
 
                 rowView.setTag(viewHolder);
 
@@ -157,9 +158,10 @@ public class ChoosePlaceActivity extends AppCompatActivity {
             }
             PlaceInfoDto curItem = list.get(position);
             Log.i("ohdoking",curItem.getTitle());
-            Glide.with(context).load(curItem.getFirstimage()).into(viewHolder.image);
+//            Glide.with(context).load(curItem.getFirstimage()).into(viewHolder.image);
 
-            viewHolder.background.setBackgroundColor(0xff556677);
+//            viewHolder.background.set(0xff556677);
+            Glide.with(context).load(curItem.getFirstimage()).into(viewHolder.background);
             viewHolder.name.setText(curItem.getTitle());
             viewHolder.image.setImageDrawable(getResources().getDrawable(R.drawable.korea));
             viewHolder._addr.setText("ADD");
