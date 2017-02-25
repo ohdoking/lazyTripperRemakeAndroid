@@ -48,17 +48,6 @@ public class ChoosePlaceActivity extends AppCompatActivity {
 
         flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
 
-//        a = new ArrayList<ChosenPlaceItem>();
-//        a.add(new ChosenPlaceItem(getResources().getDrawable(R.drawable.mario),"이진호","잠이오냐?"));
-//
-//        adapter = new ChosenPlaceAdapter(this, R.layout.chosen_place, R.id.text, a);
-
-//        b = new ArrayList<String>();
-//        b.add("sadfs");
-//        b.add("qwer");
-//
-//        arrayAdapter = new ArrayAdapter<String>(this,R.layout.chosen_place,R.id.text,b);
-
         array = new ArrayList<>();
         array.add(new ChosenPlaceItem(getResources().getDrawable(R.drawable.mario),"갓도근","진호야 일어나"));
         array.add(new ChosenPlaceItem(getResources().getDrawable(R.drawable.ruigi),"이진호","예 형 일어날게여"));
@@ -68,8 +57,6 @@ public class ChoosePlaceActivity extends AppCompatActivity {
 
         myAdapter = new MyAdapter(array,ChoosePlaceActivity.this);
         flingContainer.setAdapter(myAdapter);
-        //flingContainer.setAdapter(adapter);
-        //flingContainer.setAdapter(arrayAdapter);
         flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
 
             @Override
@@ -83,10 +70,6 @@ public class ChoosePlaceActivity extends AppCompatActivity {
                 Log.d("LIST", "removed object!");
                 array.remove(0);
                 myAdapter.notifyDataSetChanged();
-                //b.remove(0);
-                //a.remove(0);
-                //arrayAdapter.notifyDataSetChanged();
-                //adapter.notifyDataSetChanged();
 
             }
 
@@ -109,14 +92,8 @@ public class ChoosePlaceActivity extends AppCompatActivity {
 
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
-                // Ask for more data here
-                //s.add("XML ".concat(String.valueOf(i)));
-                //places.add("하이하이");
 
                 myAdapter.notifyDataSetChanged();
-                //arrayAdapter.notifyDataSetChanged();
-                //adapter.notifyDataSetChanged();
-
                 i++;
             }
         });
@@ -193,69 +170,4 @@ public class ChoosePlaceActivity extends AppCompatActivity {
 
 
     }
-
-/*
-    class ChosenPlaceAdapter extends BaseAdapter {
-
-
-        List<ChosenPlaceItem> mItems = new ArrayList<ChosenPlaceItem>();
-
-        public ChosenPlaceAdapter(Context context,int resourceId, ArrayList<ChosenPlaceItem> items){
-            super(context,resourceId,items);
-            mItems = items;
-        }
-
-        public ChosenPlaceAdapter(Context context, int resource, int textViewResourceId, List objects) {
-            super(context, resource, textViewResourceId, objects);
-            mItems = objects;
-        }
-
-        public void addItem(ChosenPlaceItem item){
-            mItems.add(item);
-        }
-
-        @Override
-        public int getCount() {
-            return mItems.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return mItems.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-
-            ChosenPlaceView itemView = null;
-            View v = convertView;
-
-            if(v == null){
-                LayoutInflater vi = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                v = vi.inflate(R.layout.chosen_place_item,null);
-            }
-
-            ChosenPlaceItem curItem = mItems.get(position);
-
-            if(curItem != null){
-                ImageView image = (ImageView) v.findViewById(R.id.image);
-                TextView name = (TextView) v.findViewById(R.id.name);
-                TextView description = (TextView) v.findViewById(R.id.description);
-
-            }
-
-
-            return v;
-        }
-
-
-
-    }*/
-
-
 }

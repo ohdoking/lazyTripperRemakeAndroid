@@ -49,4 +49,7 @@ dependencies {
 //    compile 'com.google.android.gms:play-services-appindexing:10.0.0'
     //tinder뭐시기
     compile 'com.lorentzos.swipecards:library:1.0.9'
+
+    // calendar 라이브러리
+    compile 'com.squareup:android-times-square:1.6.5@aar'
 }
