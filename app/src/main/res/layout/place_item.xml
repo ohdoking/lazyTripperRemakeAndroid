@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <com.vipul.hp_hp.timelineview.TimelineView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/timeline"
+        app:marker_size="25dp"
+        app:line_size="2dp"
+        app:line="@color/colorPrimary"/>
+    <android.support.v7.widget.CardView
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center_vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:id="@+id/frameview"
+            android:layout_gravity="right|bottom">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/image"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|right"
+                    android:id="@+id/placeDescription"
+                    android:text=""
+                    android:onClick="onDesClicked" />
+            </LinearLayout>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

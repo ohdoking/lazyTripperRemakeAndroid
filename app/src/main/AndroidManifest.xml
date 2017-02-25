@@ -19,6 +19,7 @@
         <activity android:name=".activity.ChoosePlaceActivity" />
         <activity android:name=".activity.SplashActivity" />
         <activity android:name=".activity.MyProfileActivity"></activity>
+        <activity android:name=".activity.TempActivity" />
     </application>
 
 </manifest>
