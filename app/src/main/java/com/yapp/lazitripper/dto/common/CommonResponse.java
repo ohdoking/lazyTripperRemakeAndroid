@@ -10,13 +10,13 @@ import com.google.gson.annotations.SerializedName;
 public class CommonResponse<T> {
     @SerializedName("response")
     @Expose
-    CommonResultDto<T> response;
+    CommonResult<T> response;
 
-    public CommonResultDto<T> getResponse() {
+    public CommonResult<T> getResponse() {
         return response;
     }
 
-    public void setResponse(CommonResultDto<T> response) {
+    public void setResponse(CommonResult<T> response) {
         this.response = response;
     }
 }

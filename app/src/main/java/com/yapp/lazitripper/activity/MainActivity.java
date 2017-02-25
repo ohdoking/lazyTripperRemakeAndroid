@@ -2,26 +2,18 @@ package com.yapp.lazitripper.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import com.yapp.lazitripper.R;
-import com.yapp.lazitripper.dto.common.CommonHeader;
-import com.yapp.lazitripper.dto.common.CommonResponse;
-import com.yapp.lazitripper.dto.RegionCode;
-import com.yapp.lazitripper.dto.RegionResultDto;
+import com.yapp.lazitripper.dto.RegionCodeDto;
 import com.yapp.lazitripper.network.LaziTripperKoreanTourClient;
 import com.yapp.lazitripper.service.LaziTripperKoreanTourService;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import static com.yapp.lazitripper.R.id.mypageBtn;
 
 public class MainActivity extends BaseAppCompatActivity {
 
-    public RegionCode regionCodeDto;
+    public RegionCodeDto regionCodeDtoDto;
     public LaziTripperKoreanTourClient laziTripperKoreanTourClient;
     public LaziTripperKoreanTourService laziTripperKoreanTourService;
 
@@ -33,17 +25,17 @@ public class MainActivity extends BaseAppCompatActivity {
 //        laziTripperKoreanTourClient = new LaziTripperKoreanTourClient(getApplicationContext());
 //        laziTripperKoreanTourService = laziTripperKoreanTourClient.getLiziTripperService();
 //
-//        Call<CommonResponse<RegionResultDto>> callRelionInfo = laziTripperKoreanTourService.getRelionInfo(100,1,"AND","LaziTripper",1);
+//        Call<CommonResponse<CommonItems>> callRelionInfo = laziTripperKoreanTourService.getRelionInfo(100,1,"AND","LaziTripper",1);
 //
-//        callRelionInfo.enqueue(new Callback<CommonResponse<RegionResultDto>>() {
+//        callRelionInfo.enqueue(new Callback<CommonResponse<CommonItems>>() {
 //            @Override
-//            public void onResponse(Call<CommonResponse<RegionResultDto>> call, Response<CommonResponse<RegionResultDto>> response) {
-//                RegionResultDto response2 = response.body().getResponse().getBody();
+//            public void onResponse(Call<CommonResponse<CommonItems>> call, Response<CommonResponse<CommonItems>> response) {
+//                CommonItems response2 = response.body().getResponse().getBody();
 //                Log.i("ohdoking",response2.getItems().getItems().get(0).getName());
 //            }
 //
 //            @Override
-//            public void onFailure(Call<CommonResponse<RegionResultDto>> call, Throwable t) {
+//            public void onFailure(Call<CommonResponse<CommonItems>> call, Throwable t) {
 //                Log.i("ohdoking",t.getMessage());
 //            }
 //        });

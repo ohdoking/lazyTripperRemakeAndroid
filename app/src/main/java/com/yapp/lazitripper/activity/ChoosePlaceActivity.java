@@ -16,11 +16,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 import com.yapp.lazitripper.R;
+import com.yapp.lazitripper.common.ConstantIntent;
+import com.yapp.lazitripper.dto.PlaceInfoDto;
+import com.yapp.lazitripper.dto.common.CommonItems;
+import com.yapp.lazitripper.dto.RegionCodeDto;
+import com.yapp.lazitripper.dto.common.CommonResponse;
+import com.yapp.lazitripper.network.LaziTripperKoreanTourClient;
+import com.yapp.lazitripper.service.LaziTripperKoreanTourService;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ChoosePlaceActivity extends AppCompatActivity {
 
@@ -30,12 +42,18 @@ public class ChoosePlaceActivity extends AppCompatActivity {
     //private ChosenPlaceAdapter adapter;
     int i=0;
 
-    public static MyAdapter myAdapter;
+    public MyAdapter myAdapter;
     public static ViewHolder viewHolder;
-    private ArrayList<ChosenPlaceItem> array;
+    private List<PlaceInfoDto> array;
     SwipeFlingAdapterView flingContainer;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
+
+    public PlaceInfoDto placeInfoDto;
+    public LaziTripperKoreanTourClient laziTripperKoreanTourClient;
+    public LaziTripperKoreanTourService laziTripperKoreanTourService;
+
+    Integer cityCode;
 
 
     @Override
@@ -46,15 +64,94 @@ public class ChoosePlaceActivity extends AppCompatActivity {
         pref = getPreferences(MODE_PRIVATE);
         editor = pref.edit();
 
+        //이전 엑티비티에서 city code를 가져옴
+        cityCode = getIntent().getIntExtra(ConstantIntent.CITYCODE,1);
         flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
-
         array = new ArrayList<>();
-        array.add(new ChosenPlaceItem(getResources().getDrawable(R.drawable.mario),"갓도근","진호야 일어나"));
-        array.add(new ChosenPlaceItem(getResources().getDrawable(R.drawable.ruigi),"이진호","예 형 일어날게여"));
-        array.add(new ChosenPlaceItem(getResources().getDrawable(R.drawable.mario),"갓희원","진호야 일하자"));
-        array.add(new ChosenPlaceItem(getResources().getDrawable(R.drawable.mario),"이진호","예 형 시작할게여"));
+        getCityData();
+        renderItem();
+
+    }
+
+    void getCityData(){
+        laziTripperKoreanTourClient = new LaziTripperKoreanTourClient(getApplicationContext());
+        laziTripperKoreanTourService = laziTripperKoreanTourClient.getLiziTripperService();
+        //@TODO 국가 정보를 받아서 지역을 뿌려준다.
+        Call<CommonResponse<PlaceInfoDto>> callRelionInfo = laziTripperKoreanTourService.getPlaceInfoByCity(20,1,"B","Y","AND","LaziTripper",cityCode);
+
+        callRelionInfo.enqueue(new Callback<CommonResponse<PlaceInfoDto>>() {
+            @Override
+            public void onResponse(Call<CommonResponse<PlaceInfoDto>> call, Response<CommonResponse<PlaceInfoDto>> response) {
+                Log.i("ohdoking",response.body().getResponse().getBody().getItems().getItems().get(0).getTitle());
+                array = response.body().getResponse().getBody().getItems().getItems();
+                myAdapter.list = array;
+                myAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<CommonResponse<PlaceInfoDto>> call, Throwable t) {
+                Log.i("ohdoking",t.getMessage());
+            }
+        });
+    }
 
 
+    public static class ViewHolder{
+        public static FrameLayout background;
+        public ImageView image;
+        public TextView name;
+        public TextView description;
+    }
+
+    public class MyAdapter extends BaseAdapter{
+
+        public List<PlaceInfoDto> list;
+        public Context context;
+
+        private MyAdapter(List<PlaceInfoDto> apps, Context context){
+            this.list = apps;
+            this.context = context;
+        }
+
+        public int getCount(){
+            return list.size();
+        }
+
+        public Object getItem(int position){
+            return position;
+        }
+
+        public long getItemId(int position){
+            return position;
+        }
+
+        public View getView(final int position, View convertView, ViewGroup parent){
+            View rowView = convertView;
+
+            if(rowView == null){
+                LayoutInflater inflater = getLayoutInflater();
+                rowView = inflater.inflate(R.layout.chosen_place, parent, false);
+
+                viewHolder = new ViewHolder();
+                viewHolder.image = (ImageView) rowView.findViewById(R.id.image);
+                viewHolder.name = (TextView) rowView.findViewById(R.id.name);
+                viewHolder.description = (TextView) rowView.findViewById(R.id.description);
+                rowView.setTag(viewHolder);
+
+            }else{
+                viewHolder = (ViewHolder) convertView.getTag();
+            }
+            PlaceInfoDto curItem = list.get(position);
+            Log.i("ohdoking",curItem.getTitle());
+            Glide.with(context).load(curItem.getFirstimage()).into(viewHolder.image);
+            viewHolder.name.setText(curItem.getTitle());
+            viewHolder.description.setText(curItem.getTel());
+
+            return rowView;
+        }
+    }
+
+    void renderItem(){
         myAdapter = new MyAdapter(array,ChoosePlaceActivity.this);
         flingContainer.setAdapter(myAdapter);
         flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
@@ -109,65 +206,5 @@ public class ChoosePlaceActivity extends AppCompatActivity {
 
             }
         });
-
-    }
-
-
-    public static class ViewHolder{
-        public static FrameLayout background;
-        public ImageView image;
-        public TextView name;
-        public TextView description;
-    }
-
-    public class MyAdapter extends BaseAdapter{
-
-        public List<ChosenPlaceItem> list;
-        public Context context;
-
-        private MyAdapter(List<ChosenPlaceItem> apps, Context context){
-            this.list = apps;
-            this.context = context;
-        }
-
-        public int getCount(){
-            return list.size();
-        }
-
-        public Object getItem(int position){
-            return position;
-        }
-
-        public long getItemId(int position){
-            return position;
-        }
-
-        public View getView(final int position, View convertView, ViewGroup parent){
-            View rowView = convertView;
-
-            if(rowView == null){
-                LayoutInflater inflater = getLayoutInflater();
-                rowView = inflater.inflate(R.layout.chosen_place, parent, false);
-
-                viewHolder = new ViewHolder();
-                viewHolder.image = (ImageView) rowView.findViewById(R.id.image);
-                viewHolder.name = (TextView) rowView.findViewById(R.id.name);
-                viewHolder.description = (TextView) rowView.findViewById(R.id.description);
-                rowView.setTag(viewHolder);
-
-            }else{
-                viewHolder = (ViewHolder) convertView.getTag();
-            }
-            ChosenPlaceItem curItem = list.get(position);
-
-            viewHolder.image.setImageDrawable(curItem.getImage());
-            viewHolder.name.setText(curItem.getName());
-            viewHolder.description.setText(curItem.getDescription());
-            //Glide.with(ChoosePlaceActivity.this).load(list.get(position).getImage());
-
-            return rowView;
-        }
-
-
     }
 }

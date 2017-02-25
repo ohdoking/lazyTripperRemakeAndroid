@@ -1,4 +1,4 @@
-package com.yapp.lazitripper.dto;
+package com.yapp.lazitripper.dto.common;
 
 /**
  * Created by ohdok on 2017-02-25.
@@ -7,7 +7,6 @@ package com.yapp.lazitripper.dto;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.yapp.lazitripper.dto.common.CommonItem;
 
 /*
         resultCode	결과코드	응답 결과코드
@@ -20,10 +19,10 @@ import com.yapp.lazitripper.dto.common.CommonItem;
         rnum	일련번호	일련번호
 */
 
-public class RegionResultDto {
+public class CommonItems<T> {
     @SerializedName("items")
     @Expose
-    private CommonItem<RegionCode> items;
+    private CommonItem<T> items;
 
     @SerializedName("numOfRows")
     @Expose
@@ -37,11 +36,11 @@ public class RegionResultDto {
     @Expose
     private Integer totalCount;
 
-    public CommonItem<RegionCode> getItems() {
+    public CommonItem<T> getItems() {
         return items;
     }
 
-    public void setItems(CommonItem<RegionCode> items) {
+    public void setItems(CommonItem<T> items) {
         this.items = items;
     }
 

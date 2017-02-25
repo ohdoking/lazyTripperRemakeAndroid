@@ -1,18 +1,20 @@
 package com.yapp.lazitripper.activity;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.yapp.lazitripper.R;
+import com.yapp.lazitripper.common.ConstantIntent;
 import com.yapp.lazitripper.dto.PickDate;
-import com.yapp.lazitripper.dto.RegionCode;
-import com.yapp.lazitripper.dto.RegionResultDto;
+import com.yapp.lazitripper.dto.RegionCodeDto;
 import com.yapp.lazitripper.dto.common.CommonResponse;
 import com.yapp.lazitripper.network.LaziTripperKoreanTourClient;
 import com.yapp.lazitripper.service.LaziTripperKoreanTourService;
@@ -20,7 +22,6 @@ import com.yapp.lazitripper.store.ConstantStore;
 import com.yapp.lazitripper.store.SharedPreferenceStore;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import retrofit2.Call;
@@ -33,6 +34,7 @@ public class ChooseCityActivity extends AppCompatActivity {
 
     Spinner countryDropDown;
     Spinner cityDropDown;
+    Button selectPlaceBtn;
     String[] country = {
             "korea",
             "armerica",
@@ -40,13 +42,15 @@ public class ChooseCityActivity extends AppCompatActivity {
 
     ArrayList<String> cities = new ArrayList<String>();
 
-    public RegionCode regionCodeDto;
+    public RegionCodeDto regionCodeDtoDto;
     public LaziTripperKoreanTourClient laziTripperKoreanTourClient;
     public LaziTripperKoreanTourService laziTripperKoreanTourService;
 
-    List<RegionCode> regionCodeList;
-
+    List<RegionCodeDto> regionCodeDtoList;
     ArrayAdapter<String> adapter2;
+
+    //city 의 id를 저장
+    Integer cityNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,11 +65,11 @@ public class ChooseCityActivity extends AppCompatActivity {
         // Get reference of SpinnerView from layout/main_activity.xml
         countryDropDown =(Spinner)findViewById(R.id.country_spinner);
         cityDropDown =(Spinner)findViewById(R.id.city_spinner);
+        selectPlaceBtn = (Button) findViewById(R.id.selectPlaceBtn);
         cityDropDown.setEnabled(false);
         cityDropDown.setClickable(false);
         ArrayAdapter<String> adapter= new ArrayAdapter<String>(this,android.
                 R.layout.simple_spinner_dropdown_item ,country);
-
 
         countryDropDown.setAdapter(adapter);
 
@@ -89,6 +93,15 @@ public class ChooseCityActivity extends AppCompatActivity {
                 // TODO Auto-generated method stub
             }
         });
+        //다음으로 버튼
+        selectPlaceBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ChooseCityActivity.this, ChoosePlaceActivity.class);
+                i.putExtra(ConstantIntent.CITYCODE, cityNum);
+                startActivity(i);
+            }
+        });
 
         renderSecondSpinner();
 
@@ -101,16 +114,16 @@ public class ChooseCityActivity extends AppCompatActivity {
         laziTripperKoreanTourClient = new LaziTripperKoreanTourClient(getApplicationContext());
         laziTripperKoreanTourService = laziTripperKoreanTourClient.getLiziTripperService();
         //@TODO 국가 정보를 받아서 지역을 뿌려준다.
-        Call<CommonResponse<RegionResultDto>> callRelionInfo = laziTripperKoreanTourService.getRelionInfo(100,1,"AND","LaziTripper");
+        Call<CommonResponse<RegionCodeDto>> callRelionInfo = laziTripperKoreanTourService.getRelionInfo(100,1,"AND","LaziTripper");
 
-        callRelionInfo.enqueue(new Callback<CommonResponse<RegionResultDto>>() {
+        callRelionInfo.enqueue(new Callback<CommonResponse<RegionCodeDto>>() {
             @Override
-            public void onResponse(Call<CommonResponse<RegionResultDto>> call, Response<CommonResponse<RegionResultDto>> response) {
-                regionCodeList = response.body().getResponse().getBody().getItems().getItems();
-                int index = regionCodeList.size();
+            public void onResponse(Call<CommonResponse<RegionCodeDto>> call, Response<CommonResponse<RegionCodeDto>> response) {
+                regionCodeDtoList = response.body().getResponse().getBody().getItems().getItems();
+                int index = regionCodeDtoList.size();
                 ArrayList<String> list = new ArrayList<String>();
                 for ( int i = 0 ; i < index ; i++){
-                    list.add(regionCodeList.get(i).getName());
+                    list.add(regionCodeDtoList.get(i).getName());
                 }
                 adapter2.addAll(list);
                 adapter2.notifyDataSetChanged();
@@ -119,7 +132,7 @@ public class ChooseCityActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<CommonResponse<RegionResultDto>> call, Throwable t) {
+            public void onFailure(Call<CommonResponse<RegionCodeDto>> call, Throwable t) {
                 Log.i("ohdoking",t.getMessage());
             }
         });
@@ -140,6 +153,9 @@ public class ChooseCityActivity extends AppCompatActivity {
                 int sid=cityDropDown.getSelectedItemPosition();
                 Toast.makeText(getBaseContext(), "You have selected City : " + cities.get(sid),
                         Toast.LENGTH_SHORT).show();
+
+                cityNum = regionCodeDtoList.get(sid).getCode();
+
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {

@@ -1,8 +1,9 @@
 package com.yapp.lazitripper.service;
 
+import com.yapp.lazitripper.dto.PlaceInfoDto;
+import com.yapp.lazitripper.dto.common.CommonItems;
 import com.yapp.lazitripper.dto.common.CommonResponse;
-import com.yapp.lazitripper.dto.RegionCode;
-import com.yapp.lazitripper.dto.RegionResultDto;
+import com.yapp.lazitripper.dto.RegionCodeDto;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -26,7 +27,7 @@ public interface LaziTripperKoreanTourService {
         areaCode	지역코드			지역코드, 시군구코드
     */
     @GET("rest/KorService/areaCode")
-    Call<CommonResponse<RegionResultDto>> getRelionInfo(
+    Call<CommonResponse<RegionCodeDto>> getRelionInfo(
             @Query("numOfRows") Integer numOfRows,
             @Query("pageNo") Integer pageNo,
             @Query("MobileOS") String MobileOS,
@@ -50,15 +51,15 @@ public interface LaziTripperKoreanTourService {
     */
 
     @GET("rest/KorService/areaCode")
-    Call<RegionCode> getServiceInfo(
-            @Path("numOfRows") String numOfRows,
-            @Path("pageNo") String pageNo,
-            @Path("MobileOS") String MobileOS,
-            @Path("MobileApp") String MobileApp,
-            @Path("areaCode") String areaCode,
-            @Path("cat1") String cat1,
-            @Path("cat2") String cat2,
-            @Path("cat3") String cat3);
+    Call<RegionCodeDto> getServiceInfo(
+            @Query("numOfRows") String numOfRows,
+            @Query("pageNo") String pageNo,
+            @Query("MobileOS") String MobileOS,
+            @Query("MobileApp") String MobileApp,
+            @Query("areaCode") String areaCode,
+            @Query("cat1") String cat1,
+            @Query("cat2") String cat2,
+            @Query("cat3") String cat3);
 
     /*
         도시 기준으로 장소 정보 제공
@@ -80,19 +81,14 @@ public interface LaziTripperKoreanTourService {
         cat3	소분류		cat1, cat2	소분류 코드
     */
     @GET("rest/KorService/areaBasedList")
-    Call<RegionCode> getPlaceInfoByCity(
-            @Path("numOfRows") String numOfRows,
-            @Path("pageNo") String pageNo,
-            @Path("arrange") String arrange,
-            @Path("listYN") String listYN,
-            @Path("MobileOS") String MobileOS,
-            @Path("MobileApp") String MobileApp,
-            @Path("contentTypeId") String contentTypeId,
-            @Path("areaCode") String areaCode,
-            @Path("sigunguCode") String sigunguCode,
-            @Path("cat1") String cat1,
-            @Path("cat2") String cat2,
-            @Path("cat3") String cat3);
+    Call<CommonResponse<PlaceInfoDto>> getPlaceInfoByCity(
+            @Query("numOfRows") Integer numOfRows,
+            @Query("pageNo") Integer pageNo,
+            @Query("arrange") String arrange,
+            @Query("listYN") String listYN,
+            @Query("MobileOS") String MobileOS,
+            @Query("MobileApp") String MobileApp,
+            @Query("areaCode") Integer areaCode);
 
     /*
         위치 기준으로 장소 정보 제공
@@ -111,7 +107,7 @@ public interface LaziTripperKoreanTourService {
         radius	거리 반경		필수	거리 반경(단위:m) , Max값 20000m=20Km
     */
     @GET("rest/KorService/locationBasedList")
-    Call<RegionCode> getPlaceInfoByLocation(
+    Call<RegionCodeDto> getPlaceInfoByLocation(
             @Path("numOfRows") String numOfRows,
             @Path("pageNo") String pageNo,
             @Path("arrange") String arrange,

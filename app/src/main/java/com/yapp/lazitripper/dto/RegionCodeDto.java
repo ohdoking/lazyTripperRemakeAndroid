@@ -4,7 +4,7 @@ package com.yapp.lazitripper.dto;
  * Created by ohdok on 2017-02-24.
  */
 
-public class RegionCode {
+public class RegionCodeDto {
     /*resultCode	결과코드	응답 결과코드
     resultMsg	결과메시지	응답 결과메시지
     numOfRows	한 페이지 결과 수	한 페이지 결과 수
@@ -14,20 +14,15 @@ public class RegionCode {
     name	코드명	지역명 또는 시군구명
     rnum	일련번호	일련번호*/
 
-/*    private String resultCode;
-    private String resultMsg;
-    private String numOfRows;
-    private String pageNo;
-    private String totalCount;*/
-    private String code;
+    private Integer code;
     private String name;
-    private String rnum;
+    private Integer rnum;
 
-    public String getCode() {
+    public Integer getCode() {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(Integer code) {
         this.code = code;
     }
 
@@ -39,11 +34,11 @@ public class RegionCode {
         this.name = name;
     }
 
-    public String getRnum() {
+    public Integer getRnum() {
         return rnum;
     }
 
-    public void setRnum(String rnum) {
+    public void setRnum(Integer rnum) {
         this.rnum = rnum;
     }
 }
