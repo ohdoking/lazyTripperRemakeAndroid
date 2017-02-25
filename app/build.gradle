@@ -28,6 +28,10 @@ dependencies {
     testCompile 'junit:junit:4.12'
 
 
+    //Tag
+    compile 'me.gujun.android.taggroup:library:1.4@aar'
+    //circular view
+    compile 'de.hdodenhof:circleimageview:2.1.0'
     //typekit
     compile 'com.tsengvn:typekit:1.0.1'
 
