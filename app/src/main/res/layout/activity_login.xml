@@ -1,0 +1,24 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:facebook="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#FFF"
+    >
+    <LinearLayout android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#FFF"
+        android:id="@+id/main_ui_container">
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/facebookBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_gravity="center_horizontal"
+            facebook:com_facebook_confirm_logout="false"
+            facebook:com_facebook_tooltip_mode="never_display"
+            />
+    </LinearLayout>
+
+</LinearLayout>
