@@ -2,7 +2,6 @@ package com.yapp.lazitripper.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -17,16 +16,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.JsonPrimitive;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 import com.yapp.lazitripper.R;
 import com.yapp.lazitripper.common.ConstantIntent;
 import com.yapp.lazitripper.dto.PlaceInfoDto;
-import com.yapp.lazitripper.dto.common.CommonItems;
-import com.yapp.lazitripper.dto.RegionCodeDto;
 import com.yapp.lazitripper.dto.common.CommonResponse;
 import com.yapp.lazitripper.network.LaziTripperKoreanTourClient;
 import com.yapp.lazitripper.service.LaziTripperKoreanTourService;
@@ -56,7 +49,7 @@ public class ChoosePlaceActivity extends AppCompatActivity {
     public LaziTripperKoreanTourService laziTripperKoreanTourService;
 
     Integer cityCode;
-    TextView kindTextVeiw;
+    ImageView kindTextVeiw;
 
     /*
         기본 선택 값들
@@ -75,7 +68,7 @@ public class ChoosePlaceActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_place);
-        kindTextVeiw = (TextView) findViewById(R.id.kindTextView);
+        kindTextVeiw = (ImageView) findViewById(R.id.kindTextView);
         //이전 엑티비티에서 city code를 가져옴
         cityCode = getIntent().getIntExtra(ConstantIntent.CITYCODE,1);
         flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
@@ -111,9 +104,12 @@ public class ChoosePlaceActivity extends AppCompatActivity {
 
     public static class ViewHolder{
         public static FrameLayout background;
-        public ImageView image;
         public TextView name;
-        public TextView description;
+        public ImageView image;
+        public TextView _addr;
+        public TextView addr;
+        public TextView _tel;
+        public TextView tel;
     }
 
     public class MyAdapter extends BaseAdapter{
@@ -146,9 +142,14 @@ public class ChoosePlaceActivity extends AppCompatActivity {
                 rowView = inflater.inflate(R.layout.chosen_place, parent, false);
 
                 viewHolder = new ViewHolder();
+                viewHolder.background = (FrameLayout) findViewById(R.id.background);
+                viewHolder.name = (TextView) findViewById(R.id.name);
                 viewHolder.image = (ImageView) rowView.findViewById(R.id.image);
-                viewHolder.name = (TextView) rowView.findViewById(R.id.name);
-                viewHolder.description = (TextView) rowView.findViewById(R.id.description);
+                viewHolder._addr = (TextView) rowView.findViewById(R.id._addr);
+                viewHolder.addr = (TextView) rowView.findViewById(R.id.addr);
+                viewHolder._tel = (TextView) findViewById(R.id._tel);
+                viewHolder.tel = (TextView) findViewById(R.id.tel);
+
                 rowView.setTag(viewHolder);
 
             }else{
@@ -157,8 +158,15 @@ public class ChoosePlaceActivity extends AppCompatActivity {
             PlaceInfoDto curItem = list.get(position);
             Log.i("ohdoking",curItem.getTitle());
             Glide.with(context).load(curItem.getFirstimage()).into(viewHolder.image);
+
+            viewHolder.background.setBackgroundColor(0xff556677);
             viewHolder.name.setText(curItem.getTitle());
-            viewHolder.description.setText(curItem.getTel());
+            viewHolder.image.setImageDrawable(getResources().getDrawable(R.drawable.korea));
+            viewHolder._addr.setText("ADD");
+            viewHolder.addr.setText(curItem.getAddr1());
+            viewHolder._tel.setText("TEL");
+            viewHolder.tel.setText(curItem.getTel());
+
 
             return rowView;
         }
@@ -202,7 +210,7 @@ public class ChoosePlaceActivity extends AppCompatActivity {
                         locationCount = 0;
                         locationFlag = 1;
                         count = 0;
-                        kindTextVeiw.setText("음식");
+                        kindTextVeiw.setImageDrawable(getResources().getDrawable(R.drawable.korea));
                         //39 음식
                         getPlaceData(39);
                     }
@@ -212,7 +220,7 @@ public class ChoosePlaceActivity extends AppCompatActivity {
                         locationCount = 0;
                         locationFlag = 2;
                         count = 0;
-                        kindTextVeiw.setText("숙박");
+                        kindTextVeiw.setImageDrawable(getResources().getDrawable(R.drawable.korea));
                         //32 숙박
                         getPlaceData(32);
                     }
