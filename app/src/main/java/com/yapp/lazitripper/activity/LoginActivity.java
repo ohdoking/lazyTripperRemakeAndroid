@@ -71,6 +71,8 @@ public class LoginActivity extends FragmentActivity {
         mAuth = FirebaseAuth.getInstance();
 
         LoginButton loginButton = (LoginButton) findViewById(R.id.facebookBtn);
+        loginButton.setText("페이스북으로 시작");
+//        loginButton.setBackgroundResource(R.drawable.facebook_btn);
         loginButton.setReadPermissions("email", "public_profile");
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -108,7 +110,7 @@ public class LoginActivity extends FragmentActivity {
 
         // 로그인 되어있으면 바로 접속
         if(isLoggedIn()){
-            Intent i = new Intent(LoginActivity.this, MainActivity.class);
+            Intent i = new Intent(LoginActivity.this, HomeActivity.class);
             startActivity(i);
         }
 

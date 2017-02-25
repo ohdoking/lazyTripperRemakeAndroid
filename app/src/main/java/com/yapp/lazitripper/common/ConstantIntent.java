@@ -6,4 +6,5 @@ package com.yapp.lazitripper.common;
 
 public class ConstantIntent {
     public static String CITYCODE = "city-code";
+    public static String PLACELIST = "placeList";
 }

@@ -1,27 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="524dp"
     android:layout_gravity="center"
-    android:layout_margin="30dp"
-    android:background="#ffeeccff">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/text"/>
+    android:background="#ff556677"
+    android:id="@+id/background">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="524dp"
         android:orientation="vertical"
-        android:id="@+id/frameview"
-        android:layout_gravity="right|bottom">
-        <ImageView
-            android:src="@mipmap/ic_launcher"
-            android:layout_width="wrap_content"
+        android:id="@+id/frameview">
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/image"/>
+            android:layout_marginTop="396dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="26sp"
+                android:textColor="#fffedf6b"
+                android:text="섭지코지"
+                android:layout_marginLeft="16dp"
+                android:id="@+id/name"/>
+            <ImageView
+                android:src="@drawable/korea"
+                android:layout_width="27dp"
+                android:layout_height="27dp"
+                android:id="@+id/image"/>
+            <ImageView
+                android:src="@drawable/korea"
+                android:layout_width="27dp"
+                android:layout_height="27dp"
+                android:id="@+id/kindTextView"/>
+        </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -29,15 +42,43 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:id="@+id/name"
-                android:text="이름"/>
+                android:id="@+id/_addr"
+                android:layout_marginLeft="16dp"
+                android:textColor="#fffedf6b"
+                android:textSize="14sp"
+                android:text="ADD"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:id="@+id/description"
-                android:text="설명"/>
+                android:id="@+id/addr"
+                android:textSize="14sp"
+                android:textColor="#ffffffff"
+                android:layout_marginLeft="16dp"
+                android:text="Jeju Island"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#fffedf6b"
+                android:textSize="14sp"
+                android:text="TEL"
+                android:layout_marginLeft="16dp"
+                android:layout_marginBottom="41dp"
+                android:id="@+id/_tel"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#ffffffff"
+                android:textSize="14sp"
+                android:text="1544-9506"
+                android:layout_marginBottom="41dp"
+                android:layout_marginLeft="16dp"
+                android:id="@+id/tel"/>
         </LinearLayout>
     </LinearLayout>
 

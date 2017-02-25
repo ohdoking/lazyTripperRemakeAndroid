@@ -16,7 +16,7 @@ import com.yapp.lazitripper.store.SharedPreferenceStore;
 import java.util.Calendar;
 import java.util.Date;
 
-public class DatePickActivity extends AppCompatActivity {
+public class DatePickActivity extends BaseAppCompatActivity {
 
     private int FLAG = 0;
     private PickDate pickDate;
@@ -28,7 +28,7 @@ public class DatePickActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_date_pick);
-
+        setHeader();
         chooseCompleteBtn = (Button) findViewById(R.id.chooseDateCompleteBtn);
         calendar = (CalendarPickerView) findViewById(R.id.calendar_view);
 
