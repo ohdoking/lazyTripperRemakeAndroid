@@ -59,4 +59,5 @@ dependencies {
     compile 'com.github.vipulasri:timelineview:1.0.3'
     // calendar 라이브러리
     compile 'com.squareup:android-times-square:1.6.5@aar'
+    compile 'com.google.android.gms:play-services:10.2.0'
 }

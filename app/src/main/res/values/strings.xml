@@ -16,4 +16,5 @@
     <string name="pick_seattle_place">Pick a Seattle Place</string>
     <string name="fb_login_protocol_scheme">fb355198514515820</string>
     <string name="exception">Exception: %1$s</string>
+    <string name="title_activity_travel_summary">Map</string>
 </resources>
