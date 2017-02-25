@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "584525274267",
+    "firebase_url": "https://lazitripper.firebaseio.com",
+    "project_id": "lazitripper",
+    "storage_bucket": "lazitripper.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:584525274267:android:e693d66cfa227f12",
+        "android_client_info": {
+          "package_name": "com.yapp.lazitripper"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "584525274267-e2obcj7ftd4ktjspmosvloh51b08nn4a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.yapp.lazitripper",
+            "certificate_hash": "819488cfaabab7260bc97f977bfaf0386b85c69a"
+          }
+        },
+        {
+          "client_id": "584525274267-kikneruduhnmmd2e1l7t4r78vf2nkrig.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrPs80ZNMVum3mJetCrWsPAxG1Uq1KF4I"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "584525274267-kikneruduhnmmd2e1l7t4r78vf2nkrig.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
