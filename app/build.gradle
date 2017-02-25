@@ -39,4 +39,6 @@ dependencies {
 
     //glide
     compile 'com.github.bumptech.glide:glide:3.7.0'
+    //tinder뭐시기
+    compile 'com.lorentzos.swipecards:library:1.0.9'
 }
