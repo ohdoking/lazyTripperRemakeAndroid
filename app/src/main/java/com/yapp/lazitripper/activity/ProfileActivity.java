@@ -46,8 +46,8 @@ public class ProfileActivity extends BaseAppCompatActivity {
 
         TagGroup mTagGroup = (TagGroup) findViewById(R.id.tag_group);
 
-//        mTagGroup.setTags(new String[]{"박물관", "면세점","뮤지컬", "미술관", "산", "이색체험", "게스트 하우스", "카페"});
-            mTagGroup.setTags(tagList);
+        mTagGroup.setTags(new String[]{"박물관", "면세점","뮤지컬", "미술관", "산", "이색체험", "게스트 하우스", "카페"});
+//            mTagGroup.setTags(tagList);
 
 
     }

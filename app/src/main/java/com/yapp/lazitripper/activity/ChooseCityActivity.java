@@ -87,8 +87,6 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
         cityDropDown =(WheelView)findViewById(R.id.city_spinner);
         selectPlaceBtn = (ImageView) findViewById(R.id.selectPlaceBtn);
         weekCalendar = (WeekCalendar) findViewById(R.id.weekCalendar);
-        cityDropDown.setEnabled(false);
-        cityDropDown.setClickable(false);
         ArrayAdapter<String> adapter= new ArrayAdapter<String>(this,android.
                 R.layout.simple_spinner_dropdown_item ,country);
 
@@ -153,9 +151,14 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
                     list.add(regionCodeDtoList.get(i).getName());
                 }
 //                renderSecondSpinner();
-//                cityDropDown.setWheelData(list);
-                cityDropDown.resetDataFromTop(list);
+                cityDropDown.setWheelData(list);
+//                cityDropDown.setWheelSize(list.size());
+//                cityDropDown.setLoop(true);
+//                cityDropDown.setClickable(true);
+//                cityDropDown.resetDataFromTop(list);
                 cityDropDown.deferNotifyDataSetChanged();
+//                cityDropDown.onRemoteAdapterDisconnected();
+//                cityDropDown.notifyAll();
                 isData = true;
 //                adapter2.addAll(list);
 //                adapter2.notifyDataSetChanged();
@@ -179,13 +182,6 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
         cityDropDown.setSkin(WheelView.Skin.Holo); // common皮肤
         cities.add("무");
         cityDropDown.setWheelData(cities);
-        cityDropDown.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Get select item
-
-            }
-        });
         cityDropDown.setOnWheelItemSelectedListener(new WheelView.OnWheelItemSelectedListener() {
             @Override
             public void onItemSelected(int position, Object o) {
@@ -197,26 +193,6 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
                 }
             }
         });
-
-//        cityDropDown.setAdapter(adapter2);
-//
-//        cityDropDown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view,
-//                                       int position, long id) {
-//                // Get select item
-//                int sid=cityDropDown.getSelectedItemPosition();
-//                Toast.makeText(getBaseContext(), "You have selected City : " + cities.get(sid),
-//                        Toast.LENGTH_SHORT).show();
-//
-//                cityNum = regionCodeDtoList.get(sid).getCode();
-//
-//            }
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//                // TODO Auto-generated method stub
-//            }
-//        });
     }
+
 }

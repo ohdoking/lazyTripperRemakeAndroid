@@ -8,10 +8,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,12 +65,19 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
     Integer locationFlag = 0;
     Integer count = 0;
 
+    public LinearLayout linlaHeaderProgress;
+
     ArrayList<PlaceInfoDto> placeInfoDtoList = new ArrayList<PlaceInfoDto>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_place);
         setHeader();
+
+//        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+//        setProgressBarIndeterminateVisibility(true);
+
+        linlaHeaderProgress = (LinearLayout) findViewById(R.id.linlaHeaderProgress);
 
         ImageView leftImage = getLeftImageView();
         leftImage.setImageResource(R.drawable.map_icon);
@@ -99,6 +108,8 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
     }
 
     void getPlaceData(Integer cat){
+
+        linlaHeaderProgress.setVisibility(View.VISIBLE);
         laziTripperKoreanTourClient = new LaziTripperKoreanTourClient(getApplicationContext());
         laziTripperKoreanTourService = laziTripperKoreanTourClient.getLiziTripperService();
         //@TODO 국가 정보를 받아서 지역을 뿌려준다.
@@ -111,6 +122,10 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
                 array = response.body().getResponse().getBody().getItems().getItems();
                 myAdapter.list = array;
                 myAdapter.notifyDataSetChanged();
+
+                // HIDE THE SPINNER AFTER LOADING FEEDS
+                linlaHeaderProgress.setVisibility(View.GONE);
+
             }
 
             @Override
@@ -216,15 +231,15 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
                 //Do something on the left!
                 //You also have access to the original object.
                 //If you want to use it just cast it (String) dataObject
-                Toast.makeText(ChoosePlaceActivity.this, "Left!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ChoosePlaceActivity.this, "싫어요", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onRightCardExit(Object dataObject) {
-                Toast.makeText(ChoosePlaceActivity.this, dataObject.toString(), Toast.LENGTH_SHORT).show();
                 placeInfoDtoList.add((PlaceInfoDto) dataObject);
                 count++;
                 locationCount++;
+                Toast.makeText(ChoosePlaceActivity.this,  locationCount + "회 좋아요", Toast.LENGTH_SHORT).show();
                 if(locationFlag == 0){
                     if(landMarkCount == locationCount || array.size() == count){
                         locationCount = 0;
@@ -233,6 +248,7 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
 //                        kindTextVeiw.setImageDrawable(getResources().getDrawable(R.drawable.korea));
                         //39 음식
                         getPlaceData(39);
+
                     }
                 }
                 else if(locationFlag == 1){
