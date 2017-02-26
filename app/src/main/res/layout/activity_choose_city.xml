@@ -64,9 +64,10 @@
             android:id="@+id/selectPlaceBtn"
             android:src="@drawable/ok_icon"
             android:layout_gravity="bottom"
-            android:textAlignment="center"
+            android:layout_centerHorizontal="true"
             android:text="다음"
-            android:layout_width="wrap_content"
+            android:layout_marginBottom="60dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
 

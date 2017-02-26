@@ -30,12 +30,14 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.yapp.lazitripper.R;
 import com.yapp.lazitripper.common.ConstantIntent;
 import com.yapp.lazitripper.dto.PlaceInfoDto;
+import com.yapp.lazitripper.store.ConstantStore;
+import com.yapp.lazitripper.store.SharedPreferenceStore;
 
 import java.util.ArrayList;
 
 import me.gujun.android.taggroup.TagGroup;
 
-public class TravelSummaryActivity extends FragmentActivity implements OnMapReadyCallback {
+public class TravelSummaryActivity extends BaseFragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
 
@@ -49,6 +51,9 @@ public class TravelSummaryActivity extends FragmentActivity implements OnMapRead
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_travel_summary);
+
+        SharedPreferenceStore<String[]> sharedPreferenceStore = new SharedPreferenceStore<String[]>(getApplicationContext(), ConstantStore.STORE);
+        String[] tagList = sharedPreferenceStore.getPreferences(ConstantStore.TAGS, String[].class);
 
         Intent intent = getIntent();
         ArrayList<PlaceInfoDto> list2 =
@@ -69,7 +74,7 @@ public class TravelSummaryActivity extends FragmentActivity implements OnMapRead
 
         TagGroup mTagGroup = (TagGroup) findViewById(R.id.tag_group);
 
-        mTagGroup.setTags(new String[]{"박물관", "면세점","뮤지컬", "미술관", "산", "이색체험", "게스트 하우스", "카페"});
+        mTagGroup.setTags(tagList);
 
     }
 

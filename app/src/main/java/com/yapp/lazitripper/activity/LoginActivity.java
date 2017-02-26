@@ -137,11 +137,11 @@ public class LoginActivity extends FragmentActivity {
         };
 
         // 로그인 되어있으면 바로 접속
-        if(isLoggedIn()){
-            Intent i = new Intent(LoginActivity.this, HomeActivity.class);
-            i.putExtra(ConstantIntent.EMAIL,email);
-            startActivity(i);
-        }
+//        if(isLoggedIn()){
+//            Intent i = new Intent(LoginActivity.this, KeywordSelectActivity.class);
+//            i.putExtra(ConstantIntent.EMAIL,email);
+//            startActivity(i);
+//        }
 
     }
 
@@ -153,7 +153,8 @@ public class LoginActivity extends FragmentActivity {
         Log.i("ohdoking-result",requestCode + " / " + resultCode + "/");
 
         if(requestCode == 64206){
-            Intent i = new Intent(LoginActivity.this, MainActivity.class);
+            Intent i = new Intent(LoginActivity.this, KeywordSelectActivity.class);
+            i.putExtra(ConstantIntent.EMAIL,email);
             startActivity(i);
         }
     }

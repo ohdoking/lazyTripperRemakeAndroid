@@ -44,7 +44,7 @@ public class HomeActivity extends BaseAppCompatActivity {
 
         TextView emailTv = (TextView) findViewById(R.id.textView2);
         String email = getIntent().getStringExtra(ConstantIntent.EMAIL);
-        if(email == null && email.equals("")){
+        if(email == null || email.equals("")){
             email = "유리";
         }
         emailTv.setText(email + "님,\n떠나고 싶은\n여행을 만나보세요");

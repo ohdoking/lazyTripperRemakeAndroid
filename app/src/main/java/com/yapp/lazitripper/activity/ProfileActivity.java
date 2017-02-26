@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.yapp.lazitripper.R;
+import com.yapp.lazitripper.store.ConstantStore;
+import com.yapp.lazitripper.store.SharedPreferenceStore;
 
 import java.util.ArrayList;
 
@@ -38,11 +40,14 @@ public class ProfileActivity extends BaseAppCompatActivity {
             }
         });
 
+        SharedPreferenceStore<String[]> sharedPreferenceStore = new SharedPreferenceStore<String[]>(getApplicationContext(), ConstantStore.STORE);
+        String[] tagList = sharedPreferenceStore.getPreferences(ConstantStore.TAGS, String[].class);
+
 
         TagGroup mTagGroup = (TagGroup) findViewById(R.id.tag_group);
 
-        mTagGroup.setTags(new String[]{"박물관", "면세점","뮤지컬", "미술관", "산", "이색체험", "게스트 하우스", "카페"});
-
+//        mTagGroup.setTags(new String[]{"박물관", "면세점","뮤지컬", "미술관", "산", "이색체험", "게스트 하우스", "카페"});
+            mTagGroup.setTags(tagList);
 
 
     }
