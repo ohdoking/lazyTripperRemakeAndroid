@@ -8,4 +8,6 @@ public class ConstantIntent {
     public static String CITYCODE = "city-code";
     public static String PLACELIST = "placeList";
     public static String PICKDATE = "pick-date";
+    public static String EMAIL = "email";
+
 }

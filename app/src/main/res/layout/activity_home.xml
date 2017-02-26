@@ -20,7 +20,7 @@
         android:textColor="#9b9b9b" />
 
     <TextView
-        android:text="유리님,\n떠나고 싶은\n여행을 만나보세요"
+        android:text="님,\n떠나고 싶은\n여행을 만나보세요"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView2"
@@ -54,8 +54,10 @@
             android:textSize="16sp"
             android:id="@+id/textView3"
             android:textAlignment="textStart"
-            android:layout_marginLeft="13dp"
-            android:textColor="#9b9b9b" />
+            android:layout_marginLeft="10dp"
+            android:textColor="#9b9b9b"
+            android:layout_marginBottom="12dp"
+            android:layout_marginEnd="5dp" />
 
 
     </LinearLayout>

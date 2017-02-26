@@ -7,8 +7,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.yapp.lazitripper.R;
+import com.yapp.lazitripper.common.ConstantIntent;
 import com.yapp.lazitripper.store.ConstantStore;
 
 import java.util.Date;
@@ -39,6 +41,14 @@ public class HomeActivity extends BaseAppCompatActivity {
                 startActivity(i);
             }
         });
+
+        TextView emailTv = (TextView) findViewById(R.id.textView2);
+        String email = getIntent().getStringExtra(ConstantIntent.EMAIL);
+        if(email == null && email.equals("")){
+            email = "유리";
+        }
+        emailTv.setText(email + "님,\n떠나고 싶은\n여행을 만나보세요");
+
 
         linearLayout = (LinearLayout) findViewById(R.id.nextPageBtn);
 

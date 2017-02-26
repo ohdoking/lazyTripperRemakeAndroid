@@ -24,6 +24,8 @@ import com.facebook.FacebookAuthorizationException;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
@@ -48,6 +50,10 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.yapp.lazitripper.R;
+import com.yapp.lazitripper.common.ConstantIntent;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -61,6 +67,8 @@ public class LoginActivity extends FragmentActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+
+    String email;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -79,6 +87,26 @@ public class LoginActivity extends FragmentActivity {
             public void onSuccess(LoginResult loginResult) {
                 Log.d(TAG, "facebook:onSuccess:" + loginResult.getAccessToken());
                 handleFacebookAccessToken(loginResult.getAccessToken());
+                GraphRequest request = GraphRequest.newMeRequest(
+                        loginResult.getAccessToken(),
+                        new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(JSONObject object, GraphResponse response) {
+                                Log.v("LoginActivity", response.toString());
+
+                                // Application code
+                                try {
+                                    email = object.getString("email");
+                                    String birthday = object.getString("birthday"); // 01/31/1980 format
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id,name,email,gender,birthday");
+                request.setParameters(parameters);
+                request.executeAsync();
             }
 
             @Override
@@ -111,6 +139,7 @@ public class LoginActivity extends FragmentActivity {
         // 로그인 되어있으면 바로 접속
         if(isLoggedIn()){
             Intent i = new Intent(LoginActivity.this, HomeActivity.class);
+            i.putExtra(ConstantIntent.EMAIL,email);
             startActivity(i);
         }
 
