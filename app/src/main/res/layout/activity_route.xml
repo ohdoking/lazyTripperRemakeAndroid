@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="164dp"
+        android:background="@drawable/korea"
+        >
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/my_route_photo"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@mipmap/ic_launcher"
+        app:civ_border_width="2dp"
+        app:civ_border_color="#ffffff"
+        android:scaleType="centerCrop"
+        android:layout_marginTop="36dp"
+        android:layout_centerHorizontal="true"
+        />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/my_route_photo"
+
+        >
+
+
+        <TextView
+            android:id="@+id/travel_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2017.2.12 - 2017.2.25"
+            android:textColor="#d8d8d8"
+            android:textSize="11sp"
+            android:layout_marginTop="13dp"
+            android:layout_centerHorizontal="true"
+            />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/travel_date"
+            android:layout_centerHorizontal="true"
+            >
+        <TextView
+            android:id="@+id/travel_space1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="제주도"
+            android:textColor="#ffffff"
+            android:textSize="14sp"
+            />
+
+
+        <ImageView
+            android:id="@+id/bar1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/group_6"
+            android:layout_toRightOf="@+id/travel_space1"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            />
+
+
+
+
+
+
+        <TextView
+            android:id="@+id/travel_space2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="부산"
+            android:textColor="#ffffff"
+            android:textSize="14sp"
+            android:layout_toRightOf="@+id/bar1"
+            />
+
+
+
+            <ImageView
+            android:id="@+id/bar2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/group_6"
+            android:layout_toRightOf="@+id/travel_space2"
+            android:layout_centerVertical="true"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp"
+            />
+
+        <TextView
+            android:id="@+id/travel_space3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="서울"
+            android:textColor="#ffffff"
+            android:textSize="14sp"
+            android:layout_toRightOf="@+id/bar2"
+
+            />
+
+
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

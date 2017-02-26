@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!--<android.support.v7.widget.Toolbar
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/menuToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="0dp"
+            android:background="#e6e6e6"
+            android:contentInsetLeft="10dp"
+            android:contentInsetRight="10dp"
+            android:contentInsetStart="10dp"
+            android:minHeight="?attr/actionBarSize"
+            android:padding="0dp"
+            app:contentInsetLeft="10dp"
+            app:contentInsetRight="10dp"
+            app:contentInsetStart="10dp"
+            >
+        </android.support.v7.widget.Toolbar>-->
+
+
+
+        <RelativeLayout
+            android:id="@+id/profile_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#e6e6e6"
+            >
+
+
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/user_profile_photo"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                app:civ_border_width="2dp"
+                android:src="@mipmap/ic_launcher"
+                app:civ_border_color="#ffffff"
+                android:scaleType="centerCrop"
+                android:layout_marginBottom="5dp"
+                android:layout_centerHorizontal="true"
+                />
+            <!--android:src="@drawable/profile"-->
+
+
+            <TextView
+                android:id="@+id/user_profile_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="76dp"
+                android:text="IRIN"
+                android:textColor="#4a4a4a"
+                android:textSize="15sp"
+                />
+
+
+            <RelativeLayout
+                android:id="@+id/travel_plan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#e6e6e6"
+                android:layout_below="@+id/user_profile_name"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="27.8dp"
+                >
+
+            <ImageView
+                android:id="@+id/travel_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/plane"
+                android:text="12"
+                android:textColor="#9b9b9b"
+                android:textSize="14sp"
+                />
+
+            <TextView
+                android:id="@+id/travel_day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12"
+                android:textColor="#9b9b9b"
+                android:textSize="14sp"
+                android:layout_toRightOf="@+id/travel_icon"
+                android:layout_centerHorizontal="true"
+                />
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/profile_layout"
+            android:layout_marginTop="14.2dp"
+            android:id="@+id/my_travel_map_layout"
+            >
+
+
+
+            <TextView
+                android:id="@+id/my_travel_map_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="My Travel Map"
+                android:textColor="#9b9b9b"
+                android:textSize="12sp"
+                android:layout_marginLeft="30dp"
+
+                />
+
+            <View android:id="@+id/separator1"
+                android:background="#d8d8d8"
+                android:layout_width = "350dp"
+                android:layout_height="1dip"
+                android:layout_below="@+id/my_travel_map_title"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="2dp"
+                />
+            
+            <ImageView
+                android:layout_width="263dp"
+                android:layout_height="161dp"
+                android:layout_below="@+id/separator1"
+                android:layout_marginTop="26dp"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/map"
+
+                />
+
+        </RelativeLayout>
+
+
+
+        <RelativeLayout
+            android:id="@+id/my_travel_key_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/my_travel_map_layout"
+            android:layout_marginTop="14.2dp"
+            >
+
+            <TextView
+                android:id="@+id/my_travel_key_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="My Travel Keyword"
+                android:textColor="#9b9b9b"
+                android:textSize="12sp"
+                android:layout_marginLeft="30dp"
+
+                />
+
+
+            <TextView
+                android:id="@+id/my_travel_key_update"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Update"
+                android:textColor="#9b9b9b"
+                android:textSize="12sp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="30dp"
+                />
+
+            <View android:id="@+id/separator2"
+                android:background="#d8d8d8"
+                android:layout_width = "350dp"
+                android:layout_height="1dip"
+                android:layout_below="@+id/my_travel_key_title"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="2dp"
+                />
+
+
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/tag_layout"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/my_travel_key_layout"
+            android:layout_marginTop="13dp"
+            android:layout_centerHorizontal="true"
+            >
+
+
+
+            <me.gujun.android.taggroup.TagGroup
+                android:id="@+id/tag_group"
+                style="@style/TagGroup.Beauty_Gray"
+                />
+
+        </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/my_route_title_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tag_layout"
+        android:layout_marginTop="13dp"
+        >
+
+
+        <TextView
+            android:id="@+id/my_route_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="My Travel Route"
+            android:textColor="#9b9b9b"
+            android:textSize="12sp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="42dp"
+            />
+
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/my_route_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="vertical"
+            android:layout_below="@+id/my_route_title_layout"
+            >
+
+            <include
+                layout="@layout/activity_route"
+                />
+
+
+        </LinearLayout>
+
+
+
+
+
+
+    </RelativeLayout>
+
+
+
+</ScrollView>

@@ -6,6 +6,21 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+    </style>
+
+
+    <style name="TagGroup.Beauty_Gray" parent="TagGroup">
+        <item name="atg_borderColor">#cbcbcb</item>
+        <item name="atg_textColor">#666666</item>
+        <item name="atg_checkedBorderColor">#cbcbcb</item>
+        <item name="atg_checkedBackgroundColor">#fafafa</item>
+    </style>
+
+    <style name="AppBaseTheme" parent="android:Theme.Holo.Light" >
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
     </style>
 
     <style name="FacebookLoginButton">
