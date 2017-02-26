@@ -20,6 +20,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -30,6 +32,8 @@ import com.yapp.lazitripper.common.ConstantIntent;
 import com.yapp.lazitripper.dto.PlaceInfoDto;
 
 import java.util.ArrayList;
+
+import me.gujun.android.taggroup.TagGroup;
 
 public class TravelSummaryActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -62,6 +66,10 @@ public class TravelSummaryActivity extends FragmentActivity implements OnMapRead
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        TagGroup mTagGroup = (TagGroup) findViewById(R.id.tag_group);
+
+        mTagGroup.setTags(new String[]{"박물관", "면세점","뮤지컬", "미술관", "산", "이색체험", "게스트 하우스", "카페"});
 
     }
 
@@ -150,7 +158,9 @@ public class TravelSummaryActivity extends FragmentActivity implements OnMapRead
     void makeMarker(float lat,float lng,String title,String sni){
 
         MarkerOptions temp = new MarkerOptions();
-        temp.position(new LatLng(lat, lng)).title(title).snippet(sni);
+        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.round_icon);
+
+        temp.position(new LatLng(lat, lng)).title(title).snippet(sni).icon(icon);
         Log.i("ohdoking-lat",lat+" / " + lng);
         mMap.addMarker(temp).showInfoWindow();
 
@@ -195,9 +205,10 @@ public class TravelSummaryActivity extends FragmentActivity implements OnMapRead
             }
             PlaceInfoDto curItem = items.get(position);
 
-            view.setName(curItem.getAddr1());
-            view.setLat(curItem.getMapx().toString());
-            view.setLng(curItem.getMapy().toString());
+            view.setImage(curItem.getFirstimage());
+            view.setLocatioin(curItem.getAddr1());
+            view.setel(curItem.getTel());
+            view.setTitle(curItem.getTitle());
             Log.i("ohdoking-lat","!!!");
 //            makeMarker(curItem.getMapx(), curItem.getMapy(), curItem.getAddr1(), null);
 

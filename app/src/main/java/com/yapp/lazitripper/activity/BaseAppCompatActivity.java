@@ -18,6 +18,7 @@ import com.yapp.lazitripper.R;
 
 public class BaseAppCompatActivity extends AppCompatActivity {
 
+    View mCustomView;
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
@@ -31,7 +32,7 @@ public class BaseAppCompatActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setDisplayShowTitleEnabled(false);
 
-        View mCustomView = LayoutInflater.from(this).inflate(R.layout.header,null);
+        mCustomView = LayoutInflater.from(this).inflate(R.layout.header,null);
         actionBar.setCustomView(mCustomView);
 
         Toolbar parent = (Toolbar) mCustomView.getParent();
@@ -43,4 +44,12 @@ public class BaseAppCompatActivity extends AppCompatActivity {
                 ActionBar.LayoutParams.WRAP_CONTENT);
         actionBar.setCustomView(mCustomView, params);
     }
+
+    public ImageView getLeftImageView(){
+        return (ImageView) mCustomView.findViewById(R.id.drawer_imageview);
+    }
+    public ImageView getRightImageView(){
+        return (ImageView) mCustomView.findViewById(R.id.drawer_imageview_done);
+    }
+
 }

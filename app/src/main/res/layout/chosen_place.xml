@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="524dp"
+    android:layout_height="530dp"
     android:layout_gravity="center"
     android:background="#ff556677"
     android:id="@+id/background">
@@ -14,13 +14,13 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="524dp"
+        android:layout_height="530dp"
         android:orientation="vertical"
         android:id="@+id/frameview">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="396dp">
+            android:layout_marginTop="360dp">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

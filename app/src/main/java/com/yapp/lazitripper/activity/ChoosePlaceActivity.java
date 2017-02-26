@@ -69,6 +69,24 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_place);
         setHeader();
+
+        ImageView leftImage = getLeftImageView();
+        leftImage.setImageResource(R.drawable.map_icon);
+        leftImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+        ImageView rightImage = getRightImageView();
+        rightImage.setImageResource(R.drawable.more);
+        rightImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ChoosePlaceActivity.this, ProfileActivity.class);
+                startActivity(i);
+            }
+        });
+
         kindTextVeiw = (ImageView) findViewById(R.id.kindTextView);
         //이전 엑티비티에서 city code를 가져옴
         cityCode = getIntent().getIntExtra(ConstantIntent.CITYCODE,1);
@@ -212,7 +230,7 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
                         locationCount = 0;
                         locationFlag = 1;
                         count = 0;
-                        kindTextVeiw.setImageDrawable(getResources().getDrawable(R.drawable.korea));
+//                        kindTextVeiw.setImageDrawable(getResources().getDrawable(R.drawable.korea));
                         //39 음식
                         getPlaceData(39);
                     }
@@ -222,7 +240,7 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
                         locationCount = 0;
                         locationFlag = 2;
                         count = 0;
-                        kindTextVeiw.setImageDrawable(getResources().getDrawable(R.drawable.korea));
+//                        kindTextVeiw.setImageDrawable(getResources().getDrawable(R.drawable.korea));
                         //32 숙박
                         getPlaceData(32);
                     }

@@ -6,9 +6,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.squareup.timessquare.CalendarPickerView;
 import com.yapp.lazitripper.R;
+import com.yapp.lazitripper.common.ConstantIntent;
 import com.yapp.lazitripper.dto.PickDate;
 import com.yapp.lazitripper.store.ConstantStore;
 import com.yapp.lazitripper.store.SharedPreferenceStore;
@@ -20,7 +22,6 @@ public class DatePickActivity extends BaseAppCompatActivity {
 
     private int FLAG = 0;
     private PickDate pickDate;
-    private Button chooseCompleteBtn;
     private CalendarPickerView calendar;
     private SharedPreferenceStore<PickDate> sharedPreferenceStore;
 
@@ -29,10 +30,41 @@ public class DatePickActivity extends BaseAppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_date_pick);
         setHeader();
-        chooseCompleteBtn = (Button) findViewById(R.id.chooseDateCompleteBtn);
-        calendar = (CalendarPickerView) findViewById(R.id.calendar_view);
 
         sharedPreferenceStore = new SharedPreferenceStore<PickDate>(getApplicationContext(), ConstantStore.STORE);
+
+        ImageView leftImage = getLeftImageView();
+        leftImage.setImageResource(R.drawable.arrow);
+        leftImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        ImageView rightImage = getRightImageView();
+        rightImage.setImageResource(R.drawable.next_icon);
+        rightImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(FLAG == 1){
+                    Log.i("ohdoking",FLAG+"");
+                    pickDate.setStartDate(new Date());
+                    pickDate.setFinishDate(new Date());
+                    pickDate.setPeriod(1l);
+                }
+                sharedPreferenceStore.savePreferences(ConstantStore.DATEKEY, pickDate);
+
+                Intent i = new Intent(DatePickActivity.this, ChooseCityActivity.class);
+                i.putExtra(ConstantIntent.PICKDATE,pickDate);
+                startActivity(i);
+            }
+        });
+
+        rightImage.setImageResource(R.drawable.arrow);
+
+        calendar = (CalendarPickerView) findViewById(R.id.calendar_view);
+
+
 
         Calendar nextYear = Calendar.getInstance();
         nextYear.add(Calendar.YEAR, 1);
@@ -66,22 +98,6 @@ public class DatePickActivity extends BaseAppCompatActivity {
             public void onDateUnselected(Date date) {
                 Log.i("ohdoking","onDateUnselected");
                 pickDate = new PickDate();
-            }
-        });
-
-        chooseCompleteBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(FLAG == 1){
-                    Log.i("ohdoking",FLAG+"");
-                    pickDate.setStartDate(new Date());
-                    pickDate.setFinishDate(new Date());
-                    pickDate.setPeriod(1l);
-                }
-                sharedPreferenceStore.savePreferences(ConstantStore.DATEKEY, pickDate);
-
-                Intent i = new Intent(DatePickActivity.this, ChooseCityActivity.class);
-                startActivity(i);
             }
         });
 
