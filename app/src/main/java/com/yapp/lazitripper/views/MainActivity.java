@@ -1,4 +1,4 @@
-package com.yapp.lazitripper.activity;
+package com.yapp.lazitripper.views;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +10,7 @@ import com.yapp.lazitripper.R;
 import com.yapp.lazitripper.dto.RegionCodeDto;
 import com.yapp.lazitripper.network.LaziTripperKoreanTourClient;
 import com.yapp.lazitripper.service.LaziTripperKoreanTourService;
+import com.yapp.lazitripper.views.bases.BaseAppCompatActivity;
 
 import static com.yapp.lazitripper.R.id.mypageBtn;
 

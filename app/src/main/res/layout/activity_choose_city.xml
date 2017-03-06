@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#ffffff"
-    tools:context="com.yapp.lazitripper.activity.ChooseCityActivity">
+    tools:context="com.yapp.lazitripper.views.ChooseCityActivity">
 
     <noman.weekcalendar.WeekCalendar
         android:id="@+id/weekCalendar"

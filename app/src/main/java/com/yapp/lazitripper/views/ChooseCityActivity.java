@@ -1,16 +1,11 @@
-package com.yapp.lazitripper.activity;
+package com.yapp.lazitripper.views;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.wx.wheelview.adapter.ArrayWheelAdapter;
@@ -24,6 +19,7 @@ import com.yapp.lazitripper.network.LaziTripperKoreanTourClient;
 import com.yapp.lazitripper.service.LaziTripperKoreanTourService;
 import com.yapp.lazitripper.store.ConstantStore;
 import com.yapp.lazitripper.store.SharedPreferenceStore;
+import com.yapp.lazitripper.views.bases.BaseAppCompatActivity;
 
 import org.joda.time.DateTime;
 
@@ -152,15 +148,15 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
                 }
 //                renderSecondSpinner();
                 cityDropDown.setWheelData(list);
-//                cityDropDown.setWheelSize(list.size());
+//                cityDropDown.setWheelSize(placeListView.size());
 //                cityDropDown.setLoop(true);
 //                cityDropDown.setClickable(true);
-//                cityDropDown.resetDataFromTop(list);
+//                cityDropDown.resetDataFromTop(placeListView);
                 cityDropDown.deferNotifyDataSetChanged();
 //                cityDropDown.onRemoteAdapterDisconnected();
 //                cityDropDown.notifyAll();
                 isData = true;
-//                adapter2.addAll(list);
+//                adapter2.addAll(placeListView);
 //                adapter2.notifyDataSetChanged();
 
 

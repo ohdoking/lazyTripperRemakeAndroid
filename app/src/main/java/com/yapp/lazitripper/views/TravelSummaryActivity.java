@@ -1,18 +1,14 @@
-package com.yapp.lazitripper.activity;
+package com.yapp.lazitripper.views;
 
 import android.graphics.Color;
 import android.widget.ListView;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
 import android.content.Intent;
-import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.util.Log;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -32,19 +28,23 @@ import com.yapp.lazitripper.common.ConstantIntent;
 import com.yapp.lazitripper.dto.PlaceInfoDto;
 import com.yapp.lazitripper.store.ConstantStore;
 import com.yapp.lazitripper.store.SharedPreferenceStore;
+import com.yapp.lazitripper.views.bases.BaseFragmentActivity;
 
 import java.util.ArrayList;
 
 import me.gujun.android.taggroup.TagGroup;
 
+/*
+*
+* 여행 추천 결과 화면
+*
+* */
 public class TravelSummaryActivity extends BaseFragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
 
-
-
     //리스트뷰
-    ListView list;
+    ListView placeListView;
     PlaceInfoAdapter adapter;
 
     @Override
@@ -52,28 +52,30 @@ public class TravelSummaryActivity extends BaseFragmentActivity implements OnMap
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_travel_summary);
 
+        // SP 에서 저장된 테그들의 정보를 가져옴.
         SharedPreferenceStore<String[]> sharedPreferenceStore = new SharedPreferenceStore<String[]>(getApplicationContext(), ConstantStore.STORE);
         String[] tagList = sharedPreferenceStore.getPreferences(ConstantStore.TAGS, String[].class);
 
+        // 선택 엑티비티에서 선택한 장소에 대한 정보를 가져옴.
         Intent intent = getIntent();
-        ArrayList<PlaceInfoDto> list2 =
+        ArrayList<PlaceInfoDto> beforeSelectPlaceList =
                 (ArrayList<PlaceInfoDto>)intent.getSerializableExtra(ConstantIntent.PLACELIST);
 
         //리스트뷰
-        list = (ListView) findViewById(R.id.listview);
+        placeListView = (ListView) findViewById(R.id.listview);
 
         adapter = new PlaceInfoAdapter();
-        adapter.addAllItem(list2);
+        adapter.addAllItem(beforeSelectPlaceList);
 
-        list.setAdapter(adapter);
+        placeListView.setAdapter(adapter);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        // 테그 뷰의 인스턴스를 바인딩 시킨 뒤, 테그뷰에 값을 넣어준다
         TagGroup mTagGroup = (TagGroup) findViewById(R.id.tag_group);
-
         mTagGroup.setTags(tagList);
 
     }
@@ -92,39 +94,10 @@ public class TravelSummaryActivity extends BaseFragmentActivity implements OnMap
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-
-
-
-        // animateCamera() 는 근거리에선 부드럽게 변경합니다
-
-        // marker 표시
-        // market 의 위치, 타이틀, 짧은설명 추가 가능.
-        /*MarkerOptions marker = new MarkerOptions();
-        marker .position(new LatLng(37.555744, 126.970431))
-                .title("서울역")
-                .snippet("Seoul Station");
-        googleMap.addMarker(marker).showInfoWindow(); // 마커추가,화면에출력
-
-        MarkerOptions first = new MarkerOptions();
-        first.position(new LatLng(37.521280, 127.041268)).title("몰라").snippet("idonknow");
-        googleMap.addMarker(first).showInfoWindow();
-
-        MarkerOptions second = new MarkerOptions();
-        second.position(new LatLng(37.517180, 127.041268)).title("몰라").snippet("idonknow");
-        googleMap.addMarker(second).showInfoWindow();
-        */
-
-        //makeMarker(37.1f,127.0f,"as","Esf");
-        //makeMarker(37.2f,127.1f,"aersdf","gEsfsf");
-        //makeMarker(37.3f,127.2f,"awesfsag","qEsf");
-
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(
                 new LatLng(adapter.getItem(0).getMapy(), adapter.getItem(0).getMapx())   // 위도, 경도
         ));
-//        View v = getSupportFragmentManager().findFragmentById(R.id.map).getView();
-//        v.setAlpha(0.5f);
-        // 구글지도(지구) 에서의 zoom 레벨은 1~23 까지 가능합니다.
-        // 여러가지 zoom 레벨은 직접 테스트해보세요
+
         CameraUpdate zoom = CameraUpdateFactory.zoomTo(9);
         googleMap.animateCamera(zoom);   // moveCamera 는 바로 변경하지만,
         int index = adapter.getCount();
@@ -152,11 +125,6 @@ public class TravelSummaryActivity extends BaseFragmentActivity implements OnMap
             }
         });
 
-
-        // Add a marker in Sydney and move the camera
-//        LatLng sydney = new LatLng(-34, 151);
-//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 
 
@@ -214,9 +182,6 @@ public class TravelSummaryActivity extends BaseFragmentActivity implements OnMap
             view.setLocatioin(curItem.getAddr1());
             view.setel(curItem.getTel());
             view.setTitle(curItem.getTitle());
-            Log.i("ohdoking-lat","!!!");
-//            makeMarker(curItem.getMapx(), curItem.getMapy(), curItem.getAddr1(), null);
-
 
             return view;
         }

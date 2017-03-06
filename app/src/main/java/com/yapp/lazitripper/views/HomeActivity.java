@@ -1,9 +1,7 @@
-package com.yapp.lazitripper.activity;
+package com.yapp.lazitripper.views;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -11,9 +9,7 @@ import android.widget.TextView;
 
 import com.yapp.lazitripper.R;
 import com.yapp.lazitripper.common.ConstantIntent;
-import com.yapp.lazitripper.store.ConstantStore;
-
-import java.util.Date;
+import com.yapp.lazitripper.views.bases.BaseAppCompatActivity;
 
 public class HomeActivity extends BaseAppCompatActivity {
 

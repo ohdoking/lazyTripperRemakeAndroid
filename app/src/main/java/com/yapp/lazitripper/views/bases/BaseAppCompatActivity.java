@@ -1,17 +1,12 @@
-package com.yapp.lazitripper.activity;
+package com.yapp.lazitripper.views.bases;
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.tsengvn.typekit.TypekitContextWrapper;
 import com.yapp.lazitripper.R;
@@ -24,10 +19,15 @@ public class BaseAppCompatActivity extends AppCompatActivity {
         super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
     }
 
+    /*
+    *
+    * ActionBar 뷰를 만든다.
+    * 참고 해보기 : http://stackoverflow.com/questions/16079028/how-to-get-onclicklistener-event-on-custom-actionbar
+    *
+    *
+    * */
     public void setHeader(){
         ActionBar actionBar = getSupportActionBar();
-//        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-//        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setDisplayShowTitleEnabled(false);
@@ -38,16 +38,27 @@ public class BaseAppCompatActivity extends AppCompatActivity {
         Toolbar parent = (Toolbar) mCustomView.getParent();
         parent.setContentInsetsAbsolute(0,0);
 
-        actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.facebook_btn));
+//        actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.facebook_btn));
 
         ActionBar.LayoutParams params = new ActionBar.LayoutParams(ActionBar.LayoutParams.WRAP_CONTENT,
                 ActionBar.LayoutParams.WRAP_CONTENT);
         actionBar.setCustomView(mCustomView, params);
     }
 
+    /*
+    *
+    * actionbar 의 왼쪽 버튼의 인스턴스를 가져온다
+    *
+    * */
     public ImageView getLeftImageView(){
         return (ImageView) mCustomView.findViewById(R.id.drawer_imageview);
     }
+
+    /*
+    *
+    * actionbar 의 오른쪽 버튼의 인스턴스를 가져온다
+    *
+    * */
     public ImageView getRightImageView(){
         return (ImageView) mCustomView.findViewById(R.id.drawer_imageview_done);
     }

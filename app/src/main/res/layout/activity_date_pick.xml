@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.yapp.lazitripper.activity.DatePickActivity">
+    tools:context="com.yapp.lazitripper.views.DatePickActivity">
 
     <!--<Button-->
         <!--android:id="@+id/chooseDateCompleteBtn"-->

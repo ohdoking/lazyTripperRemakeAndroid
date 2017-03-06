@@ -1,11 +1,9 @@
-package com.yapp.lazitripper.activity;
+package com.yapp.lazitripper.views;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 
 import com.squareup.timessquare.CalendarPickerView;
@@ -14,6 +12,7 @@ import com.yapp.lazitripper.common.ConstantIntent;
 import com.yapp.lazitripper.dto.PickDate;
 import com.yapp.lazitripper.store.ConstantStore;
 import com.yapp.lazitripper.store.SharedPreferenceStore;
+import com.yapp.lazitripper.views.bases.BaseAppCompatActivity;
 
 import java.util.Calendar;
 import java.util.Date;
