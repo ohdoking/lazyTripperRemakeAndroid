@@ -29,7 +29,6 @@ public class MainActivity extends BaseAppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mAuth = FirebaseAuth.getInstance();
-
         test();
     }
 
