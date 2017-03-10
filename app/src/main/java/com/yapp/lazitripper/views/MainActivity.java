@@ -47,7 +47,6 @@ public class MainActivity extends BaseAppCompatActivity {
             public void onClick(View v) {
                 mAuth.signOut();
                 FacebookSdk.sdkInitialize(getApplicationContext());
-                Log.e("","");
                 Intent i = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(i);
             }
