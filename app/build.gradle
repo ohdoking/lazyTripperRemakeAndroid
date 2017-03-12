@@ -27,6 +27,13 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.1.1'
     testCompile 'junit:junit:4.12'
 
+    allprojects {
+        repositories {
+            maven { url "https://jitpack.io" }
+        }
+    }
+    //progressbar
+    compile 'com.github.HotBitmapGG:RingProgressBar:V1.2.2'
 
     //Tag
     compile 'me.gujun.android.taggroup:library:1.4@aar'
