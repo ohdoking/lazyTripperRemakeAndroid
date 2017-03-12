@@ -86,8 +86,8 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
         ArrayAdapter<String> adapter= new ArrayAdapter<String>(this,android.
                 R.layout.simple_spinner_dropdown_item ,country);
 
-        countryDropDown.setWheelAdapter(new ArrayWheelAdapter(this)); // 文本数据源
-        countryDropDown.setSkin(WheelView.Skin.Holo); // common皮肤
+        countryDropDown.setWheelAdapter(new ArrayWheelAdapter(this));
+        countryDropDown.setSkin(WheelView.Skin.Holo);
 
         country.add("한국");
         country.add("미국");

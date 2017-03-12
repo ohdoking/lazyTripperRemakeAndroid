@@ -17,6 +17,7 @@ import com.yapp.lazitripper.views.bases.BaseAppCompatActivity;
 import java.util.Calendar;
 import java.util.Date;
 
+//여행 시작 -> 날짜 선택
 public class DatePickActivity extends BaseAppCompatActivity {
 
     private int FLAG = 0;
@@ -32,6 +33,8 @@ public class DatePickActivity extends BaseAppCompatActivity {
 
         sharedPreferenceStore = new SharedPreferenceStore<PickDate>(getApplicationContext(), ConstantStore.STORE);
 
+        //뒤로가기, 액티비티 종료
+        //TODO 버튼 이미지 변경
         ImageView leftImage = getLeftImageView();
         leftImage.setImageResource(R.drawable.arrow);
         leftImage.setOnClickListener(new View.OnClickListener() {
@@ -40,6 +43,9 @@ public class DatePickActivity extends BaseAppCompatActivity {
                 finish();
             }
         });
+
+        //다음단계 버튼 -> 도시선택 액티비티
+        //TODO '다음' 버튼 위치 하단으로 이동 (모든 액티비티 통일?)
         ImageView rightImage = getRightImageView();
         rightImage.setImageResource(R.drawable.next_icon);
         rightImage.setOnClickListener(new View.OnClickListener() {
@@ -63,8 +69,6 @@ public class DatePickActivity extends BaseAppCompatActivity {
 
         calendar = (CalendarPickerView) findViewById(R.id.calendar_view);
 
-
-
         Calendar nextYear = Calendar.getInstance();
         nextYear.add(Calendar.YEAR, 1);
 
@@ -73,7 +77,8 @@ public class DatePickActivity extends BaseAppCompatActivity {
                 .inMode(CalendarPickerView.SelectionMode.RANGE);
 
         pickDate = new PickDate();
-
+        
+        //날짜 선택 Listener
         calendar.setOnDateSelectedListener(new CalendarPickerView.OnDateSelectedListener() {
             @Override
             public void onDateSelected(Date date) {
@@ -99,7 +104,5 @@ public class DatePickActivity extends BaseAppCompatActivity {
                 pickDate = new PickDate();
             }
         });
-
     }
-
 }

@@ -2,6 +2,7 @@ package com.yapp.lazitripper.views;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.facebook.FacebookSdk;
@@ -28,7 +29,6 @@ public class MainActivity extends BaseAppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mAuth = FirebaseAuth.getInstance();
-
         test();
     }
 
@@ -46,7 +46,6 @@ public class MainActivity extends BaseAppCompatActivity {
             public void onClick(View v) {
                 mAuth.signOut();
                 FacebookSdk.sdkInitialize(getApplicationContext());
-
                 Intent i = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(i);
             }

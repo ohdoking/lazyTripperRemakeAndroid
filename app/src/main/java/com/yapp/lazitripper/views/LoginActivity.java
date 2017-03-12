@@ -60,6 +60,8 @@ public class LoginActivity extends FragmentActivity {
             public void onSuccess(LoginResult loginResult) {
                 Log.d(TAG, "facebook:onSuccess:" + loginResult.getAccessToken());
                 handleFacebookAccessToken(loginResult.getAccessToken());
+
+
                 GraphRequest request = GraphRequest.newMeRequest(
                         loginResult.getAccessToken(),
                         new GraphRequest.GraphJSONObjectCallback() {

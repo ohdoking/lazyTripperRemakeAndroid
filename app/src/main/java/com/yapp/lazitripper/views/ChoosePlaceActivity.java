@@ -106,19 +106,22 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
 
     }
 
-    void getPlaceData(Integer cat){
+    void getPlaceData(Integer contentTypeId){
 
         linlaHeaderProgress.setVisibility(View.VISIBLE);
         laziTripperKoreanTourClient = new LaziTripperKoreanTourClient(getApplicationContext());
         laziTripperKoreanTourService = laziTripperKoreanTourClient.getLiziTripperService();
         //@TODO 국가 정보를 받아서 지역을 뿌려준다.
-        Call<CommonResponse<PlaceInfoDto>> callRelionInfo = laziTripperKoreanTourService.getPlaceInfoByCity(20,1,"B","Y","AND","LaziTripper",cityCode, cat);
+
+        //NumOfRows,pageNo,arrange,listYN,MobileOS,MobileApp,areaCode,contentTypeId
+        Call<CommonResponse<PlaceInfoDto>> callRelionInfo = laziTripperKoreanTourService.getPlaceInfoByCity(20,1,"B","Y","AND","LaziTripper",cityCode, contentTypeId);
 
         callRelionInfo.enqueue(new Callback<CommonResponse<PlaceInfoDto>>() {
             @Override
             public void onResponse(Call<CommonResponse<PlaceInfoDto>> call, Response<CommonResponse<PlaceInfoDto>> response) {
                 Log.i("ohdoking",response.body().getResponse().getBody().getItems().getItems().get(0).getTitle());
                 array = response.body().getResponse().getBody().getItems().getItems();
+
                 myAdapter.list = array;
                 myAdapter.notifyDataSetChanged();
 
