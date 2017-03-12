@@ -18,6 +18,13 @@
         android:background="#f4f4f4"
         android:layout_height="5dp"/>
 
+    <io.netopen.hotbitmapgg.library.view.RingProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_alignParentTop="true"/>
+
     <LinearLayout
         android:orientation="horizontal"
         android:layout_marginTop="50dp"
