@@ -109,15 +109,15 @@ public interface LaziTripperKoreanTourService {
     */
     @GET("rest/KorService/locationBasedList")
     Call<CommonResponse<PlaceInfoDto>> getPlaceInfoByLocation(
-            @Path("numOfRows") String numOfRows,
-            @Path("pageNo") String pageNo,
-            @Path("arrange") String arrange,
-            @Path("listYN") String listYN,
-            @Path("MobileOS") String MobileOS,
-            @Path("MobileApp") String MobileApp,
-            @Path("contentTypeId") String contentTypeId,
-            @Path("mapX") String mapX,
-            @Path("mapY") String mapY,
-            @Path("radius") String radius);
+            @Query("numOfRows") Integer numOfRows,
+            @Query("pageNo") Integer pageNo,
+            @Query("arrange") String arrange,
+            @Query("listYN") String listYN,
+            @Query("MobileOS") String MobileOS,
+            @Query("MobileApp") String MobileApp,
+            @Query("contentTypeId") Integer contentTypeId,
+            @Query("mapX") Float mapX,
+            @Query("mapY") Float mapY,
+            @Query("radius") Integer radius);
 
 }

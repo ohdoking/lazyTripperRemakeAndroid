@@ -3,6 +3,7 @@ package com.yapp.lazitripper.util;
 import com.yapp.lazitripper.dto.PlaceInfoDto;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by ohdoking on 2017. 3. 12..
@@ -12,9 +13,9 @@ import java.util.ArrayList;
 
 public class TravelRoute {
 
-    ArrayList<PlaceInfoDto> routeList;
+    List<PlaceInfoDto> routeList;
 
-    public TravelRoute(ArrayList<PlaceInfoDto> routeList){
+    public TravelRoute(List<PlaceInfoDto> routeList){
         this.routeList = routeList;
     }
 
@@ -24,6 +25,10 @@ public class TravelRoute {
     * */
     public void addItem(PlaceInfoDto placeInfo) {
         routeList.add(placeInfo);
+    }
+
+    public List<PlaceInfoDto> getList(){
+        return routeList;
     }
 
 
@@ -60,7 +65,7 @@ public class TravelRoute {
     * */
     public void findShortRoute(){
 
-      
+
 
     }
 

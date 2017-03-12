@@ -22,6 +22,7 @@ import com.yapp.lazitripper.dto.PlaceInfoDto;
 import com.yapp.lazitripper.dto.common.CommonResponse;
 import com.yapp.lazitripper.network.LaziTripperKoreanTourClient;
 import com.yapp.lazitripper.service.LaziTripperKoreanTourService;
+import com.yapp.lazitripper.util.TravelRoute;
 import com.yapp.lazitripper.views.bases.BaseAppCompatActivity;
 
 import java.util.ArrayList;
@@ -63,6 +64,7 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
     Integer locationFlag = 0;
     Integer count = 0;
 
+    TravelRoute travelRoute;
     public LinearLayout linlaHeaderProgress;
 
     ArrayList<PlaceInfoDto> placeInfoDtoList = new ArrayList<PlaceInfoDto>();
@@ -102,6 +104,8 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
         array = new ArrayList<>();
         //12 관광지
         getPlaceData(12);
+
+
         renderItem();
 
     }
@@ -113,8 +117,15 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
         laziTripperKoreanTourService = laziTripperKoreanTourClient.getLiziTripperService();
         //@TODO 국가 정보를 받아서 지역을 뿌려준다.
 
-        //NumOfRows,pageNo,arrange,listYN,MobileOS,MobileApp,areaCode,contentTypeId
-        Call<CommonResponse<PlaceInfoDto>> callRelionInfo = laziTripperKoreanTourService.getPlaceInfoByCity(20,1,"B","Y","AND","LaziTripper",cityCode, contentTypeId);
+        Call<CommonResponse<PlaceInfoDto>> callRelionInfo;
+        //contenttype이 관광지면 도시 기반으로 가져오고 나머지인경우 위치에 가까운 식당이나 숙소 데이터를 가져온다.
+        if(contentTypeId == 12){
+            callRelionInfo = laziTripperKoreanTourService.getPlaceInfoByCity(20,1,"B","Y","AND","LaziTripper",cityCode, contentTypeId);
+        }
+        else{
+            callRelionInfo = laziTripperKoreanTourService.getPlaceInfoByLocation(20,1,"E","Y","AND","LaziTripper",contentTypeId, travelRoute.getList().get(0).getMapx(), travelRoute.getList().get(0).getMapy() ,100);
+        }
+
 
         callRelionInfo.enqueue(new Callback<CommonResponse<PlaceInfoDto>>() {
             @Override
@@ -248,9 +259,10 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
                         locationFlag = 1;
                         count = 0;
 //                        kindTextVeiw.setImageDrawable(getResources().getDrawable(R.drawable.korea));
+
+                        travelRoute = new TravelRoute(array);
                         //39 음식
                         getPlaceData(39);
-
                     }
                 }
                 else if(locationFlag == 1){
@@ -261,6 +273,10 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
 //                        kindTextVeiw.setImageDrawable(getResources().getDrawable(R.drawable.korea));
                         //32 숙박
                         getPlaceData(32);
+                    }
+                    else{
+                        //다음 경로의 주변 음식 가져오기
+                        getPlaceData(39);
                     }
                 }
                 else if(locationFlag == 2){
