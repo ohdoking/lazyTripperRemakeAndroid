@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginTop="60dp"
-    tools:context="com.yapp.lazitripper.activity.MyProfileActivity">
+    tools:context="com.yapp.lazitripper.views.MyProfileActivity">
     <TextView
         android:text="Splash!!!!"
         android:layout_width="wrap_content"

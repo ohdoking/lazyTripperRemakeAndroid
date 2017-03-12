@@ -1,4 +1,4 @@
-package com.yapp.lazitripper.activity;
+package com.yapp.lazitripper.views;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,6 +19,7 @@ import com.yapp.lazitripper.network.LaziTripperKoreanTourClient;
 import com.yapp.lazitripper.service.LaziTripperKoreanTourService;
 import com.yapp.lazitripper.store.ConstantStore;
 import com.yapp.lazitripper.store.SharedPreferenceStore;
+import com.yapp.lazitripper.views.bases.BaseAppCompatActivity;
 
 import org.joda.time.DateTime;
 
@@ -90,8 +91,8 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
         ArrayAdapter<String> adapter= new ArrayAdapter<String>(this,android.
                 R.layout.simple_spinner_dropdown_item ,country);
 
-        countryDropDown.setWheelAdapter(new ArrayWheelAdapter(this)); // 文本数据源
-        countryDropDown.setSkin(WheelView.Skin.Holo); // common皮肤
+        countryDropDown.setWheelAdapter(new ArrayWheelAdapter(this));
+        countryDropDown.setSkin(WheelView.Skin.Holo);
 
         country.add("한국");
         country.add("미국");
@@ -172,15 +173,15 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
                 Log.d("ttttttttt",list.size() + "test4");
 //                renderSecondSpinner();
                 cityDropDown.setWheelData(list);
-//                cityDropDown.setWheelSize(list.size());
+//                cityDropDown.setWheelSize(placeListView.size());
 //                cityDropDown.setLoop(true);
 //                cityDropDown.setClickable(true);
-//                cityDropDown.resetDataFromTop(list);
+//                cityDropDown.resetDataFromTop(placeListView);
                 cityDropDown.deferNotifyDataSetChanged();
 //                cityDropDown.onRemoteAdapterDisconnected();
 //                cityDropDown.notifyAll();
                 isData = true;
-//                adapter2.addAll(list);
+//                adapter2.addAll(placeListView);
 //                adapter2.notifyDataSetChanged();
 
 

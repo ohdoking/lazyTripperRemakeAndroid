@@ -3,13 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="64dp"
     android:background="@color/calendar_bg"
+    android:gravity="center"
     android:orientation="horizontal">
 
     <ImageView
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
         android:layout_gravity="left|center"
         android:gravity="left"
+        android:scaleType="centerInside"
+        android:onClick="menuClickEvent"
         android:id="@+id/drawer_imageview"/>
 
     <ImageView
@@ -22,9 +25,11 @@
         android:id="@+id/actionbar_titleview"/>
 
     <ImageView
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
         android:layout_gravity="center"
+        android:scaleType="centerInside"
+        android:onClick="menuClickEvent"
         android:id="@+id/drawer_imageview_done"/>
 
 </LinearLayout>

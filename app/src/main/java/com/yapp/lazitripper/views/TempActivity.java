@@ -1,7 +1,6 @@
-package com.yapp.lazitripper.activity;
+package com.yapp.lazitripper.views;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -9,8 +8,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.yapp.lazitripper.R;
-import com.yapp.lazitripper.util.TimeLineAdapter;
+import com.yapp.lazitripper.views.adapters.TimeLineAdapter;
 import com.yapp.lazitripper.dto.TimeLineModel;
+import com.yapp.lazitripper.views.bases.BaseAppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +65,4 @@ public class TempActivity extends BaseAppCompatActivity {
             mTimeLineAdapter.addItem(new TimeLineModel(""));
         }
     }
-
-
-
 }

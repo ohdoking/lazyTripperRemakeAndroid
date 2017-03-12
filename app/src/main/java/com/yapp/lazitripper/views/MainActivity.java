@@ -1,7 +1,8 @@
-package com.yapp.lazitripper.activity;
+package com.yapp.lazitripper.views;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.facebook.FacebookSdk;
@@ -10,6 +11,7 @@ import com.yapp.lazitripper.R;
 import com.yapp.lazitripper.dto.RegionCodeDto;
 import com.yapp.lazitripper.network.LaziTripperKoreanTourClient;
 import com.yapp.lazitripper.service.LaziTripperKoreanTourService;
+import com.yapp.lazitripper.views.bases.BaseAppCompatActivity;
 
 import static com.yapp.lazitripper.R.id.mypageBtn;
 
@@ -27,7 +29,6 @@ public class MainActivity extends BaseAppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mAuth = FirebaseAuth.getInstance();
-
         test();
     }
 
@@ -45,7 +46,6 @@ public class MainActivity extends BaseAppCompatActivity {
             public void onClick(View v) {
                 mAuth.signOut();
                 FacebookSdk.sdkInitialize(getApplicationContext());
-
                 Intent i = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(i);
             }

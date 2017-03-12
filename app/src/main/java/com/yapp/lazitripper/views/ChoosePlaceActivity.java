@@ -1,17 +1,14 @@
-package com.yapp.lazitripper.activity;
+package com.yapp.lazitripper.views;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -25,6 +22,7 @@ import com.yapp.lazitripper.dto.PlaceInfoDto;
 import com.yapp.lazitripper.dto.common.CommonResponse;
 import com.yapp.lazitripper.network.LaziTripperKoreanTourClient;
 import com.yapp.lazitripper.service.LaziTripperKoreanTourService;
+import com.yapp.lazitripper.views.bases.BaseAppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,8 +69,9 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_choose_place);
         setHeader();
+        setContentView(R.layout.activity_choose_place);
+
 
 //        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 //        setProgressBarIndeterminateVisibility(true);
@@ -107,19 +106,22 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
 
     }
 
-    void getPlaceData(Integer cat){
+    void getPlaceData(Integer contentTypeId){
 
         linlaHeaderProgress.setVisibility(View.VISIBLE);
         laziTripperKoreanTourClient = new LaziTripperKoreanTourClient(getApplicationContext());
         laziTripperKoreanTourService = laziTripperKoreanTourClient.getLiziTripperService();
         //@TODO 국가 정보를 받아서 지역을 뿌려준다.
-        Call<CommonResponse<PlaceInfoDto>> callRelionInfo = laziTripperKoreanTourService.getPlaceInfoByCity(20,1,"B","Y","AND","LaziTripper",cityCode, cat);
+
+        //NumOfRows,pageNo,arrange,listYN,MobileOS,MobileApp,areaCode,contentTypeId
+        Call<CommonResponse<PlaceInfoDto>> callRelionInfo = laziTripperKoreanTourService.getPlaceInfoByCity(20,1,"B","Y","AND","LaziTripper",cityCode, contentTypeId);
 
         callRelionInfo.enqueue(new Callback<CommonResponse<PlaceInfoDto>>() {
             @Override
             public void onResponse(Call<CommonResponse<PlaceInfoDto>> call, Response<CommonResponse<PlaceInfoDto>> response) {
                 Log.i("ohdoking",response.body().getResponse().getBody().getItems().getItems().get(0).getTitle());
                 array = response.body().getResponse().getBody().getItems().getItems();
+
                 myAdapter.list = array;
                 myAdapter.notifyDataSetChanged();
 
