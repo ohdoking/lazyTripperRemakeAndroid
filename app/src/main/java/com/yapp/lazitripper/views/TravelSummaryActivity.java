@@ -42,7 +42,8 @@ import me.gujun.android.taggroup.TagGroup;
 public class TravelSummaryActivity extends BaseFragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-
+    private String TAG = "TrevelSummaryActivity";
+    private int i=0;
     //리스트뷰
     ListView placeListView;
     PlaceInfoAdapter adapter;
@@ -68,6 +69,11 @@ public class TravelSummaryActivity extends BaseFragmentActivity implements OnMap
         adapter.addAllItem(beforeSelectPlaceList);
 
         placeListView.setAdapter(adapter);
+
+        //경계값 오류 처리해야함.
+        for(i=0; !beforeSelectPlaceList.isEmpty(); i++){
+            Log.e(TAG, beforeSelectPlaceList.get(i).getTitle());
+        }
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -136,14 +142,12 @@ public class TravelSummaryActivity extends BaseFragmentActivity implements OnMap
         temp.position(new LatLng(lat, lng)).title(title).snippet(sni).icon(icon);
         Log.i("ohdoking-lat",lat+" / " + lng);
         mMap.addMarker(temp).showInfoWindow();
-
     }
 
 
     class PlaceInfoAdapter extends BaseAdapter{
 
         ArrayList<PlaceInfoDto> items = new ArrayList<>();
-
 
         public void addItem(PlaceInfoDto dto){
             items.add(dto);
@@ -186,7 +190,4 @@ public class TravelSummaryActivity extends BaseFragmentActivity implements OnMap
             return view;
         }
     }
-
-
-
 }

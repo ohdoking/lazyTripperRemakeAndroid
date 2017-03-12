@@ -64,15 +64,10 @@ public class KeywordSelectActivity extends BaseAppCompatActivity implements View
         text[13] = (ImageButton) findViewById(R.id.btn14);
         text[14] = (ImageButton) findViewById(R.id.btn15);
 
-
-
         for(int i=0;i<text.length;i++) {
             flag[i] = true;
             text[i].setOnClickListener(this);
         }
-
-
-
 
     }
 

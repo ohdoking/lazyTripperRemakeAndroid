@@ -51,16 +51,14 @@ public class LaziTripperKoreanTourClient implements LaziTripperClient<LaziTrippe
                 .build();
 
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .client(client)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+    Retrofit retrofit = new Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build();
+    apiService = retrofit.create(LaziTripperKoreanTourService.class);
 
-
-        apiService = retrofit.create(LaziTripperKoreanTourService.class);
-
-    }
+}
 
     public LaziTripperKoreanTourService getLiziTripperService(){
         return apiService;
