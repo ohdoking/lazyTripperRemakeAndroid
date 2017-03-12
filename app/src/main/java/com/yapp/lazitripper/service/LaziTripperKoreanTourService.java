@@ -108,7 +108,7 @@ public interface LaziTripperKoreanTourService {
         radius	거리 반경		필수	거리 반경(단위:m) , Max값 20000m=20Km
     */
     @GET("rest/KorService/locationBasedList")
-    Call<RegionCodeDto> getPlaceInfoByLocation(
+    Call<CommonResponse<PlaceInfoDto>> getPlaceInfoByLocation(
             @Path("numOfRows") String numOfRows,
             @Path("pageNo") String pageNo,
             @Path("arrange") String arrange,
