@@ -29,6 +29,7 @@ import com.yapp.lazitripper.dto.PlaceInfoDto;
 import com.yapp.lazitripper.store.ConstantStore;
 import com.yapp.lazitripper.store.SharedPreferenceStore;
 import com.yapp.lazitripper.views.bases.BaseFragmentActivity;
+import com.yapp.lazitripper.views.dialog.LoadingDialog;
 
 import java.util.ArrayList;
 
@@ -48,11 +49,15 @@ public class TravelSummaryActivity extends BaseFragmentActivity implements OnMap
     ListView placeListView;
     PlaceInfoAdapter adapter;
 
+    LoadingDialog loadingDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_travel_summary);
 
+        loadingDialog = new LoadingDialog(TravelSummaryActivity.this);
+        loadingDialog.show();
         // SP 에서 저장된 테그들의 정보를 가져옴.
         SharedPreferenceStore<String[]> sharedPreferenceStore = new SharedPreferenceStore<String[]>(getApplicationContext(), ConstantStore.STORE);
         String[] tagList = sharedPreferenceStore.getPreferences(ConstantStore.TAGS, String[].class);
@@ -71,9 +76,9 @@ public class TravelSummaryActivity extends BaseFragmentActivity implements OnMap
         placeListView.setAdapter(adapter);
 
         //경계값 오류 처리해야함.
-        for(i=0; !beforeSelectPlaceList.isEmpty(); i++){
-            Log.e(TAG, beforeSelectPlaceList.get(i).getTitle());
-        }
+//        for(i=0; !beforeSelectPlaceList.isEmpty(); i++){
+//            Log.e(TAG, beforeSelectPlaceList.get(i).getTitle());
+//        }
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -130,6 +135,8 @@ public class TravelSummaryActivity extends BaseFragmentActivity implements OnMap
                 return false;
             }
         });
+
+        loadingDialog.dismiss();
 
     }
 

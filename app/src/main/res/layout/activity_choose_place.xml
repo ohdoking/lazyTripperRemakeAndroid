@@ -5,22 +5,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/linlaHeaderProgress"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone" >
-
-        <ProgressBar
-            android:id="@+id/pbHeaderProgress"
-            style="@style/spinner_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
-        </ProgressBar>
-    </LinearLayout>
-
     <TextView
         android:text="오른쪽으로 넘긴 여행지가 루트에 추가되요"
         android:layout_width="match_parent"

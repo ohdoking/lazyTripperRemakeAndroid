@@ -24,6 +24,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.yapp.lazitripper.R;
 import com.yapp.lazitripper.common.ConstantIntent;
+import com.yapp.lazitripper.views.dialog.LoadingDialog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,6 +42,8 @@ public class LoginActivity extends FragmentActivity {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
+    private LoadingDialog loadingDialog;
+
     String name;
 
     @Override
@@ -51,10 +54,12 @@ public class LoginActivity extends FragmentActivity {
         callbackManager = CallbackManager.Factory.create();
         mAuth = FirebaseAuth.getInstance();
 
+        loadingDialog = new LoadingDialog(LoginActivity.this);
+
         LoginButton loginButton = (LoginButton) findViewById(R.id.facebookBtn);
         loginButton.setText("페이스북으로 시작");
 //        loginButton.setBackgroundResource(R.drawable.facebook_btn);
-        loginButton.setReadPermissions("name", "public_profile");
+        loginButton.setReadPermissions("email", "public_profile");
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -79,7 +84,7 @@ public class LoginActivity extends FragmentActivity {
                             }
                         });
                 Bundle parameters = new Bundle();
-                parameters.putString("fields", "id,name,name,gender,birthday");
+                parameters.putString("fields", "id,name,email,gender,birthday");
                 request.setParameters(parameters);
                 request.executeAsync();
             }
@@ -107,6 +112,7 @@ public class LoginActivity extends FragmentActivity {
 
                     Intent i = new Intent(LoginActivity.this, KeywordSelectActivity.class);
                     i.putExtra(ConstantIntent.NAME, name);
+                    loadingDialog.dismiss();
                     startActivity(i);
                     finish();
 
@@ -133,11 +139,7 @@ public class LoginActivity extends FragmentActivity {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
 
-        Log.i("ohdoking-result",requestCode + " / " + resultCode + "/");
-
-        if(requestCode == 64206){
-
-        }
+        loadingDialog.show();
     }
 
     private void handleFacebookAccessToken(AccessToken token) {
