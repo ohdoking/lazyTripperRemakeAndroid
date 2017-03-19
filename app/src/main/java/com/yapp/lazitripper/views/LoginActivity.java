@@ -41,7 +41,7 @@ public class LoginActivity extends FragmentActivity {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
-    String email;
+    String name;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,7 +54,7 @@ public class LoginActivity extends FragmentActivity {
         LoginButton loginButton = (LoginButton) findViewById(R.id.facebookBtn);
         loginButton.setText("페이스북으로 시작");
 //        loginButton.setBackgroundResource(R.drawable.facebook_btn);
-        loginButton.setReadPermissions("email", "public_profile");
+        loginButton.setReadPermissions("name", "public_profile");
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -71,7 +71,7 @@ public class LoginActivity extends FragmentActivity {
 
                                 // Application code
                                 try {
-                                    email = object.getString("email");
+                                    name = object.getString(ConstantIntent.NAME);
                                     String birthday = object.getString("birthday"); // 01/31/1980 format
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -79,7 +79,7 @@ public class LoginActivity extends FragmentActivity {
                             }
                         });
                 Bundle parameters = new Bundle();
-                parameters.putString("fields", "id,name,email,gender,birthday");
+                parameters.putString("fields", "id,name,name,gender,birthday");
                 request.setParameters(parameters);
                 request.executeAsync();
             }
@@ -97,13 +97,19 @@ public class LoginActivity extends FragmentActivity {
             }
         });
 
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+
+                    Intent i = new Intent(LoginActivity.this, KeywordSelectActivity.class);
+                    i.putExtra(ConstantIntent.NAME, name);
+                    startActivity(i);
+                    finish();
+
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
@@ -113,11 +119,11 @@ public class LoginActivity extends FragmentActivity {
 
         // 로그인 되어있으면 바로 접속
             if(isLoggedIn()){
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 Intent i = new Intent(LoginActivity.this, KeywordSelectActivity.class);
-                i.putExtra(ConstantIntent.EMAIL,email);
+                i.putExtra(ConstantIntent.NAME, user.getDisplayName());
                 startActivity(i);
                 finish();
-
             }
 
     }
@@ -130,10 +136,7 @@ public class LoginActivity extends FragmentActivity {
         Log.i("ohdoking-result",requestCode + " / " + resultCode + "/");
 
         if(requestCode == 64206){
-            Intent i = new Intent(LoginActivity.this, KeywordSelectActivity.class);
-            i.putExtra(ConstantIntent.EMAIL,email);
-            startActivity(i);
-            finish();
+
         }
     }
 

@@ -46,11 +46,11 @@ public class HomeActivity extends BaseAppCompatActivity {
         });
 
         TextView emailTv = (TextView) findViewById(R.id.textView2);
-        String email = getIntent().getStringExtra(ConstantIntent.EMAIL);
-        if(email == null || email.equals("")){
-            email = "유리";
+        String name = getIntent().getStringExtra(ConstantIntent.NAME);
+        if(name == null || name.equals("")){
+            name = "유리";
         }
-        emailTv.setText(email + "님,\n떠나고 싶은\n여행을 만나보세요");
+        emailTv.setText(name + "님,\n떠나고 싶은\n여행을 만나보세요");
 
         //여행 시작
         linearLayout = (LinearLayout) findViewById(R.id.nextPageBtn);

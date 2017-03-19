@@ -95,9 +95,7 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
         countryDropDown.setSkin(WheelView.Skin.Holo);
 
         country.add("한국");
-        country.add("미국");
         countryDropDown.setWheelData(country);
-            Log.d("tttttttt","test");
 
         mRingProgressBar = (RingProgressBar) findViewById(R.id.progress_bar);
 

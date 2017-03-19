@@ -19,7 +19,7 @@ public class KeywordSelectActivity extends BaseAppCompatActivity implements View
     ImageButton[] text = new ImageButton[15];
     boolean[] flag = new boolean[15];
     ArrayList<String> stringArrayList;
-    String email;
+    String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +27,7 @@ public class KeywordSelectActivity extends BaseAppCompatActivity implements View
         setHeader();
         setContentView(R.layout.activity_keyword_select);
 
-        email = getIntent().getStringExtra(ConstantIntent.EMAIL);
+        name = getIntent().getStringExtra(ConstantIntent.NAME);
         final SharedPreferenceStore sharedPreferenceStore = new SharedPreferenceStore(getApplicationContext(), ConstantStore.STORE);
 
         ImageView leftImage = getLeftImageView();
@@ -40,7 +40,7 @@ public class KeywordSelectActivity extends BaseAppCompatActivity implements View
 
                 sharedPreferenceStore.savePreferences(ConstantStore.TAGS, stringArrayList);
                 Intent i = new Intent(KeywordSelectActivity.this, HomeActivity.class);
-                i.putExtra(ConstantIntent.EMAIL,email);
+                i.putExtra(ConstantIntent.NAME,name);
                 startActivity(i);
             }
         });
