@@ -105,7 +105,7 @@ public class DatePickActivity extends BaseAppCompatActivity {
         });
 
         /*
-        * 이전날짜 선택시 무시
+        * 이전날짜 선택시 시작 날짜가 이전날짜가 되도록 수정
         * */
         calendar.setCellClickInterceptor(new CalendarPickerView.CellClickInterceptor() {
             @Override
@@ -113,7 +113,9 @@ public class DatePickActivity extends BaseAppCompatActivity {
                 if (FLAG == 1){
                     long diff = pickDate.getStartDate().getTime() - date.getTime();
                     if(diff > 0){
-                        return true;
+                        calendar.clearHighlightedDates();
+                        FLAG = 0;
+                        return false;
                     }
                     else{
                         return false;
