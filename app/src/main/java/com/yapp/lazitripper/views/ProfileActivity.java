@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.facebook.login.LoginManager;
+import com.google.firebase.auth.FirebaseAuth;
 import com.yapp.lazitripper.R;
 import com.yapp.lazitripper.store.ConstantStore;
 import com.yapp.lazitripper.store.SharedPreferenceStore;
@@ -35,8 +37,11 @@ public class ProfileActivity extends BaseAppCompatActivity {
         rightImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                LoginManager.getInstance().logOut();
                 Intent i = new Intent(ProfileActivity.this, LoginActivity.class);
                 startActivity(i);
+                finish();
             }
         });
 

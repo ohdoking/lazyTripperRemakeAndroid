@@ -112,11 +112,13 @@ public class LoginActivity extends FragmentActivity {
         };
 
         // 로그인 되어있으면 바로 접속
-        if(isLoggedIn()){
-            Intent i = new Intent(LoginActivity.this, KeywordSelectActivity.class);
-            i.putExtra(ConstantIntent.EMAIL,email);
-            startActivity(i);
-        }
+            if(isLoggedIn()){
+                Intent i = new Intent(LoginActivity.this, KeywordSelectActivity.class);
+                i.putExtra(ConstantIntent.EMAIL,email);
+                startActivity(i);
+                finish();
+
+            }
 
     }
 
@@ -131,6 +133,7 @@ public class LoginActivity extends FragmentActivity {
             Intent i = new Intent(LoginActivity.this, KeywordSelectActivity.class);
             i.putExtra(ConstantIntent.EMAIL,email);
             startActivity(i);
+            finish();
         }
     }
 
