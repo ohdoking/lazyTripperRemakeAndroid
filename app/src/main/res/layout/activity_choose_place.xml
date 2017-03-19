@@ -3,6 +3,8 @@
     android:id="@+id/activity_choose_place"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:paddingTop="10dp"
     android:orientation="vertical">
 
     <TextView
@@ -10,6 +12,7 @@
         android:layout_width="match_parent"
         android:textAlignment="center"
         android:gravity="center"
+        android:textSize="12sp"
         android:layout_height="30dp" />
 
 

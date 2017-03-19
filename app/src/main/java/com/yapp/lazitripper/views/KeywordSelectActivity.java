@@ -42,6 +42,7 @@ public class KeywordSelectActivity extends BaseAppCompatActivity implements View
                 Intent i = new Intent(KeywordSelectActivity.this, HomeActivity.class);
                 i.putExtra(ConstantIntent.NAME,name);
                 startActivity(i);
+                finish();
             }
         });
 

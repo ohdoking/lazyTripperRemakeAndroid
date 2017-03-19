@@ -3,6 +3,7 @@ package com.yapp.lazitripper.views;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -75,6 +76,11 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
     Integer landMarkUseCount = 0;
 
     TravelRoute travelRoute;
+    // paging 처리를 위한
+    Integer page = 1;
+
+    private Boolean exit = false;
+
 
     ArrayList<PlaceInfoDto> placeInfoDtoList = new ArrayList<PlaceInfoDto>();
     @Override
@@ -131,14 +137,16 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
 
         //contenttype이 관광지면 도시 기반으로 가져오고 나머지인경우 위치에 가까운 식당이나 숙소 데이터를 가져온다.
         if(contentTypeId == 12){
-            callRelionInfo = laziTripperKoreanTourService.getPlaceInfoByCity(20,1,"B","Y","AND","LaziTripper",cityCode, contentTypeId);
+            callRelionInfo = laziTripperKoreanTourService.getPlaceInfoByCity(20,page,"B","Y","AND","LaziTripper",cityCode, contentTypeId);
         }
         else{
             if(landMarkUseCount > placeCount.getLandMark()){
                 landMarkUseCount = placeCount.getLandMark();
             }
-            callRelionInfo = laziTripperKoreanTourService.getPlaceInfoByLocation(20,1,"E","Y","AND","LaziTripper",contentTypeId, travelRoute.getList().get(landMarkUseCount).getMapx(), travelRoute.getList().get(landMarkUseCount).getMapy() ,100000);
-            landMarkUseCount++;
+            callRelionInfo = laziTripperKoreanTourService.getPlaceInfoByLocation(20,page,"E","Y","AND","LaziTripper",contentTypeId, travelRoute.getList().get(landMarkUseCount).getMapx(), travelRoute.getList().get(landMarkUseCount).getMapy() ,100000);
+            if(array.size() != count){
+                landMarkUseCount++;
+            }
         }
 
 
@@ -222,10 +230,9 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
             }
             PlaceInfoDto curItem = list.get(position);
             Log.i("ohdoking",curItem.getTitle());
-//            Glide.with(context).load(curItem.getFirstimage()).into(viewHolder.image);
 
 //            viewHolder.background.set(0xff556677);
-            Glide.with(context).load(curItem.getFirstimage()).override(300, 700).fitCenter().into(viewHolder.background);
+            Glide.with(context).load(curItem.getFirstimage()).override(485, 710).centerCrop().into(viewHolder.background);
             viewHolder.name.setText(curItem.getTitle());
             viewHolder.image.setImageDrawable(getResources().getDrawable(R.drawable.korea));
             viewHolder._addr.setText("ADD");
@@ -263,6 +270,20 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
                 //You also have access to the original object.
                 //If you want to use it just cast it (String) dataObject
                 Toast.makeText(ChoosePlaceActivity.this, "싫어요", Toast.LENGTH_SHORT).show();
+
+                if(array.size() == count){
+                    page++;
+
+                    if(locationFlag == 0){
+                        getPlaceData(12);
+                    }
+                    else if(locationFlag == 1){
+                        getPlaceData(39);
+                    }
+                    else if(locationFlag == 2){
+                        getPlaceData(32);
+                    }
+                }
             }
 
             @Override
@@ -272,10 +293,12 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
                 locationCount++;
                 Toast.makeText(ChoosePlaceActivity.this,  locationCount + "회 좋아요", Toast.LENGTH_SHORT).show();
                 if(locationFlag == 0){
-                    if(placeCount.getLandMark().equals(locationCount)|| array.size() == count){
+                    if(placeCount.getLandMark().equals(locationCount) || array.size() == count){
+
                         locationCount = 0;
                         locationFlag = 1;
                         count = 0;
+                        page = 1;
 
                         travelRoute = new TravelRoute(array);
                         //39 음식
@@ -284,9 +307,12 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
                 }
                 else if(locationFlag == 1){
                     if(placeCount.getRestaurant().equals(locationCount) || array.size() == count) {
+
+
                         locationCount = 0;
                         locationFlag = 2;
                         count = 0;
+                        page = 1;
                         //32 숙박
                         getPlaceData(32);
                     }
@@ -298,8 +324,10 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
                 }
                 else if(locationFlag == 2){
                     if(placeCount.getAccommodation().equals(locationCount) || array.size() == count){
+
                         locationCount = 0;
                         count = 0;
+                        page = 1;
                         Intent i = new Intent(ChoosePlaceActivity.this, TravelSummaryActivity.class);
                         i.putExtra(ConstantIntent.PLACELIST,placeInfoDtoList);
                         startActivity(i);
@@ -326,6 +354,25 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (exit) {
+            finish(); // finish activity
+        } else {
+            Toast.makeText(this, R.string.back_cause,
+                    Toast.LENGTH_SHORT).show();
+            exit = true;
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    exit = false;
+                }
+            }, 3 * 1000);
+
+        }
+
     }
 
 }

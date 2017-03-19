@@ -47,7 +47,7 @@ public class SetPlaceCountDialog extends Dialog {
         setContentView(R.layout.set_place_count_dialog);
         setTitle("선택해주세요 ..?");
         //default 랜드마크 4, 음식점 3, 숙소 1
-        placeCount = new PlaceCount(4,3,1);
+        placeCount = new PlaceCount(3,2,0);
 
         init();
     }
@@ -70,7 +70,7 @@ public class SetPlaceCountDialog extends Dialog {
         landmarkCountWheelView.setOnWheelItemSelectedListener(new WheelView.OnWheelItemSelectedListener() {
             @Override
             public void onItemSelected(int position, Object o) {
-                placeCount.setLandMark(position);
+                placeCount.setLandMark(position+1);
             }
         });
 
@@ -82,7 +82,7 @@ public class SetPlaceCountDialog extends Dialog {
         restaurantCountWheelView.setOnWheelItemSelectedListener(new WheelView.OnWheelItemSelectedListener() {
             @Override
             public void onItemSelected(int position, Object o) {
-                placeCount.setRestaurant(position);
+                placeCount.setRestaurant(position+1);
             }
         });
 
@@ -94,7 +94,7 @@ public class SetPlaceCountDialog extends Dialog {
         accommodationCountWheelView.setOnWheelItemSelectedListener(new WheelView.OnWheelItemSelectedListener() {
             @Override
             public void onItemSelected(int position, Object o) {
-                placeCount.setAccommodation(position);
+                placeCount.setAccommodation(position+1);
             }
         });
 
@@ -106,6 +106,7 @@ public class SetPlaceCountDialog extends Dialog {
                 i.putExtra(ConstantIntent.CITYCODE, cityNum);
                 i.putExtra(ConstantIntent.PLACECOUNT, placeCount);
                 context.startActivity(i);
+                dismiss();
             }
         });
     }

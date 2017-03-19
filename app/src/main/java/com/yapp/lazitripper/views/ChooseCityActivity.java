@@ -20,6 +20,7 @@ import com.yapp.lazitripper.service.LaziTripperKoreanTourService;
 import com.yapp.lazitripper.store.ConstantStore;
 import com.yapp.lazitripper.store.SharedPreferenceStore;
 import com.yapp.lazitripper.views.bases.BaseAppCompatActivity;
+import com.yapp.lazitripper.views.dialog.LoadingDialog;
 import com.yapp.lazitripper.views.dialog.SetPlaceCountDialog;
 
 import org.joda.time.DateTime;
@@ -59,11 +60,16 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
     //city 의 id를 저장
     Integer cityNum;
 
+    LoadingDialog loadingDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_city);
         setHeader();
+
+        loadingDialog = new LoadingDialog(ChooseCityActivity.this);
+        loadingDialog.show();
 
         getRightImageView().setVisibility(View.INVISIBLE);
         ImageView leftImage = getLeftImageView();
@@ -114,7 +120,6 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
             @Override
             public void onItemSelected(int position, Object o) {
                 int sid=countryDropDown.getSelectedItemPosition();
-                Log.d("tttttttt","test2");
                 cityDropDown.setWheelClickable(true);
                 getCityData(position);
             }
@@ -157,7 +162,7 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
         laziTripperKoreanTourService = laziTripperKoreanTourClient.getLiziTripperService();
         //@TODO 국가 정보를 받아서 지역을 뿌려준다.
         Call<CommonResponse<RegionCodeDto>> callRelionInfo = laziTripperKoreanTourService.getRelionInfo(100,1,"AND","LaziTripper");
-        Log.d("tttttttt","test3");
+
 
         callRelionInfo.enqueue(new Callback<CommonResponse<RegionCodeDto>>() {
             @Override
@@ -169,22 +174,11 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
                     list.add(regionCodeDtoList.get(i).getName());
                 }
 
-                Log.d("ttttttttt",list.size() + "test4");
-//                renderSecondSpinner();
+                loadingDialog.dismiss();
+
                 cityDropDown.setWheelData(list);
-//                cityDropDown.setWheelSize(placeListView.size());
-//                cityDropDown.setLoop(true);
-//                cityDropDown.setClickable(true);
-//                cityDropDown.resetDataFromTop(placeListView);
                 cityDropDown.deferNotifyDataSetChanged();
-//                cityDropDown.onRemoteAdapterDisconnected();
-//                cityDropDown.notifyAll();
                 isData = true;
-//                adapter2.addAll(placeListView);
-//                adapter2.notifyDataSetChanged();
-
-
-//                renderSecondSpinner(cities);
             }
 
             @Override

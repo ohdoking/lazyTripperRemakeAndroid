@@ -1,6 +1,7 @@
 package com.yapp.lazitripper.views;
 
 import android.graphics.Color;
+import android.os.Handler;
 import android.widget.ListView;
 
 import android.os.Bundle;
@@ -50,6 +51,8 @@ public class TravelSummaryActivity extends BaseFragmentActivity implements OnMap
     PlaceInfoAdapter adapter;
 
     LoadingDialog loadingDialog;
+
+    private Boolean exit = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -196,5 +199,24 @@ public class TravelSummaryActivity extends BaseFragmentActivity implements OnMap
 
             return view;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (exit) {
+            finish(); // finish activity
+        } else {
+            Toast.makeText(this, R.string.back_cause,
+                    Toast.LENGTH_SHORT).show();
+            exit = true;
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    exit = false;
+                }
+            }, 3 * 1000);
+
+        }
+
     }
 }
