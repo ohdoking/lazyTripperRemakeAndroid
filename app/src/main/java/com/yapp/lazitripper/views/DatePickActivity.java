@@ -82,7 +82,6 @@ public class DatePickActivity extends BaseAppCompatActivity {
         calendar.setOnDateSelectedListener(new CalendarPickerView.OnDateSelectedListener() {
             @Override
             public void onDateSelected(Date date) {
-                Log.i("ohdoking","click");
                 if (FLAG == 0){
                     pickDate.setStartDate(date);
                     FLAG = 1;
@@ -102,6 +101,25 @@ public class DatePickActivity extends BaseAppCompatActivity {
             public void onDateUnselected(Date date) {
                 Log.i("ohdoking","onDateUnselected");
                 pickDate = new PickDate();
+            }
+        });
+
+        /*
+        * 이전날짜 선택시 무시
+        * */
+        calendar.setCellClickInterceptor(new CalendarPickerView.CellClickInterceptor() {
+            @Override
+            public boolean onCellClicked(Date date) {
+                if (FLAG == 1){
+                    long diff = pickDate.getStartDate().getTime() - date.getTime();
+                    if(diff > 0){
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
+                }
+                return false;
             }
         });
     }
