@@ -12,5 +12,7 @@ public class ConstantIntent {
     public static String PLACELIST = "placeList";
     public static String PICKDATE = "pick-date";
     public static String NAME = "name";
+    public static String PLACECOUNT = "place-count";
+
 
 }

@@ -20,6 +20,7 @@ import com.yapp.lazitripper.service.LaziTripperKoreanTourService;
 import com.yapp.lazitripper.store.ConstantStore;
 import com.yapp.lazitripper.store.SharedPreferenceStore;
 import com.yapp.lazitripper.views.bases.BaseAppCompatActivity;
+import com.yapp.lazitripper.views.dialog.SetPlaceCountDialog;
 
 import org.joda.time.DateTime;
 
@@ -74,10 +75,6 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
             }
         });
 
-
-
-
-
         sharedPreferenceStore = new SharedPreferenceStore<PickDate>(getApplicationContext(), ConstantStore.STORE);
 
         PickDate pickDate = sharedPreferenceStore.getPreferences(ConstantStore.DATEKEY, PickDate.class);
@@ -127,9 +124,13 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
         selectPlaceBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(ChooseCityActivity.this, ChoosePlaceActivity.class);
-                i.putExtra(ConstantIntent.CITYCODE, cityNum);
-                startActivity(i);
+//                Intent i = new Intent(ChooseCityActivity.this, ChoosePlaceActivity.class);
+//                i.putExtra(ConstantIntent.CITYCODE, cityNum);
+//                startActivity(i);
+
+                SetPlaceCountDialog setPlaceCountDialog = new SetPlaceCountDialog(ChooseCityActivity.this, cityNum);
+                setPlaceCountDialog.show();
+                setPlaceCountDialog.setCancelable(true);
             }
         });
 
