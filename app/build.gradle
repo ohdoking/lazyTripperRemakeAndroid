@@ -76,5 +76,10 @@ dependencies {
     compile 'com.wx.wheelview:wheelview:1.3.3'
 
     compile 'noman.weekcalendar:weekcalendar:1.0.6'
+    compile 'devs.mulham.horizontalcalendar:horizontalcalendar:1.1.0'
+
+    //loading
+    compile 'me.zhanghai.android.materialprogressbar:library:1.3.0'
+
 }
 apply plugin: 'com.google.gms.google-services'

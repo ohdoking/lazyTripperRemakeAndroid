@@ -1,6 +1,6 @@
 package com.yapp.lazitripper.views;
 
-import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,7 +11,7 @@ import android.widget.Toast;
 import com.wx.wheelview.adapter.ArrayWheelAdapter;
 import com.wx.wheelview.widget.WheelView;
 import com.yapp.lazitripper.R;
-import com.yapp.lazitripper.common.ConstantIntent;
+import com.yapp.lazitripper.dto.ChooseDate;
 import com.yapp.lazitripper.dto.PickDate;
 import com.yapp.lazitripper.dto.RegionCodeDto;
 import com.yapp.lazitripper.dto.common.CommonResponse;
@@ -20,17 +20,21 @@ import com.yapp.lazitripper.service.LaziTripperKoreanTourService;
 import com.yapp.lazitripper.store.ConstantStore;
 import com.yapp.lazitripper.store.SharedPreferenceStore;
 import com.yapp.lazitripper.views.bases.BaseAppCompatActivity;
+import com.yapp.lazitripper.views.component.weekcalendar.LazyWeekCalendar;
+import com.yapp.lazitripper.views.component.weekcalendar.OnDateClickListener;
+import com.yapp.lazitripper.views.component.weekcalendar2.HorizontalCalendar;
+import com.yapp.lazitripper.views.component.weekcalendar2.HorizontalCalendarListener;
 import com.yapp.lazitripper.views.dialog.LoadingDialog;
 import com.yapp.lazitripper.views.dialog.SetPlaceCountDialog;
 
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import io.netopen.hotbitmapgg.library.view.RingProgressBar;
-import noman.weekcalendar.WeekCalendar;
-import noman.weekcalendar.listener.OnDateClickListener;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -41,7 +45,8 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
 
     WheelView countryDropDown;
     WheelView cityDropDown;
-    WeekCalendar weekCalendar;
+//    LazyWeekCalendar weekCalendar;
+    HorizontalCalendar horizontalCalendar;
     ImageView selectPlaceBtn;
     RingProgressBar mRingProgressBar;
 
@@ -90,7 +95,45 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
         countryDropDown =(WheelView)findViewById(R.id.country_spinner);
         cityDropDown =(WheelView)findViewById(R.id.city_spinner);
         selectPlaceBtn = (ImageView) findViewById(R.id.selectPlaceBtn);
-        weekCalendar = (WeekCalendar) findViewById(R.id.weekCalendar);
+//        weekCalendar = (LazyWeekCalendar) findViewById(R.id.weekCalendar);
+
+
+        Integer period = 7;
+        if(pickDate.getPeriod().intValue() < period){
+            period = pickDate.getPeriod().intValue();
+        }
+
+        ArrayList<Date> chooseDates = new ArrayList<Date>();
+
+        Calendar calendar = Calendar.getInstance();
+        Date today = calendar.getTime();
+
+        calendar.add(Calendar.DAY_OF_YEAR, 1);
+        Date tommorow = calendar.getTime();
+
+        calendar.add(Calendar.DAY_OF_YEAR, 1);
+        Date nextTommorow = calendar.getTime();
+
+
+        chooseDates.add(tommorow);
+        chooseDates.add(nextTommorow);
+
+        horizontalCalendar = new HorizontalCalendar.Builder(this, R.id.weekCalendar)
+                .setChooseDate(chooseDates)
+                .startDate(pickDate.getStartDate())
+                .endDate(pickDate.getFinishDate())
+                .datesNumberOnScreen(period)   // Number of Dates cells shown on screen (Recommended 5)
+                .dayNameFormat("EEE")	  // WeekDay text format
+                .dayNumberFormat("dd")    // Date format
+                .monthFormat("MMM") 	  // Month format
+                .showDayName(true)	  // Show or Hide dayName text
+                .showMonthName(true)	  // Show or Hide month text
+                .textColor(Color.LTGRAY, Color.WHITE)    // Text color for none selected Dates, Text color for selected Date.
+                .selectedDateBackground(Color.TRANSPARENT)  // Background color of the selected date cell.
+                .selectorColor(Color.RED)
+                .build();
+
+
         ArrayAdapter<String> adapter= new ArrayAdapter<String>(this,android.
                 R.layout.simple_spinner_dropdown_item ,country);
 
@@ -141,7 +184,7 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
 
 
 
-        weekCalendar.setOnDateClickListener(new OnDateClickListener() {
+       /* weekCalendar.setOnDateClickListener(new OnDateClickListener() {
             @Override
             public void onDateClick(DateTime dateTime) {
                 Toast.makeText(ChooseCityActivity.this,
@@ -150,7 +193,17 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
 
 
 
+        });*/
+        horizontalCalendar.setCalendarListener(new HorizontalCalendarListener() {
+            @Override
+            public void onDateSelected(Date date, int position) {
+                Toast.makeText(ChooseCityActivity.this,
+                        "You Selected " + date.toString(), Toast.LENGTH_SHORT).show();
+
+                horizontalCalendar.setSelectedDateBackground(Color.GRAY);
+            }
         });
+
         renderSecondSpinner();
     }
 
@@ -213,6 +266,12 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
         Long l = pre*100/total;
         mRingProgressBar.setProgress(l.intValue());
         
+    }
+
+    public Calendar toCalendar(Date date){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        return cal;
     }
 
 

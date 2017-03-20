@@ -18,16 +18,21 @@
         android:gravity="center"
         android:layout_height="30dp" />
 
-    <noman.weekcalendar.WeekCalendar
+    <!--<com.yapp.lazitripper.views.component.weekcalendar.LazyWeekCalendar
         android:id="@+id/weekCalendar"
         android:layout_width="match_parent"
         android:layout_height="65dp"
         android:background="@color/colorPrimary"
         app:numOfPages="150"
-        app:dayNameLength="threeLetters"
         app:hideNames="false"
         app:weekTextSize="12sp"
-        />
+        />-->
+    <com.yapp.lazitripper.views.component.weekcalendar2.HorizontalCalendarView
+        android:id="@+id/weekCalendar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        app:textColorSelected="#FFFF"/>
 
     <View
         android:layout_width="match_parent"
