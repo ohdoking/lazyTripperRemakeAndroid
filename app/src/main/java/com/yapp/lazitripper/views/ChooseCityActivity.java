@@ -55,6 +55,9 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
 
     ArrayList<String> cities = new ArrayList<String>();
 
+    //선택한 날짜
+    PickDate chooseDate;
+
     public RegionCodeDto regionCodeDtoDto;
     public LaziTripperKoreanTourClient laziTripperKoreanTourClient;
     public LaziTripperKoreanTourService laziTripperKoreanTourService;
@@ -88,7 +91,8 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
 
         sharedPreferenceStore = new SharedPreferenceStore<PickDate>(getApplicationContext(), ConstantStore.STORE);
 
-        PickDate pickDate = sharedPreferenceStore.getPreferences(ConstantStore.DATEKEY, PickDate.class);
+
+        final PickDate pickDate = sharedPreferenceStore.getPreferences(ConstantStore.DATEKEY, PickDate.class);
         Log.i("ohdoking",pickDate.getStartDate() + " / " + pickDate.getPeriod());
 
         // Get reference of SpinnerView from layout/main_activity.xml
@@ -176,29 +180,30 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
 //                i.putExtra(ConstantIntent.CITYCODE, cityNum);
 //                startActivity(i);
 
-                SetPlaceCountDialog setPlaceCountDialog = new SetPlaceCountDialog(ChooseCityActivity.this, cityNum);
-                setPlaceCountDialog.show();
-                setPlaceCountDialog.setCancelable(true);
+                if(pickDate.getFinishDate() == null ){
+                    Toast.makeText(ChooseCityActivity.this,
+                            "날짜를 선택해주세요!", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    //shared에 선택한 스케쥴 날짜를 넣는다
+                    sharedPreferenceStore.savePreferences(ConstantStore.SCHEDULE_DATE, pickDate);
+                    SetPlaceCountDialog setPlaceCountDialog = new SetPlaceCountDialog(ChooseCityActivity.this, cityNum);
+                    setPlaceCountDialog.show();
+                    setPlaceCountDialog.setCancelable(true);
+                }
             }
         });
 
-
-
-       /* weekCalendar.setOnDateClickListener(new OnDateClickListener() {
-            @Override
-            public void onDateClick(DateTime dateTime) {
-                Toast.makeText(ChooseCityActivity.this,
-                        "You Selected " + dateTime.toString(), Toast.LENGTH_SHORT).show();
-            }
-
-
-
-        });*/
+        //날짜 선택
         horizontalCalendar.setCalendarListener(new HorizontalCalendarListener() {
             @Override
             public void onDateSelected(Date date, int position) {
                 Toast.makeText(ChooseCityActivity.this,
                         "You Selected " + date.toString(), Toast.LENGTH_SHORT).show();
+
+                pickDate.setStartDate(date);
+                pickDate.setFinishDate(date);
+                pickDate.setPeriod(1L);
 
                 horizontalCalendar.setSelectedDateBackground(Color.GRAY);
             }
