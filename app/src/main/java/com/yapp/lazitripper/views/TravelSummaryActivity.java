@@ -26,6 +26,7 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.yapp.lazitripper.R;
 import com.yapp.lazitripper.common.ConstantIntent;
+import com.yapp.lazitripper.dto.PickDate;
 import com.yapp.lazitripper.dto.PlaceInfoDto;
 import com.yapp.lazitripper.store.ConstantStore;
 import com.yapp.lazitripper.store.SharedPreferenceStore;
@@ -51,6 +52,10 @@ public class TravelSummaryActivity extends BaseFragmentActivity implements OnMap
     ListView placeListView;
     PlaceInfoAdapter adapter;
 
+    SharedPreferenceStore<PickDate> scheduleDateStore;
+    PickDate scheduleDate;
+
+
     LoadingDialog loadingDialog;
 
     private Boolean exit = false;
@@ -65,6 +70,11 @@ public class TravelSummaryActivity extends BaseFragmentActivity implements OnMap
         // SP 에서 저장된 테그들의 정보를 가져옴.
         SharedPreferenceStore<String[]> sharedPreferenceStore = new SharedPreferenceStore<String[]>(getApplicationContext(), ConstantStore.STORE);
         String[] tagList = sharedPreferenceStore.getPreferences(ConstantStore.TAGS, String[].class);
+
+
+        //해당 여행 일자
+        scheduleDateStore = new SharedPreferenceStore<PickDate>(getApplicationContext(), ConstantStore.STORE);
+        scheduleDate = scheduleDateStore.getPreferences(ConstantStore.SCHEDULE_DATE,PickDate.class);
 
         // 선택 엑티비티에서 선택한 장소에 대한 정보를 가져옴.
         Intent intent = getIntent();

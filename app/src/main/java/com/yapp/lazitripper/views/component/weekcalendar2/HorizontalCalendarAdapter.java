@@ -99,7 +99,7 @@ class HorizontalCalendarAdapter extends RecyclerView.Adapter<HorizontalCalendarA
             holder.txtDayNumber.setTextColor(horizontalCalendar.getTextColorSelected());
             holder.txtMonthName.setTextColor(horizontalCalendar.getTextColorSelected());
             holder.txtDayName.setTextColor(horizontalCalendar.getTextColorSelected());
-            holder.layoutBackground.setBackgroundColor(Color.GREEN);
+            holder.layoutBackground.setBackgroundColor(Color.parseColor("#fedf6b"));
             holder.selectionView.setVisibility(View.INVISIBLE);
         }
         // Unselected Days

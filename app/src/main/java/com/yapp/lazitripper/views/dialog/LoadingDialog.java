@@ -19,7 +19,7 @@ public class LoadingDialog extends Dialog{
         super(context);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.loading_dialog);
-
+        setCanceledOnTouchOutside(false);
         getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
     }
