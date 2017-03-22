@@ -395,7 +395,7 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
     //랜드마크 사이에 음식점 삽입
     private void inputLandMarkAndLandMark(PlaceInfoDto placeInfoDto){
         if(array.size() != count){
-            placeInfoDtoList.add(((landMarkUseCount)*2), placeInfoDto);
+            placeInfoDtoList.add(((landMarkUseCount*2)-1), placeInfoDto);
         }
         else{
             placeInfoDtoList.add(placeInfoDto);
