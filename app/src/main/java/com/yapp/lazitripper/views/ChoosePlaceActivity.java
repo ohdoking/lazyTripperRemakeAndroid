@@ -140,8 +140,8 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
             callRelionInfo = laziTripperKoreanTourService.getPlaceInfoByCity(20,page,"B","Y","AND","LaziTripper",cityCode, contentTypeId);
         }
         else{
-            if(landMarkUseCount > placeCount.getLandMark()){
-                landMarkUseCount = placeCount.getLandMark();
+            if(landMarkUseCount >= placeCount.getLandMark()){
+                landMarkUseCount = placeCount.getLandMark()-1;
             }
             else if(contentTypeId == 32){
                 //숙소는 마지막 랜드마크 다음
