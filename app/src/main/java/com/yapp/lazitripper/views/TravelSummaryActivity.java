@@ -29,6 +29,7 @@ import com.yapp.lazitripper.common.ConstantIntent;
 import com.yapp.lazitripper.dto.PlaceInfoDto;
 import com.yapp.lazitripper.store.ConstantStore;
 import com.yapp.lazitripper.store.SharedPreferenceStore;
+import com.yapp.lazitripper.util.TravelRoute;
 import com.yapp.lazitripper.views.bases.BaseFragmentActivity;
 import com.yapp.lazitripper.views.dialog.LoadingDialog;
 
@@ -70,11 +71,16 @@ public class TravelSummaryActivity extends BaseFragmentActivity implements OnMap
         ArrayList<PlaceInfoDto> beforeSelectPlaceList =
                 (ArrayList<PlaceInfoDto>)intent.getSerializableExtra(ConstantIntent.PLACELIST);
 
+        //요게 일단 최단거리긴한데 수정중
+        TravelRoute travelRoute = new TravelRoute(beforeSelectPlaceList);
+        ArrayList<PlaceInfoDto> shortRoute = travelRoute.findShortRoute();
+
         //리스트뷰
         placeListView = (ListView) findViewById(R.id.listview);
 
         adapter = new PlaceInfoAdapter();
-        adapter.addAllItem(beforeSelectPlaceList);
+        //adapter.addAllItem(beforeSelectPlaceList);
+        adapter.addAllItem(shortRoute);
 
         placeListView.setAdapter(adapter);
 

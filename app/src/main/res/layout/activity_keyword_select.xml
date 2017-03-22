@@ -17,27 +17,39 @@
             android:orientation="vertical">
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="34dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:text="당신의 여행 키워드를 골라주세요"
+                    android:textSize="12sp" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="133.3dp"
                 android:orientation="horizontal">
                 <ImageButton
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="97dp"
+                    android:layout_height="97dp"
                     android:layout_weight="1"
                     android:id="@+id/btn1"
                     android:src="@drawable/category01"
                     android:background="#00000000"
                     android:text=""/>
                 <ImageButton
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="97dp"
+                    android:layout_height="97dp"
                     android:id="@+id/btn2"
                     android:layout_weight="1"
                     android:src="@drawable/category02"
                     android:background="#00000000"
                     android:text=""/>
                 <ImageButton
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="97dp"
+                    android:layout_height="97dp"
                     android:id="@+id/btn3"
                     android:layout_weight="1"
                     android:src="@drawable/category03"
@@ -47,56 +59,57 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="133.3dp"
                 android:orientation="horizontal">
                 <ImageButton
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="97dp"
+                    android:layout_height="97dp"
                     android:layout_weight="1"
                     android:id="@+id/btn4"
                     android:src="@drawable/category04"
                     android:background="#00000000"
                     android:text=""/>
                 <ImageButton
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="97dp"
+                    android:layout_height="97dp"
                     android:id="@+id/btn5"
                     android:layout_weight="1"
                     android:src="@drawable/category05"
                     android:background="#00000000"
                     android:text=""/>
                 <ImageButton
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="97dp"
+                    android:layout_height="97dp"
                     android:id="@+id/btn6"
                     android:layout_weight="1"
                     android:src="@drawable/category06"
                     android:background="#00000000"
                     android:text=""/>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="133.3dp"
                 android:orientation="horizontal">
                 <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="97dp"
+                    android:layout_height="97dp"
                     android:layout_weight="1"
                     android:id="@+id/btn7"
                     android:src="@drawable/category07"
                     android:background="#00000000"
                     android:text=""/>
                 <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="97dp"
+                    android:layout_height="97dp"
                     android:id="@+id/btn8"
                     android:layout_weight="1"
                     android:src="@drawable/category08"
                     android:background="#00000000"
                     android:text=""/>
                 <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="97dp"
+                    android:layout_height="97dp"
                     android:id="@+id/btn9"
                     android:layout_weight="1"
                     android:src="@drawable/category09"
@@ -105,27 +118,27 @@
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="133.3dp"
                 android:orientation="horizontal">
                 <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="97dp"
+                    android:layout_height="97dp"
                     android:layout_weight="1"
                     android:id="@+id/btn10"
                     android:src="@drawable/category10"
                     android:background="#00000000"
                     android:text=""/>
                 <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="97dp"
+                    android:layout_height="97dp"
                     android:id="@+id/btn11"
                     android:layout_weight="1"
                     android:src="@drawable/category11"
                     android:background="#00000000"
                     android:text=""/>
                 <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="97dp"
+                    android:layout_height="97dp"
                     android:id="@+id/btn12"
                     android:layout_weight="1"
                     android:src="@drawable/category12"
@@ -134,27 +147,27 @@
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="133.3dp"
                 android:orientation="horizontal">
                 <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="97dp"
+                    android:layout_height="97dp"
                     android:layout_weight="1"
                     android:id="@+id/btn13"
                     android:src="@drawable/category13"
                     android:background="#00000000"
                     android:text=""/>
                 <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="97dp"
+                    android:layout_height="97dp"
                     android:id="@+id/btn14"
                     android:layout_weight="1"
                     android:src="@drawable/category14"
                     android:background="#00000000"
                     android:text=""/>
                 <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="97dp"
+                    android:layout_height="97dp"
                     android:id="@+id/btn15"
                     android:layout_weight="1"
                     android:src="@drawable/category15"

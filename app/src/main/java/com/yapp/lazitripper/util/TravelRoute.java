@@ -58,26 +58,28 @@ public class TravelRoute {
             dist = dist * 1609.344;
         }
 
-        return (dist);
+        return Math.floor(dist);
     }
 
     public ArrayList<ArrayList<Double>> getAllNodeDistance(List<PlaceInfoDto> place){
         ArrayList<ArrayList<Double>> allDistance = new ArrayList<ArrayList<Double>>();
+        PlaceInfoDto temp;
+        PlaceInfoDto temp2;
+        ArrayList<Double> dis;
+
+        //Log.d("distance","size:"+place.size());
         for(int i=0;i<place.size();i++){
-            PlaceInfoDto temp = place.get(i);
-            PlaceInfoDto temp2;
-            ArrayList<Double> dis = new ArrayList<Double>();
+            temp = place.get(i);
+            dis = new ArrayList<Double>();
 
             for(int j=0;j<place.size();j++){
                 temp2 = place.get(j);
-//                if(i == j){
-//                    continue;
-//                }else {
-                dis.add(calculateDistance(temp.getMapx(), temp.getMapy(), temp2.getMapx(), temp2.getMapy(), "meter"));
-                //}
+
+                //Log.d("distance",i+","+j+":"+calculateDistance(temp.getMapx(), temp.getMapy(), temp2.getMapx(), temp2.getMapy(), "meter"));
+                dis.add(Double.valueOf( calculateDistance(temp.getMapx(), temp.getMapy(), temp2.getMapx(), temp2.getMapy(), "meter")) );
+
             }
             allDistance.add(dis);
-
 
         }
 
@@ -104,24 +106,41 @@ public class TravelRoute {
 
         //node.add(123);
         //Log.d("distance",node.size()+"");
-        //Log.d("distance",node.get(node.size())+"qwerwqr"+node.size());
+        //Log.d("distance",node.get(node.size()-1)+"qwerwqr"+node.size());
 
         Double temp = dis.get(node.get(0)).get(0);
         Double temp2 = dis.get(node.get(node.size()-1)).get(0);
-        Integer a = new Integer(-1);
-        Integer b = new Integer(-1);
+        //Integer a = new Integer(-1);
+        //Integer b = new Integer(-1);
+        int a=99,b=99;
+
+        for(int i=0;i<dis.get(node.get(0)).size();i++){
+            if(!node.contains(Integer.valueOf(i))){
+                temp = dis.get(node.get(0)).get(i);
+                a = i;
+                break;
+            }
+        }
+        for(int i=0;i<dis.get(node.get(node.size()-1)).size();i++){
+            if(!node.contains(Integer.valueOf(i))){
+                temp2 = dis.get(node.get(node.size()-1)).get(i);
+                b = i;
+                break;
+            }
+        }
 
         for(int i=0;i<dis.get(node.get(0)).size();i++){
             if(node.contains(Integer.valueOf(i))){
                 //Log.d("distance","i값 : "+i);
                 continue;
             }
-            a = i;
-            if(temp >= dis.get(node.get(0)).get(i)) {
-                //Log.d("distance", "if안" + i);
+            //a = i;
+            if(temp > dis.get(node.get(0)).get(i)) {
+                Log.d("distance", "if안" + i);
                 temp = dis.get(node.get(0)).get(i);
-                //a = i;
+                a = i;
             }
+
         }
 
         for(int i=0;i<dis.get(node.get(node.size()-1)).size();i++){
@@ -130,10 +149,10 @@ public class TravelRoute {
 
             }
 
-            b = i;
-            if(temp2 >= dis.get(node.get(node.size()-1)).get(i)){
+            //b = i;
+            if(temp2 > dis.get(node.get(node.size()-1)).get(i)){
                 temp2 = dis.get(node.get(node.size()-1)).get(i);
-                //b = i;
+                b = i;
             }
 
 
@@ -141,11 +160,11 @@ public class TravelRoute {
 
         Log.d("distance","temp:"+temp+"temp2:"+temp2);
         if(temp < temp2){
-            //Log.d("distance", a+"aa");
+            Log.d("distance", a+"aa");
             node.add(0,new Integer(a));
             return a;
         }else {
-            //Log.d("distance",b+"bb");
+            Log.d("distance",b+"bb");
             node.add(node.size(),new Integer(b));
             return b;
         }
@@ -170,7 +189,7 @@ public class TravelRoute {
                     connectedNode.clear();
                     connectedNode.add(new Integer(i));
                     connectedNode.add(new Integer(j));
-                    //Log.d("distance",connectedNode.get(i)+" aaaa"+connectedNode.get(j));
+                    Log.d("distance",connectedNode.get(0)+" aaaa"+connectedNode.get(1));
 
                 }
 
@@ -186,7 +205,7 @@ public class TravelRoute {
 
         ArrayList<Integer> route = new ArrayList<Integer>();
         for(int i=0;i<dis.size();i++){
-            Log.d("distance","순서대로 : "+connectedNode.get(i));
+            //Log.d("distance","순서대로 : "+connectedNode.get(i));
             route.add(connectedNode.get(i));
         }
 
@@ -204,7 +223,7 @@ public class TravelRoute {
         ArrayList<PlaceInfoDto> temp = new ArrayList<PlaceInfoDto>();
         for(int i=0;i<dto.size();i++){
             temp.add(dto.get(index.get(i)));
-            //Log.d("distance",index.get(i)+" hihi");
+            Log.d("distance",index.get(i)+" hihi");
         }
 
         return temp;
@@ -222,7 +241,54 @@ public class TravelRoute {
 
         return changeIndex(routeList,findShortRoute(allDistance));
 
+
+        //플로이드로...
+        /*ArrayList<ArrayList<Double>> allDistance;
+        allDistance = getAllNodeDistance(routeList);
+        showDistance(allDistance);
+        Log.d("floyd","플로이드 쓰고난후 최단거리들");
+        ArrayList<ArrayList<Double>> temp = findShortRoute(allDistance);
+
+        showDistance(temp);
+
+        return null;*/
     }
+
+    //////////////////////////////플로이드알고리즘
+    /*public ArrayList<ArrayList<Double>> findShortRoute(ArrayList<ArrayList<Double>> dis){
+
+        ArrayList<ArrayList<Double>> shortDis = new ArrayList<ArrayList<Double>>();
+        ArrayList<Double> temp;
+
+
+        int size = dis.size();
+
+        for(int k=0;k<size;k++){
+
+            for(int i=0;i<size;i++){
+                temp = new ArrayList<Double>();
+
+                for(int j=0;j<size;j++){
+
+                    temp.add( Math.min(dis.get(i).get(j), dis.get(i).get(k) + dis.get(k).get(j)) );
+
+                    //shortDis.get(i).set(j, Math.min(dis.get(i).get(j), dis.get(i).get(k) + dis.get(k).get(j) ));
+
+                }
+
+                shortDis.add(temp);
+            }
+
+
+        }
+
+
+        return shortDis;
+
+    }*/
+
+
+
 
     // This function converts decimal degrees to radians
     private double deg2rad(double deg) {
