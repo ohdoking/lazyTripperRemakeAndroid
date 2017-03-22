@@ -238,6 +238,7 @@ public class TravelRoute {
         allDistance = getAllNodeDistance(routeList);
         showDistance(allDistance);
 
+        routeList = changeIndex(routeList,findShortRoute(allDistance));
 
         return changeIndex(routeList,findShortRoute(allDistance));
 

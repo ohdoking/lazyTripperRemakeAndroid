@@ -143,6 +143,10 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
             if(landMarkUseCount > placeCount.getLandMark()){
                 landMarkUseCount = placeCount.getLandMark();
             }
+            else if(contentTypeId == 32){
+                //숙소는 마지막 랜드마크 다음
+                landMarkUseCount = travelRoute.getList().size() - 1 ;
+            }
             callRelionInfo = laziTripperKoreanTourService.getPlaceInfoByLocation(20,page,"E","Y","AND","LaziTripper",contentTypeId, travelRoute.getList().get(landMarkUseCount).getMapx(), travelRoute.getList().get(landMarkUseCount).getMapy() ,100000);
             if(array.size() != count){
                 landMarkUseCount++;
@@ -288,11 +292,12 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
 
             @Override
             public void onRightCardExit(Object dataObject) {
-                placeInfoDtoList.add((PlaceInfoDto) dataObject);
+
                 count++;
                 locationCount++;
                 Toast.makeText(ChoosePlaceActivity.this,  locationCount + "회 좋아요", Toast.LENGTH_SHORT).show();
                 if(locationFlag == 0){
+                    placeInfoDtoList.add((PlaceInfoDto) dataObject);
                     if(placeCount.getLandMark().equals(locationCount) || array.size() == count){
 
                         locationCount = 0;
@@ -300,12 +305,19 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
                         count = 0;
                         page = 1;
 
-                        travelRoute = new TravelRoute(array);
+
+
+                        //최단거리 구함
+                        travelRoute = new TravelRoute(placeInfoDtoList);
+                        placeInfoDtoList = travelRoute.findShortRoute();
+
                         //39 음식
                         getPlaceData(39);
                     }
                 }
                 else if(locationFlag == 1){
+                    //랜드마크와 랜드마크 사이에 음식점 넣기
+                    inputLandMarkAndLandMark((PlaceInfoDto) dataObject);
                     if(placeCount.getRestaurant().equals(locationCount) || array.size() == count) {
 
 
@@ -313,17 +325,22 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
                         locationFlag = 2;
                         count = 0;
                         page = 1;
+
                         //32 숙박
                         getPlaceData(32);
                     }
                     else{
+
                         //다음 경로의 주변 음식 가져오기
                         getPlaceData(39);
                     }
 
                 }
                 else if(locationFlag == 2){
+                    placeInfoDtoList.add((PlaceInfoDto) dataObject);
                     if(placeCount.getAccommodation().equals(locationCount) || array.size() == count){
+
+
 
                         locationCount = 0;
                         count = 0;
@@ -371,6 +388,17 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
                 }
             }, 3 * 1000);
 
+        }
+
+    }
+
+    //랜드마크 사이에 음식점 삽입
+    private void inputLandMarkAndLandMark(PlaceInfoDto placeInfoDto){
+        if(array.size() != count){
+            placeInfoDtoList.add(((landMarkUseCount)*2), placeInfoDto);
+        }
+        else{
+            placeInfoDtoList.add(placeInfoDto);
         }
 
     }

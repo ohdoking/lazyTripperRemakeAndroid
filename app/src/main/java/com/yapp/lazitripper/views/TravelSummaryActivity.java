@@ -82,15 +82,15 @@ public class TravelSummaryActivity extends BaseFragmentActivity implements OnMap
                 (ArrayList<PlaceInfoDto>)intent.getSerializableExtra(ConstantIntent.PLACELIST);
 
         //요게 일단 최단거리긴한데 수정중
-        TravelRoute travelRoute = new TravelRoute(beforeSelectPlaceList);
-        ArrayList<PlaceInfoDto> shortRoute = travelRoute.findShortRoute();
+//        TravelRoute travelRoute = new TravelRoute(beforeSelectPlaceList);
+//        ArrayList<PlaceInfoDto> shortRoute = travelRoute.findShortRoute();
 
         //리스트뷰
         placeListView = (ListView) findViewById(R.id.listview);
 
         adapter = new PlaceInfoAdapter();
         //adapter.addAllItem(beforeSelectPlaceList);
-        adapter.addAllItem(shortRoute);
+        adapter.addAllItem(beforeSelectPlaceList);
 
         placeListView.setAdapter(adapter);
 
