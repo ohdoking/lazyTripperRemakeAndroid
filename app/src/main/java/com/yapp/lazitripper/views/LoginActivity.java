@@ -77,7 +77,7 @@ public class LoginActivity extends FragmentActivity {
                                 // Application code
                                 try {
                                     name = object.getString(ConstantIntent.NAME);
-                                    String birthday = object.getString("birthday"); // 01/31/1980 format
+                                    //String birthday = object.getString("birthday"); // 01/31/1980 format
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
