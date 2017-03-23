@@ -121,7 +121,6 @@ public class LoginActivity extends FragmentActivity {
 
                     //여기서 바로 시작하는 이유는??? loggedIn()은???
                     Intent i = new Intent(LoginActivity.this, KeywordSelectActivity.class);
-                    i.putExtra(ConstantIntent.UUID,uuid);
 
                     startActivity(i);
                     finish();
@@ -138,7 +137,6 @@ public class LoginActivity extends FragmentActivity {
         if(isLoggedIn()){
             Intent i = new Intent(LoginActivity.this, KeywordSelectActivity.class);
             //email-> uuid 변경
-            i.putExtra(ConstantIntent.UUID,uuid);
             startActivity(i);
         }
 
@@ -151,11 +149,6 @@ public class LoginActivity extends FragmentActivity {
 
         loadingDialog.show();
 
-        /*if(requestCode == 64206){
-            Intent i = new Intent(LoginActivity.this, KeywordSelectActivity.class);
-            //i.putExtra(ConstantIntent.UUID,uuid);
-            startActivity(i);
-        }*/
     }
 
     private void handleFacebookAccessToken(AccessToken token) {
