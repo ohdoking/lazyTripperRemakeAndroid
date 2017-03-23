@@ -57,17 +57,11 @@ public class KeywordSelectActivity extends BaseAppCompatActivity implements View
             public void onClick(View v) {
 
                 sharedPreferenceStore.savePreferences(ConstantStore.TAGS, stringArrayList);
-
                 Intent i = new Intent(KeywordSelectActivity.this, HomeActivity.class);
                 startActivity(i);
+                finish();
             }
         });
-
-        //for test
-
-
-
-        //
 
 
         stringArrayList = new ArrayList<>();

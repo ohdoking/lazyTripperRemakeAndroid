@@ -4,8 +4,18 @@
     android:id="@+id/activity_date_pick"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingTop="10dp"
     android:orientation="vertical"
+    android:background="#ffffff"
     tools:context="com.yapp.lazitripper.views.DatePickActivity">
+
+    <TextView
+        android:text="여행날짜를 선택해주세요."
+        android:layout_width="match_parent"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:textSize="12sp"
+        android:layout_height="18dp" />
 
     <!--<Button-->
         <!--android:id="@+id/chooseDateCompleteBtn"-->

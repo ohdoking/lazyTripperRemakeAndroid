@@ -32,11 +32,14 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import com.yapp.lazitripper.R;
 import com.yapp.lazitripper.common.ConstantIntent;
+import com.yapp.lazitripper.dto.PickDate;
 import com.yapp.lazitripper.dto.PlaceInfoDto;
 import com.yapp.lazitripper.dto.Travel;
 import com.yapp.lazitripper.store.ConstantStore;
 import com.yapp.lazitripper.store.SharedPreferenceStore;
+import com.yapp.lazitripper.util.TravelRoute;
 import com.yapp.lazitripper.views.bases.BaseFragmentActivity;
+import com.yapp.lazitripper.views.dialog.LoadingDialog;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -63,6 +66,14 @@ public class TravelSummaryActivity extends BaseFragmentActivity implements OnMap
     ListView placeListView;
     PlaceInfoAdapter adapter;
 
+    SharedPreferenceStore<PickDate> scheduleDateStore;
+    PickDate scheduleDate;
+
+
+    LoadingDialog loadingDialog;
+
+    private Boolean exit = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +84,8 @@ public class TravelSummaryActivity extends BaseFragmentActivity implements OnMap
         String addr;
         String image;
 
+        loadingDialog = new LoadingDialog(TravelSummaryActivity.this);
+        loadingDialog.show();
         // SP 에서 저장된 테그들의 정보를 가져옴.
         SharedPreferenceStore<String[]> sharedPreferenceStore = new SharedPreferenceStore<String[]>(getApplicationContext(), ConstantStore.STORE);
         String[] tagList = sharedPreferenceStore.getPreferences(ConstantStore.TAGS, String[].class);
@@ -81,16 +94,26 @@ public class TravelSummaryActivity extends BaseFragmentActivity implements OnMap
         SharedPreferenceStore sharedPreferenceStore1 = new SharedPreferenceStore(getApplicationContext(), ConstantStore.STORE);
         uuid = (String)sharedPreferenceStore1.getPreferences(ConstantStore.UUID, String.class);
 
+
+        //해당 여행 일자
+        scheduleDateStore = new SharedPreferenceStore<PickDate>(getApplicationContext(), ConstantStore.STORE);
+        scheduleDate = scheduleDateStore.getPreferences(ConstantStore.SCHEDULE_DATE,PickDate.class);
+
         // 선택 엑티비티에서 선택한 장소에 대한 정보를 가져옴.
         Intent intent = getIntent();
         ArrayList<PlaceInfoDto> beforeSelectPlaceList =
                 (ArrayList<PlaceInfoDto>)intent.getSerializableExtra(ConstantIntent.PLACELIST);
         getTravelList();
 
+        //요게 일단 최단거리긴한데 수정중
+//        TravelRoute travelRoute = new TravelRoute(beforeSelectPlaceList);
+//        ArrayList<PlaceInfoDto> shortRoute = travelRoute.findShortRoute();
+
         //리스트뷰
         placeListView = (ListView) findViewById(R.id.listview);
 
         adapter = new PlaceInfoAdapter();
+        //adapter.addAllItem(beforeSelectPlaceList);
         adapter.addAllItem(beforeSelectPlaceList);
 
         placeListView.setAdapter(adapter);
@@ -206,6 +229,8 @@ public class TravelSummaryActivity extends BaseFragmentActivity implements OnMap
             }
         });
 
+        loadingDialog.dismiss();
+
     }
 
 
@@ -264,5 +289,24 @@ public class TravelSummaryActivity extends BaseFragmentActivity implements OnMap
 
             return view;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (exit) {
+            finish(); // finish activity
+        } else {
+            Toast.makeText(this, R.string.back_cause,
+                    Toast.LENGTH_SHORT).show();
+            exit = true;
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    exit = false;
+                }
+            }, 3 * 1000);
+
+        }
+
     }
 }

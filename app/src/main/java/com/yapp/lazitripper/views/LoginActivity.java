@@ -26,6 +26,7 @@ import com.yapp.lazitripper.R;
 import com.yapp.lazitripper.common.ConstantIntent;
 import com.yapp.lazitripper.store.ConstantStore;
 import com.yapp.lazitripper.store.SharedPreferenceStore;
+import com.yapp.lazitripper.views.dialog.LoadingDialog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,6 +46,9 @@ public class LoginActivity extends FragmentActivity {
 
     String email;
     String uuid;
+    private LoadingDialog loadingDialog;
+
+    String name;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,10 +58,11 @@ public class LoginActivity extends FragmentActivity {
         callbackManager = CallbackManager.Factory.create();
         mAuth = FirebaseAuth.getInstance();
 
+        loadingDialog = new LoadingDialog(LoginActivity.this);
 
         LoginButton loginButton = (LoginButton) findViewById(R.id.facebookBtn);
         loginButton.setText("페이스북으로 시작");
-//        loginButton.setBackgroundResource(R.drawable.facebook_btn);
+//      loginButton.setBackgroundResource(R.drawable.facebook_btn);
         loginButton.setReadPermissions("email", "public_profile");
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -112,10 +117,11 @@ public class LoginActivity extends FragmentActivity {
                     //uuid 저장
                     SharedPreferenceStore sharedPreferenceStore = new SharedPreferenceStore(getApplicationContext(), ConstantStore.STORE);
                     sharedPreferenceStore.savePreferences(ConstantStore.UUID, uuid);
-
+                    loadingDialog.dismiss();
+                    startActivity(i);
+                    finish();
 
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
@@ -127,7 +133,6 @@ public class LoginActivity extends FragmentActivity {
         if(isLoggedIn()){
             Intent i = new Intent(LoginActivity.this, KeywordSelectActivity.class);
             //email-> uuid 변경
-
             i.putExtra(ConstantIntent.UUID,uuid);
             startActivity(i);
         }
@@ -139,13 +144,13 @@ public class LoginActivity extends FragmentActivity {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
 
-        Log.i("ohdoking-result",requestCode + " / " + resultCode + "/");
+        loadingDialog.show();
 
-        if(requestCode == 64206){
+        /*if(requestCode == 64206){
             Intent i = new Intent(LoginActivity.this, KeywordSelectActivity.class);
             //i.putExtra(ConstantIntent.UUID,uuid);
             startActivity(i);
-        }
+        }*/
     }
 
     private void handleFacebookAccessToken(AccessToken token) {

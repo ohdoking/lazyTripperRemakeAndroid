@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:background="#ffffff"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="랜드마크"/>
+
+        <com.wx.wheelview.widget.WheelView
+            android:id="@+id/landmark_count_wheel_view"
+            android:layout_width="200dp"
+            android:layout_height="40dp" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="음식점"/>
+
+        <com.wx.wheelview.widget.WheelView
+            android:id="@+id/restaruant_count_wheel_view"
+            android:layout_width="200dp"
+            android:layout_height="40dp" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="숙소"/>
+
+        <com.wx.wheelview.widget.WheelView
+            android:id="@+id/accommodation_count_wheel_view"
+            android:layout_width="200dp"
+            android:layout_height="40dp" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/choose_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#ffffffff"
+            android:text="ok"/>
+    </LinearLayout>
+
+
+
+</LinearLayout>
