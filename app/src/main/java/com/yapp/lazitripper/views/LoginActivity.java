@@ -118,6 +118,11 @@ public class LoginActivity extends FragmentActivity {
                     SharedPreferenceStore sharedPreferenceStore = new SharedPreferenceStore(getApplicationContext(), ConstantStore.STORE);
                     sharedPreferenceStore.savePreferences(ConstantStore.UUID, uuid);
                     loadingDialog.dismiss();
+
+                    //여기서 바로 시작하는 이유는??? loggedIn()은???
+                    Intent i = new Intent(LoginActivity.this, KeywordSelectActivity.class);
+                    i.putExtra(ConstantIntent.UUID,uuid);
+
                     startActivity(i);
                     finish();
 

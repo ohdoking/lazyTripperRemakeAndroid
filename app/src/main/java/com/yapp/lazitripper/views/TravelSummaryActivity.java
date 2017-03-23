@@ -1,6 +1,7 @@
 package com.yapp.lazitripper.views;
 
 import android.graphics.Color;
+import android.os.Handler;
 import android.widget.ListView;
 
 import android.os.Bundle;
@@ -128,6 +129,7 @@ public class TravelSummaryActivity extends BaseFragmentActivity implements OnMap
             Travel travel = new Travel(typeid,title,addr,image);
             travelList.add(travel);
 
+                //출력 테스트용 Log
             /*Log.e(TAG ,"도시 : " + beforeSelectPlaceList.get(i).getAddr1());
             Log.e(TAG ,"타이틀 : " + beforeSelectPlaceList.get(i).getTitle());
             Log.e(TAG ,"주소 : " + beforeSelectPlaceList.get(i).getAddr2());
@@ -135,6 +137,7 @@ public class TravelSummaryActivity extends BaseFragmentActivity implements OnMap
             Log.e(TAG ,"이미지 : " + beforeSelectPlaceList.get(i).getFirstimage());
             Log.e(TAG ,"카테고리 ID : " + beforeSelectPlaceList.get(i).getContenttypeid());*/
         }
+        //uuid
         if(uuid != null) {
             myRef.child("user").child(uuid).child("Travel").push().setValue(travelList);
         }
