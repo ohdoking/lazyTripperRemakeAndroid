@@ -24,6 +24,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.yapp.lazitripper.R;
 import com.yapp.lazitripper.common.ConstantIntent;
+import com.yapp.lazitripper.store.ConstantStore;
+import com.yapp.lazitripper.store.SharedPreferenceStore;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,6 +44,7 @@ public class LoginActivity extends FragmentActivity {
     private FirebaseAuth.AuthStateListener mAuthListener;
 
     String email;
+    String uuid;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,6 +53,7 @@ public class LoginActivity extends FragmentActivity {
 
         callbackManager = CallbackManager.Factory.create();
         mAuth = FirebaseAuth.getInstance();
+
 
         LoginButton loginButton = (LoginButton) findViewById(R.id.facebookBtn);
         loginButton.setText("페이스북으로 시작");
@@ -103,7 +107,15 @@ public class LoginActivity extends FragmentActivity {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // User is signed in
+                    uuid = user.getUid();
+
+                    //uuid 저장
+                    SharedPreferenceStore sharedPreferenceStore = new SharedPreferenceStore(getApplicationContext(), ConstantStore.STORE);
+                    sharedPreferenceStore.savePreferences(ConstantStore.UUID, uuid);
+
+
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
@@ -114,7 +126,9 @@ public class LoginActivity extends FragmentActivity {
         // 로그인 되어있으면 바로 접속
         if(isLoggedIn()){
             Intent i = new Intent(LoginActivity.this, KeywordSelectActivity.class);
-            i.putExtra(ConstantIntent.EMAIL,email);
+            //email-> uuid 변경
+
+            i.putExtra(ConstantIntent.UUID,uuid);
             startActivity(i);
         }
 
@@ -129,7 +143,7 @@ public class LoginActivity extends FragmentActivity {
 
         if(requestCode == 64206){
             Intent i = new Intent(LoginActivity.this, KeywordSelectActivity.class);
-            i.putExtra(ConstantIntent.EMAIL,email);
+            //i.putExtra(ConstantIntent.UUID,uuid);
             startActivity(i);
         }
     }

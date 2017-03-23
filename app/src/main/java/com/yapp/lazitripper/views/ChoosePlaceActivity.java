@@ -47,6 +47,7 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
     public PlaceInfoDto placeInfoDto;
     public LaziTripperKoreanTourClient laziTripperKoreanTourClient;
     public LaziTripperKoreanTourService laziTripperKoreanTourService;
+    private String TAG = "ChoosePlaceActivity";
 
     Integer cityCode;
     ImageView kindTextVeiw;
@@ -119,7 +120,7 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
         callRelionInfo.enqueue(new Callback<CommonResponse<PlaceInfoDto>>() {
             @Override
             public void onResponse(Call<CommonResponse<PlaceInfoDto>> call, Response<CommonResponse<PlaceInfoDto>> response) {
-                Log.i("ohdoking",response.body().getResponse().getBody().getItems().getItems().get(0).getTitle());
+                Log.e("ohdoking",response.body().getResponse().getBody().getItems().getItems().get(0).getTitle());
                 array = response.body().getResponse().getBody().getItems().getItems();
 
                 myAdapter.list = array;
@@ -203,8 +204,6 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
             viewHolder.addr.setText(curItem.getAddr1());
             viewHolder._tel.setText("TEL");
             viewHolder.tel.setText(curItem.getTel());
-
-
             return rowView;
         }
     }
@@ -285,9 +284,11 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
         flingContainer.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
             @Override
             public void onItemClicked(int itemPosition, Object dataObject) {
-                Toast.makeText(getApplicationContext(),"hihi"+itemPosition,Toast.LENGTH_LONG).show();
+                PlaceInfoDto infodto = (PlaceInfoDto) dataObject;
 
+                Log.e(TAG,"position = " + itemPosition + ", Object" + infodto.getAddr1());
                 Intent intent = new Intent(getApplicationContext(),MyProfileActivity.class);
+                intent.putExtra("placeInfo",infodto);
                 startActivity(intent);
 
             }

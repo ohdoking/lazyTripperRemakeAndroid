@@ -8,4 +8,5 @@ public class ConstantStore {
     public static String STORE = "lazitripper-store";
     public static String DATEKEY = "date-key";
     public static String TAGS = "tags";
+    public static String UUID = "uuid";
 }

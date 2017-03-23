@@ -23,14 +23,25 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
 import com.yapp.lazitripper.R;
 import com.yapp.lazitripper.common.ConstantIntent;
 import com.yapp.lazitripper.dto.PlaceInfoDto;
+import com.yapp.lazitripper.dto.Travel;
 import com.yapp.lazitripper.store.ConstantStore;
 import com.yapp.lazitripper.store.SharedPreferenceStore;
 import com.yapp.lazitripper.views.bases.BaseFragmentActivity;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import me.gujun.android.taggroup.TagGroup;
 
@@ -40,10 +51,14 @@ import me.gujun.android.taggroup.TagGroup;
 *
 * */
 public class TravelSummaryActivity extends BaseFragmentActivity implements OnMapReadyCallback {
-
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference myRef = database.getReference("lazitripper");
     private GoogleMap mMap;
     private String TAG = "TrevelSummaryActivity";
     private int i=0;
+    private ArrayList<Travel> travelList = new ArrayList<Travel>();
+    private String uuid;
+
     //리스트뷰
     ListView placeListView;
     PlaceInfoAdapter adapter;
@@ -53,14 +68,24 @@ public class TravelSummaryActivity extends BaseFragmentActivity implements OnMap
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_travel_summary);
 
+        String title;
+        int typeid;
+        String addr;
+        String image;
+
         // SP 에서 저장된 테그들의 정보를 가져옴.
         SharedPreferenceStore<String[]> sharedPreferenceStore = new SharedPreferenceStore<String[]>(getApplicationContext(), ConstantStore.STORE);
         String[] tagList = sharedPreferenceStore.getPreferences(ConstantStore.TAGS, String[].class);
+
+        //UUID를 가져오기 위한 <String> SharedPreferenceStore
+        SharedPreferenceStore sharedPreferenceStore1 = new SharedPreferenceStore(getApplicationContext(), ConstantStore.STORE);
+        uuid = (String)sharedPreferenceStore1.getPreferences(ConstantStore.UUID, String.class);
 
         // 선택 엑티비티에서 선택한 장소에 대한 정보를 가져옴.
         Intent intent = getIntent();
         ArrayList<PlaceInfoDto> beforeSelectPlaceList =
                 (ArrayList<PlaceInfoDto>)intent.getSerializableExtra(ConstantIntent.PLACELIST);
+        getTravelList();
 
         //리스트뷰
         placeListView = (ListView) findViewById(R.id.listview);
@@ -70,9 +95,25 @@ public class TravelSummaryActivity extends BaseFragmentActivity implements OnMap
 
         placeListView.setAdapter(adapter);
 
-        //경계값 오류 처리해야함.
-        for(i=0; !beforeSelectPlaceList.isEmpty(); i++){
-            Log.e(TAG, beforeSelectPlaceList.get(i).getTitle());
+            for(int i=0; i< beforeSelectPlaceList.size(); i++){
+
+            addr = beforeSelectPlaceList.get(i).getAddr1();
+            typeid = beforeSelectPlaceList.get(i).getContenttypeid();
+            title = beforeSelectPlaceList.get(i).getTitle();
+            image = beforeSelectPlaceList.get(i).getFirstimage();
+
+            Travel travel = new Travel(typeid,title,addr,image);
+            travelList.add(travel);
+
+            /*Log.e(TAG ,"도시 : " + beforeSelectPlaceList.get(i).getAddr1());
+            Log.e(TAG ,"타이틀 : " + beforeSelectPlaceList.get(i).getTitle());
+            Log.e(TAG ,"주소 : " + beforeSelectPlaceList.get(i).getAddr2());
+            Log.e(TAG ,"전화번호 : " + beforeSelectPlaceList.get(i).getTel());
+            Log.e(TAG ,"이미지 : " + beforeSelectPlaceList.get(i).getFirstimage());
+            Log.e(TAG ,"카테고리 ID : " + beforeSelectPlaceList.get(i).getContenttypeid());*/
+        }
+        if(uuid != null) {
+            myRef.child("user").child(uuid).child("Travel").push().setValue(travelList);
         }
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -86,16 +127,50 @@ public class TravelSummaryActivity extends BaseFragmentActivity implements OnMap
 
     }
 
+    private void addTravelList(Travel travel){
+        travelList.add(travel);
+    }
+    private void getTravelList(){
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
+        myRef.child("user").child(uuid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //Log.d(TAG,"onDataChange");
+
+                 for(DataSnapshot child : dataSnapshot.getChildren()){
+                    addTravelList(child.getValue(Travel.class));
+                }
+
+                Iterator<Travel> iterator = travelList.iterator();
+                while(iterator.hasNext()){
+                    Travel travel = (Travel) iterator.next();
+                    Log.e(TAG, "save travel title .. : " + travel.getTitle());
+                }
+
+               /*GenericTypeIndicator<List<Travel>> t = new GenericTypeIndicator<List<Travel>>() {};
+
+                List<Travel> user_travelList = dataSnapshot.child("Travel").getValue(t);
+
+                //DB에 저장된 값이 있으면 list에 저장
+                if (user_travelList != null) {
+                    Iterator<Travel> iterator = user_travelList.iterator();
+
+                    while (iterator.hasNext()) {
+                        Travel travel = (Travel) iterator.next();
+                        //Log.d(TAG , "iterator test .. data is : " + travel.getTitle());
+                        addTravelList(travel);
+                    }
+                }*/
+            }
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
+
+    }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;

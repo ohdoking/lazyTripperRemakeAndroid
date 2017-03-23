@@ -12,5 +12,6 @@ public class ConstantIntent {
     public static String PLACELIST = "placeList";
     public static String PICKDATE = "pick-date";
     public static String EMAIL = "email";
+    public static String UUID = "UUID";
 
 }
