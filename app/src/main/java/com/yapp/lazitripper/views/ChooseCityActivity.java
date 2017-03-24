@@ -111,6 +111,7 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
         }
 
         chooseDates = new ArrayList<Date>();
+        chooseDate = new PickDate();
 
 
         //@TODO 임시로 데이터를 넣어둠 ----- 실제 완료된 일정 날짜를 삽입해야함
@@ -183,17 +184,17 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
 //                i.putExtra(ConstantIntent.CITYCODE, cityNum);
 //                startActivity(i);
 
-                if(pickDate.getFinishDate() == null ){
+                if(chooseDate.getFinishDate() == null ){
                     Toast.makeText(ChooseCityActivity.this,
                             "날짜를 선택해주세요!", Toast.LENGTH_SHORT).show();
                 }
-                else if(checkAlreadyIncludeDate(pickDate.getStartDate())){
+                else if(checkAlreadyIncludeDate(chooseDate.getStartDate())){
                     Toast.makeText(ChooseCityActivity.this,
                             "이미 일정을 짠 스케쥴 입니다.", Toast.LENGTH_SHORT).show();
                 }
                 else{
                     //shared에 선택한 스케쥴 날짜를 넣는다
-                    sharedPreferenceStore.savePreferences(ConstantStore.SCHEDULE_DATE, pickDate);
+                    sharedPreferenceStore.savePreferences(ConstantStore.SCHEDULE_DATE, chooseDate);
                     SetPlaceCountDialog setPlaceCountDialog = new SetPlaceCountDialog(ChooseCityActivity.this, cityNum);
                     setPlaceCountDialog.show();
                     setPlaceCountDialog.setCancelable(true);
@@ -208,9 +209,9 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
                 Toast.makeText(ChooseCityActivity.this,
                         "You Selected " + date.toString(), Toast.LENGTH_SHORT).show();
 
-                pickDate.setStartDate(date);
-                pickDate.setFinishDate(date);
-                pickDate.setPeriod(1L);
+                chooseDate.setStartDate(date);
+                chooseDate.setFinishDate(date);
+                chooseDate.setPeriod(1L);
 
                 horizontalCalendar.setSelectedDateBackground(Color.GRAY);
             }

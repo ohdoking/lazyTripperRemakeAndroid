@@ -54,7 +54,7 @@ public class TravelSummaryActivity extends BaseFragmentActivity implements OnMap
 
     SharedPreferenceStore<PickDate> scheduleDateStore;
     PickDate scheduleDate;
-
+    PickDate totalDate;
 
     LoadingDialog loadingDialog;
 
@@ -75,6 +75,9 @@ public class TravelSummaryActivity extends BaseFragmentActivity implements OnMap
         //해당 여행 일자
         scheduleDateStore = new SharedPreferenceStore<PickDate>(getApplicationContext(), ConstantStore.STORE);
         scheduleDate = scheduleDateStore.getPreferences(ConstantStore.SCHEDULE_DATE,PickDate.class);
+        totalDate = scheduleDateStore.getPreferences(ConstantStore.DATEKEY,PickDate.class);
+
+
 
         // 선택 엑티비티에서 선택한 장소에 대한 정보를 가져옴.
         Intent intent = getIntent();
