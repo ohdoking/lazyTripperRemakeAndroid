@@ -2,24 +2,39 @@ package com.yapp.lazitripper.views;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
 import com.yapp.lazitripper.R;
 import com.yapp.lazitripper.common.ConstantIntent;
+import com.yapp.lazitripper.dto.Travel;
 import com.yapp.lazitripper.store.ConstantStore;
 import com.yapp.lazitripper.store.SharedPreferenceStore;
 import com.yapp.lazitripper.views.bases.BaseAppCompatActivity;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class KeywordSelectActivity extends BaseAppCompatActivity implements View.OnClickListener {
-
+    String TAG = "KeywordSelectActivity";
     ImageButton[] text = new ImageButton[15];
     boolean[] flag = new boolean[15];
     ArrayList<String> stringArrayList;
-    String name;
+    String email;
+
+    //for test
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference myRef = database.getReference("lazitripper");
+    //
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +42,11 @@ public class KeywordSelectActivity extends BaseAppCompatActivity implements View
         setHeader();
         setContentView(R.layout.activity_keyword_select);
 
-        name = getIntent().getStringExtra(ConstantIntent.NAME);
         final SharedPreferenceStore sharedPreferenceStore = new SharedPreferenceStore(getApplicationContext(), ConstantStore.STORE);
+
+        //for test
+        final String uuid = (String)sharedPreferenceStore.getPreferences(ConstantStore.UUID, String.class);
+        //
 
         ImageView leftImage = getLeftImageView();
         leftImage.setVisibility(View.INVISIBLE);
@@ -40,7 +58,6 @@ public class KeywordSelectActivity extends BaseAppCompatActivity implements View
 
                 sharedPreferenceStore.savePreferences(ConstantStore.TAGS, stringArrayList);
                 Intent i = new Intent(KeywordSelectActivity.this, HomeActivity.class);
-                i.putExtra(ConstantIntent.NAME,name);
                 startActivity(i);
                 finish();
             }
@@ -69,7 +86,6 @@ public class KeywordSelectActivity extends BaseAppCompatActivity implements View
             flag[i] = true;
             text[i].setOnClickListener(this);
         }
-
     }
 
 

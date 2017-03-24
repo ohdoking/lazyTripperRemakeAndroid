@@ -34,7 +34,6 @@ public class DatePickActivity extends BaseAppCompatActivity {
         sharedPreferenceStore = new SharedPreferenceStore<PickDate>(getApplicationContext(), ConstantStore.STORE);
 
         //뒤로가기, 액티비티 종료
-        //TODO 버튼 이미지 변경
         ImageView leftImage = getLeftImageView();
         leftImage.setImageResource(R.drawable.arrow);
         leftImage.setOnClickListener(new View.OnClickListener() {
@@ -45,7 +44,6 @@ public class DatePickActivity extends BaseAppCompatActivity {
         });
 
         //다음단계 버튼 -> 도시선택 액티비티
-        //TODO '다음' 버튼 위치 하단으로 이동 (모든 액티비티 통일?)
         ImageView rightImage = getRightImageView();
         rightImage.setImageResource(R.drawable.next_icon);
         rightImage.setOnClickListener(new View.OnClickListener() {

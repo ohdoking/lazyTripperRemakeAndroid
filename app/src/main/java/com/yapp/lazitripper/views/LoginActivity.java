@@ -24,6 +24,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.yapp.lazitripper.R;
 import com.yapp.lazitripper.common.ConstantIntent;
+import com.yapp.lazitripper.store.ConstantStore;
+import com.yapp.lazitripper.store.SharedPreferenceStore;
 import com.yapp.lazitripper.views.dialog.LoadingDialog;
 
 import org.json.JSONException;
@@ -42,6 +44,8 @@ public class LoginActivity extends FragmentActivity {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
+    String email;
+    String uuid;
     private LoadingDialog loadingDialog;
 
     String name;
@@ -58,7 +62,7 @@ public class LoginActivity extends FragmentActivity {
 
         LoginButton loginButton = (LoginButton) findViewById(R.id.facebookBtn);
         loginButton.setText("페이스북으로 시작");
-//        loginButton.setBackgroundResource(R.drawable.facebook_btn);
+//      loginButton.setBackgroundResource(R.drawable.facebook_btn);
         loginButton.setReadPermissions("email", "public_profile");
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -76,8 +80,8 @@ public class LoginActivity extends FragmentActivity {
 
                                 // Application code
                                 try {
-                                    name = object.getString(ConstantIntent.NAME);
-                                    //String birthday = object.getString("birthday"); // 01/31/1980 format
+                                    email = object.getString("email");
+                                    String birthday = object.getString("birthday"); // 01/31/1980 format
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -102,20 +106,26 @@ public class LoginActivity extends FragmentActivity {
             }
         });
 
-            mAuthListener = new FirebaseAuth.AuthStateListener() {
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // User is signed in
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    uuid = user.getUid();
 
-                    Intent i = new Intent(LoginActivity.this, KeywordSelectActivity.class);
-                    i.putExtra(ConstantIntent.NAME, name);
+                    //uuid 저장
+                    SharedPreferenceStore sharedPreferenceStore = new SharedPreferenceStore(getApplicationContext(), ConstantStore.STORE);
+                    sharedPreferenceStore.savePreferences(ConstantStore.UUID, uuid);
                     loadingDialog.dismiss();
+
+                    //여기서 바로 시작하는 이유는??? loggedIn()은???
+                    Intent i = new Intent(LoginActivity.this, KeywordSelectActivity.class);
+
                     startActivity(i);
                     finish();
 
+                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
@@ -124,13 +134,11 @@ public class LoginActivity extends FragmentActivity {
         };
 
         // 로그인 되어있으면 바로 접속
-            if(isLoggedIn()){
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                Intent i = new Intent(LoginActivity.this, KeywordSelectActivity.class);
-                i.putExtra(ConstantIntent.NAME, user.getDisplayName());
-                startActivity(i);
-                finish();
-            }
+        if(isLoggedIn()){
+            Intent i = new Intent(LoginActivity.this, KeywordSelectActivity.class);
+            //email-> uuid 변경
+            startActivity(i);
+        }
 
     }
 
@@ -140,6 +148,7 @@ public class LoginActivity extends FragmentActivity {
         callbackManager.onActivityResult(requestCode, resultCode, data);
 
         loadingDialog.show();
+
     }
 
     private void handleFacebookAccessToken(AccessToken token) {

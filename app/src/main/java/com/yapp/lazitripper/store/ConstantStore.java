@@ -9,4 +9,5 @@ public class ConstantStore {
     public static String DATEKEY = "date-key";
     public static String SCHEDULE_DATE = "schedule-date";
     public static String TAGS = "tags";
+    public static String UUID = "uuid";
 }
