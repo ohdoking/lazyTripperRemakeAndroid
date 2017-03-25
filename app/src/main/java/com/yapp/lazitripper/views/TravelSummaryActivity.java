@@ -2,6 +2,7 @@ package com.yapp.lazitripper.views;
 
 import android.graphics.Color;
 import android.os.Handler;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import android.os.Bundle;
@@ -39,6 +40,7 @@ import com.yapp.lazitripper.dto.Travel;
 import com.yapp.lazitripper.store.ConstantStore;
 import com.yapp.lazitripper.store.SharedPreferenceStore;
 import com.yapp.lazitripper.util.TravelRoute;
+import com.yapp.lazitripper.views.bases.BaseAppCompatActivity;
 import com.yapp.lazitripper.views.bases.BaseFragmentActivity;
 import com.yapp.lazitripper.views.dialog.LoadingDialog;
 
@@ -54,7 +56,7 @@ import me.gujun.android.taggroup.TagGroup;
 * 여행 추천 결과 화면
 *
 * */
-public class TravelSummaryActivity extends BaseFragmentActivity implements OnMapReadyCallback {
+public class TravelSummaryActivity extends BaseAppCompatActivity implements OnMapReadyCallback {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference("lazitripper");
     private GoogleMap mMap;
@@ -79,6 +81,23 @@ public class TravelSummaryActivity extends BaseFragmentActivity implements OnMap
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_travel_summary);
+
+        setHeader();
+
+
+        /* setHeaer */
+        ImageView rightImage = getRightImageView();
+
+        //TODO 이미지 변경 혹은 아이콘 삭제
+        rightImage.setImageResource(android.R.drawable.ic_menu_save);
+        rightImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //@TODO firebase에 save하는 로직을 넣어줘야함
+                Intent i = new Intent(TravelSummaryActivity.this, ChooseCityActivity.class);
+                startActivity(i);
+            }
+        });
 
         String title;
         int typeid;
