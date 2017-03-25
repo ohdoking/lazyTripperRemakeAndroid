@@ -142,9 +142,7 @@
                 android:text="My Travel Keyword"
                 android:textColor="#9b9b9b"
                 android:textSize="12sp"
-                android:layout_marginLeft="30dp"
-
-                />
+                android:layout_marginLeft="30dp" />
 
 
             <TextView
@@ -155,8 +153,7 @@
                 android:textColor="#9b9b9b"
                 android:textSize="12sp"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="30dp"
-                />
+                android:layout_marginRight="30dp" />
 
             <View android:id="@+id/separator2"
                 android:background="#d8d8d8"
@@ -164,13 +161,9 @@
                 android:layout_height="1dip"
                 android:layout_below="@+id/my_travel_key_title"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="2dp"
-                />
-
-
+                android:layout_marginTop="2dp" />
 
         </RelativeLayout>
-
 
         <RelativeLayout
             android:id="@+id/tag_layout"
@@ -178,10 +171,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/my_travel_key_layout"
             android:layout_marginTop="13dp"
-            android:layout_centerHorizontal="true"
-            >
-
-
+            android:layout_centerHorizontal="true">
 
             <me.gujun.android.taggroup.TagGroup
                 android:id="@+id/tag_group"
@@ -189,8 +179,6 @@
                 />
 
         </RelativeLayout>
-
-
     <RelativeLayout
         android:id="@+id/my_route_title_layout"
         android:layout_width="wrap_content"
@@ -198,8 +186,6 @@
         android:layout_below="@+id/tag_layout"
         android:layout_marginTop="13dp"
         >
-
-
         <TextView
             android:id="@+id/my_route_title"
             android:layout_width="wrap_content"
@@ -210,8 +196,6 @@
             android:layout_marginLeft="30dp"
             android:layout_marginTop="42dp"
             />
-
-
         </RelativeLayout>
 
         <LinearLayout
@@ -226,15 +210,7 @@
             <include
                 layout="@layout/activity_route"
                 />
-
-
         </LinearLayout>
-
-
-
-
-
-
     </RelativeLayout>
 
 

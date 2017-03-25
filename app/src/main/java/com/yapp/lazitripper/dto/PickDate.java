@@ -1,6 +1,7 @@
 package com.yapp.lazitripper.dto;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -45,5 +46,14 @@ public class PickDate implements Serializable{
 
     public void setPeriod(Long period) {
         this.period = period;
+    }
+
+    //도시선택 일정의 finishDate부터 alldate의 finishDate까지 하루씩 증가.
+    public Date getDate (PickDate date , int iDay) {
+        Calendar temp = Calendar.getInstance ();
+        temp.add ( Calendar.DAY_OF_MONTH, iDay );
+        temp.setTime(date.finishDate);
+        temp.add(Calendar.DATE, iDay);
+        return temp.getTime();
     }
 }

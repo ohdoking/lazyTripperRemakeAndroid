@@ -11,6 +11,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.yapp.lazitripper.R;
 import com.yapp.lazitripper.common.ConstantIntent;
+import com.yapp.lazitripper.store.ConstantStore;
+import com.yapp.lazitripper.store.SharedPreferenceStore;
 import com.yapp.lazitripper.views.bases.BaseAppCompatActivity;
 
 // 메인 화면
@@ -18,13 +20,13 @@ import com.yapp.lazitripper.views.bases.BaseAppCompatActivity;
 public class HomeActivity extends BaseAppCompatActivity {
 
     LinearLayout linearLayout;
-
+    private SharedPreferenceStore sharedPreferenceStore;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         setHeader();
-
+        sharedPreferenceStore = new SharedPreferenceStore(getApplicationContext(), ConstantStore.STORE);
 
         /* setHeaer */
         ImageView rightImage = getRightImageView();
@@ -50,6 +52,8 @@ public class HomeActivity extends BaseAppCompatActivity {
 
         if (user != null) {
             userName = user.getDisplayName();
+            //shared에 유저명 추가
+            sharedPreferenceStore.savePreferences(ConstantStore.USERNAME,userName);
         }
         //TODO 떠나고 싶은 여행을 까지만 노출됨, 전체적인 view 개선
         emailTv.setText(userName + "님,\n떠나고 싶은\n여행을 만나보세요");

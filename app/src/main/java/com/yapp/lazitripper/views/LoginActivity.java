@@ -161,9 +161,6 @@ public class LoginActivity extends FragmentActivity {
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     Log.d("ohdoking-task", "signInWithCredential:onComplete:" + task.isSuccessful());
 
-                    // If sign in fails, display a message to the user. If sign in succeeds
-                    // the auth state listener will be notified and logic to handle the
-                    // signed in user can be handled in the listener.
                     if (!task.isSuccessful()) {
                         Log.w("ohdoking-task", "signInWithCredential", task.getException());
                         Toast.makeText(LoginActivity.this, "Authentication failed.",

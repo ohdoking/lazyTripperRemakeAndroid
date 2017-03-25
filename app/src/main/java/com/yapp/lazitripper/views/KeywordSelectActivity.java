@@ -1,5 +1,7 @@
 package com.yapp.lazitripper.views;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,25 +17,36 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import com.yapp.lazitripper.R;
 import com.yapp.lazitripper.common.ConstantIntent;
+import com.yapp.lazitripper.dto.PickDate;
+import com.yapp.lazitripper.dto.RemainingDay;
 import com.yapp.lazitripper.dto.Travel;
 import com.yapp.lazitripper.store.ConstantStore;
 import com.yapp.lazitripper.store.SharedPreferenceStore;
 import com.yapp.lazitripper.views.bases.BaseAppCompatActivity;
 
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
 public class KeywordSelectActivity extends BaseAppCompatActivity implements View.OnClickListener {
-    String TAG = "KeywordSelectActivity";
-    ImageButton[] text = new ImageButton[15];
+    private String TAG = "KeywordSelectActivity";
+    private ImageButton[] text = new ImageButton[15];
     boolean[] flag = new boolean[15];
-    ArrayList<String> stringArrayList;
-    String email;
-
+    private ArrayList<String> stringArrayList;
+    private String email;
+    private String key;
+    private String date;
+    private Date tempDate;
+    private SharedPreferenceStore sharedPreferenceStore;
     //for test
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference myRef = database.getReference("lazitripper");
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference myRef = database.getReference("lazitripper");
+    private PickDate pickDate;
     //
 
     @Override
@@ -42,7 +55,8 @@ public class KeywordSelectActivity extends BaseAppCompatActivity implements View
         setHeader();
         setContentView(R.layout.activity_keyword_select);
 
-        final SharedPreferenceStore sharedPreferenceStore = new SharedPreferenceStore(getApplicationContext(), ConstantStore.STORE);
+        sharedPreferenceStore = new SharedPreferenceStore(getApplicationContext(), ConstantStore.STORE);
+        pickDate = new PickDate();
 
         //for test
         final String uuid = (String)sharedPreferenceStore.getPreferences(ConstantStore.UUID, String.class);
@@ -60,9 +74,41 @@ public class KeywordSelectActivity extends BaseAppCompatActivity implements View
                 Intent i = new Intent(KeywordSelectActivity.this, HomeActivity.class);
                 startActivity(i);
                 finish();
+
             }
         });
 
+        myRef.child("user").child(uuid).child("needSelect").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                boolean isdata = false;
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                 RemainingDay day = postSnapshot.getValue(RemainingDay.class);
+                    Log.e(TAG, "Get key" + day.getKey());
+                    key = day.getKey();
+                    date = day.getDayRemaining().get(0);
+                    Log.e(TAG,"DATE is " + date);
+                    if(day.getKey() != null) isdata = true;
+                }
+                if(isdata){
+                    try {
+                        SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy-MM-dd");
+                        tempDate = sdFormat.parse(date);
+                            //// TODO: 2017-03-25 임의로 수정 루트는 하루만 가능하게 해둠.
+                            pickDate.setStartDate(tempDate);
+                            pickDate.setFinishDate(tempDate);
+                            pickDate.setPeriod(1L);
+                    }catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+                notification();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
 
         stringArrayList = new ArrayList<>();
 
@@ -87,9 +133,6 @@ public class KeywordSelectActivity extends BaseAppCompatActivity implements View
             text[i].setOnClickListener(this);
         }
     }
-
-
-
 
     @Override
     public void onClick(View v) {
@@ -264,5 +307,33 @@ public class KeywordSelectActivity extends BaseAppCompatActivity implements View
 
         }
 
+    }
+
+    private void notification(){
+        AlertDialog.Builder alert_confirm = new AlertDialog.Builder(KeywordSelectActivity.this);
+        alert_confirm.setMessage("이전에 작성 중이던 루트가 있습니다. 마저 작성하시겠습니까?").setCancelable(false).setPositiveButton("확인",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                            //YES
+                            sharedPreferenceStore.savePreferences(ConstantStore.KEY,key);
+                            sharedPreferenceStore.savePreferences(ConstantStore.DATEKEY, pickDate);
+                            sharedPreferenceStore.savePreferences(ConstantStore.SCHEDULE_DATE, pickDate);
+                             //전체일정과 선택일정이 같음(하루만 가능하게)
+                        Intent i = new Intent(KeywordSelectActivity.this, ChooseCityActivity.class);
+                        startActivity(i);
+                        finish();
+
+                    }
+                }).setNegativeButton("취소",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // 'No'
+                        return;
+                    }
+                });
+        AlertDialog alert = alert_confirm.create();
+        alert.show();
     }
 }

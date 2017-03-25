@@ -3,6 +3,7 @@ package com.yapp.lazitripper.views;
 import android.graphics.Color;
 import android.os.Handler;
 import android.widget.ImageView;
+import android.support.annotation.NonNull;
 import android.widget.ListView;
 
 import android.os.Bundle;
@@ -36,6 +37,7 @@ import com.yapp.lazitripper.R;
 import com.yapp.lazitripper.common.ConstantIntent;
 import com.yapp.lazitripper.dto.PickDate;
 import com.yapp.lazitripper.dto.PlaceInfoDto;
+import com.yapp.lazitripper.dto.RemainingDay;
 import com.yapp.lazitripper.dto.Travel;
 import com.yapp.lazitripper.store.ConstantStore;
 import com.yapp.lazitripper.store.SharedPreferenceStore;
@@ -45,9 +47,16 @@ import com.yapp.lazitripper.views.bases.BaseFragmentActivity;
 import com.yapp.lazitripper.views.dialog.LoadingDialog;
 
 import java.lang.reflect.Array;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import me.gujun.android.taggroup.TagGroup;
 
@@ -72,7 +81,9 @@ public class TravelSummaryActivity extends BaseAppCompatActivity implements OnMa
     SharedPreferenceStore<PickDate> scheduleDateStore;
     PickDate scheduleDate;
     PickDate totalDate;
-
+    String needWriteKey;
+    String startdate;
+    String key;
     LoadingDialog loadingDialog;
 
     private Boolean exit = false;
@@ -81,53 +92,55 @@ public class TravelSummaryActivity extends BaseAppCompatActivity implements OnMa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_travel_summary);
-
+        /* setHeaer */
         setHeader();
 
-
-        /* setHeaer */
         ImageView rightImage = getRightImageView();
-
-        //TODO 이미지 변경 혹은 아이콘 삭제
-        rightImage.setImageResource(android.R.drawable.ic_menu_save);
-        rightImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //@TODO firebase에 save하는 로직을 넣어줘야함
-                Intent i = new Intent(TravelSummaryActivity.this, ChooseCityActivity.class);
-                startActivity(i);
-            }
-        });
-
         String title;
         int typeid;
         String addr;
         String image;
-
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
         loadingDialog = new LoadingDialog(TravelSummaryActivity.this);
         loadingDialog.show();
+
         // SP 에서 저장된 테그들의 정보를 가져옴.
         SharedPreferenceStore<String[]> sharedPreferenceStore = new SharedPreferenceStore<String[]>(getApplicationContext(), ConstantStore.STORE);
         String[] tagList = sharedPreferenceStore.getPreferences(ConstantStore.TAGS, String[].class);
 
+        //총 여행 일정
+        SharedPreferenceStore sharedPreferenceStore2 = new SharedPreferenceStore(getApplicationContext(), ConstantStore.STORE);
+        PickDate alldate = (PickDate) sharedPreferenceStore2.getPreferences(ConstantStore.DATEKEY, PickDate.class);
+        Log.e(TAG, "Allday -> startDay =" + alldate.getStartDate() + "All day -> finishDay" + alldate.getFinishDate());
+
         //UUID를 가져오기 위한 <String> SharedPreferenceStore
         SharedPreferenceStore sharedPreferenceStore1 = new SharedPreferenceStore(getApplicationContext(), ConstantStore.STORE);
         uuid = (String)sharedPreferenceStore1.getPreferences(ConstantStore.UUID, String.class);
+        needWriteKey = (String)sharedPreferenceStore1.getPreferences(ConstantStore.KEY, String.class);
 
-
-        //해당 여행 일자
+        //도시선택한 여행 일정 (Travel 단위)
         scheduleDateStore = new SharedPreferenceStore<PickDate>(getApplicationContext(), ConstantStore.STORE);
         scheduleDate = scheduleDateStore.getPreferences(ConstantStore.SCHEDULE_DATE,PickDate.class);
         totalDate = scheduleDateStore.getPreferences(ConstantStore.DATEKEY,PickDate.class);
+        SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
 
+        Log.e(TAG,"startDay : " + scheduleDate.getStartDate());
+        Log.e(TAG,"FinishDay : " + scheduleDate.getFinishDate());
 
-
+        //db에 저장될 해당 travel의 key값 설정
+        key = myRef.child("user").child(uuid).child("Travel").push().getKey();
+        //일정 작성한 날의 시작일.
+        //// TODO: 2017-03-25 여러 일정을 한 도시에서 보낼경우의 data를 어떻게 처리할건지 생각해봐야함.
+        startdate = fmt.format(scheduleDate.getStartDate());
         // 선택 엑티비티에서 선택한 장소에 대한 정보를 가져옴.
         Intent intent = getIntent();
         ArrayList<PlaceInfoDto> beforeSelectPlaceList =
                 (ArrayList<PlaceInfoDto>)intent.getSerializableExtra(ConstantIntent.PLACELIST);
-        getTravelList();
 
+        if(needWriteKey != null) {
+            key = needWriteKey;
+            Log.e(TAG, "작성중 일정 작성완료!! date key is .." + needWriteKey);
+        }
         //요게 일단 최단거리긴한데 수정중
 //        TravelRoute travelRoute = new TravelRoute(beforeSelectPlaceList);
 //        ArrayList<PlaceInfoDto> shortRoute = travelRoute.findShortRoute();
@@ -150,21 +163,39 @@ public class TravelSummaryActivity extends BaseAppCompatActivity implements OnMa
 
             Travel travel = new Travel(typeid,title,addr,image);
             travelList.add(travel);
-
-                //출력 테스트용 Log
-            /*Log.e(TAG ,"도시 : " + beforeSelectPlaceList.get(i).getAddr1());
-            Log.e(TAG ,"타이틀 : " + beforeSelectPlaceList.get(i).getTitle());
-            Log.e(TAG ,"주소 : " + beforeSelectPlaceList.get(i).getAddr2());
-            Log.e(TAG ,"전화번호 : " + beforeSelectPlaceList.get(i).getTel());
-            Log.e(TAG ,"이미지 : " + beforeSelectPlaceList.get(i).getFirstimage());
-            Log.e(TAG ,"카테고리 ID : " + beforeSelectPlaceList.get(i).getContenttypeid());*/
-        }
-        //uuid
-        if(uuid != null) {
-            myRef.child("user").child(uuid).child("Travel").push().setValue(travelList);
         }
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        //TODO 이미지 변경 혹은 아이콘 삭제
+        rightImage.setImageResource(android.R.drawable.ic_menu_save);
+        rightImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveDataToDB();
+                Intent i = new Intent(TravelSummaryActivity.this, ChooseCityActivity.class);
+                startActivity(i);
+            }
+        });
+
+     ArrayList<String> dayRemaining = new ArrayList<String>();
+        //전체 일정이 하루 이상일 때
+        if(1< alldate.getPeriod()){
+            //마지막날까지 하루씩 증가하면서 다음날을 구함.
+            for(int i=1; i<alldate.getPeriod(); i++) {
+                //시작점은 scheduleDate의 finalDate
+                //// TODO: 2017-03-25 만약 사용자가 2일 이상을 선택했고, 중간 날만 여행일정 작성 시에 이전 날짜는 저장 안됨..
+                Date nextDay = alldate.getDate(scheduleDate, i);
+                //여기서 nextDay가 사용자가 작성 안한 날
+                Log.e(TAG, sdformat.format(nextDay));
+                dayRemaining.add(sdformat.format(nextDay));
+            }
+        }
+
+        RemainingDay remainingDay = new RemainingDay(key, dayRemaining);
+        if(!dayRemaining.isEmpty()){
+            myRef.child("user").child(uuid).child("needSelect").child(key).setValue(remainingDay);
+        }
+
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -178,6 +209,11 @@ public class TravelSummaryActivity extends BaseAppCompatActivity implements OnMa
     private void addTravelList(Travel travel){
         travelList.add(travel);
     }
+    private void saveDataToDB(){
+        //// TODO: 저장버튼 누르기 전에 뒤로가면 dayRemaining만 저장되고 travel은 저장이 안되므로 해당 로직 구현해야함.
+        myRef.child("user").child(uuid).child("Travel").child(key).child(startdate).setValue(travelList);
+    }
+
     private void getTravelList(){
 
         myRef.child("user").child(uuid).addValueEventListener(new ValueEventListener() {
@@ -258,7 +294,6 @@ public class TravelSummaryActivity extends BaseAppCompatActivity implements OnMa
 
     }
 
-
     void makeMarker(float lat,float lng,String title,String sni){
 
         MarkerOptions temp = new MarkerOptions();
@@ -268,7 +303,6 @@ public class TravelSummaryActivity extends BaseAppCompatActivity implements OnMa
         Log.i("ohdoking-lat",lat+" / " + lng);
         mMap.addMarker(temp).showInfoWindow();
     }
-
 
     class PlaceInfoAdapter extends BaseAdapter{
 

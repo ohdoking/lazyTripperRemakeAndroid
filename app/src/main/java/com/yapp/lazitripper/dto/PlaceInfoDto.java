@@ -1,6 +1,7 @@
 package com.yapp.lazitripper.dto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Created by ohdok on 2017-02-25.
@@ -29,6 +30,8 @@ import java.io.Serializable;
     sigungucode	시군구코드	시군구코드
     tel	전화번호	전화번호
     title	제목	콘텐츠 제목
+    review 리뷰(유저키,별점,코멘트)
+    rating_avg 평균별점
 
 * */
 public class PlaceInfoDto implements Serializable {
@@ -36,6 +39,18 @@ public class PlaceInfoDto implements Serializable {
     public PlaceInfoDto(){
 
     }
+
+    public PlaceInfoDto(String title, String addr1, String tel, ArrayList<Review> review, double rating_tot){
+        this.title = title;
+        this.addr1 = addr1;
+        this.tel = tel;
+        this.review = review;
+        this.rating_tot = rating_tot;
+    }
+
+    private ArrayList<Review> review;
+    private double rating_tot;
+
     private String addr1;
     private String addr2;
     private Integer areacode;
@@ -56,6 +71,22 @@ public class PlaceInfoDto implements Serializable {
     private String tel;
     private String title;
     private String zipcode;
+
+    public ArrayList<Review> getReview() {
+        return review;
+    }
+
+    public void setReview(ArrayList<Review> review) {
+        this.review = review;
+    }
+
+    public double getRating_tot() {
+        return rating_tot;
+    }
+
+    public void setRating_tot(double rating_avg) {
+        this.rating_tot = rating_avg;
+    }
 
     public String getAddr1() {
         return addr1;

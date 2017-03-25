@@ -43,7 +43,6 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
     //private ChosenPlaceAdapter adapter;
     int i=0;
 
-
     public MyAdapter myAdapter;
     public ViewHolder viewHolder;
     private List<PlaceInfoDto> array;
@@ -118,10 +117,7 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
         array = new ArrayList<>();
         //12 관광지
 
-
         getPlaceData(12);
-
-
         renderItem();
 
     }
@@ -304,8 +300,6 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
                         count = 0;
                         page = 1;
 
-
-
                         //최단거리 구함
                         travelRoute = new TravelRoute(placeInfoDtoList);
                         placeInfoDtoList = travelRoute.findShortRoute();
@@ -318,7 +312,6 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
                     //랜드마크와 랜드마크 사이에 음식점 넣기
                     inputLandMarkAndLandMark((PlaceInfoDto) dataObject);
                     if(placeCount.getRestaurant().equals(locationCount) || array.size() == count) {
-
 
                         locationCount = 0;
                         locationFlag = 2;
@@ -338,8 +331,6 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
                 else if(locationFlag == 2){
                     placeInfoDtoList.add((PlaceInfoDto) dataObject);
                     if(placeCount.getAccommodation().equals(locationCount) || array.size() == count){
-
-
 
                         locationCount = 0;
                         count = 0;
