@@ -139,6 +139,7 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
                 .textColor(Color.LTGRAY, Color.WHITE)    // Text color for none selected Dates, Text color for selected Date.
                 .selectedDateBackground(Color.GRAY)  // Background color of the selected date cell.
                 .selectorColor(Color.RED)
+                .centerToday(false)
                 .build();
 
 
@@ -213,7 +214,6 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
                 chooseDate.setFinishDate(date);
                 chooseDate.setPeriod(1L);
 
-                horizontalCalendar.setSelectedDateBackground(Color.GRAY);
             }
         });
 

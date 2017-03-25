@@ -138,6 +138,7 @@ public class HorizontalCalendar {
 
         LinearSnapHelper snapHelper = new LinearSnapHelper();
         snapHelper.attachToRecyclerView(calendarView);
+        calendarView.setOnFlingListener(snapHelper);
 
         calendarView.setVisibility(View.INVISIBLE);
 
