@@ -78,6 +78,7 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
     TravelRoute travelRoute;
     // paging 처리를 위한
     Integer page = 1;
+    Integer pageNum = 20;
 
     private Boolean exit = false;
 
@@ -134,7 +135,7 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
 
         //contenttype이 관광지면 도시 기반으로 가져오고 나머지인경우 위치에 가까운 식당이나 숙소 데이터를 가져온다.
         if(contentTypeId == 12){
-            callRelionInfo = laziTripperKoreanTourService.getPlaceInfoByCity(20,page,"B","Y","AND","LaziTripper",cityCode, contentTypeId);
+            callRelionInfo = laziTripperKoreanTourService.getPlaceInfoByCity(pageNum,page,"B","Y","AND","LaziTripper",cityCode, contentTypeId);
         }
         else{
             if(landMarkUseCount >= placeCount.getLandMark()){
@@ -144,8 +145,8 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
                 //숙소는 마지막 랜드마크 다음
                 landMarkUseCount = travelRoute.getList().size() - 1 ;
             }
-            callRelionInfo = laziTripperKoreanTourService.getPlaceInfoByLocation(20,page,"E","Y","AND","LaziTripper",contentTypeId, travelRoute.getList().get(landMarkUseCount).getMapx(), travelRoute.getList().get(landMarkUseCount).getMapy() ,100000);
-            if(array.size() != count){
+            callRelionInfo = laziTripperKoreanTourService.getPlaceInfoByLocation(pageNum,page,"E","Y","AND","LaziTripper",contentTypeId, travelRoute.getList().get(landMarkUseCount).getMapx(), travelRoute.getList().get(landMarkUseCount).getMapy() ,100000);
+            if(locationCount % pageNum == 0){
                 landMarkUseCount++;
             }
         }
@@ -287,7 +288,7 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
                 //If you want to use it just cast it (String) dataObject
                 Toast.makeText(ChoosePlaceActivity.this, "싫어요", Toast.LENGTH_SHORT).show();
 
-                if(array.size() == count){
+                if(locationCount % pageNum == 0){
                     page++;
 
                     if(locationFlag == 0){
@@ -310,7 +311,7 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
                 Toast.makeText(ChoosePlaceActivity.this,  locationCount + "회 좋아요", Toast.LENGTH_SHORT).show();
                 if(locationFlag == 0){
                     placeInfoDtoList.add((PlaceInfoDto) dataObject);
-                    if(placeCount.getLandMark().equals(locationCount) || array.size() == count){
+                    if(placeCount.getLandMark().equals(locationCount)){
 
                         locationCount = 0;
                         locationFlag = 1;
@@ -324,11 +325,15 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
                         //39 음식
                         getPlaceData(39);
                     }
+                    else if(locationCount % pageNum == 0){
+                        page++;
+                        getPlaceData(12);
+                    }
                 }
                 else if(locationFlag == 1){
                     //랜드마크와 랜드마크 사이에 음식점 넣기
                     inputLandMarkAndLandMark((PlaceInfoDto) dataObject);
-                    if(placeCount.getRestaurant().equals(locationCount) || array.size() == count) {
+                    if(placeCount.getRestaurant().equals(locationCount)) {
 
                         locationCount = 0;
                         locationFlag = 2;
@@ -340,6 +345,9 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
                     }
                     else{
 
+                        if(locationCount % pageNum == 0){
+                            page++;
+                        }
                         //다음 경로의 주변 음식 가져오기
                         getPlaceData(39);
                     }
@@ -347,7 +355,7 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
                 }
                 else if(locationFlag == 2){
                     placeInfoDtoList.add((PlaceInfoDto) dataObject);
-                    if(placeCount.getAccommodation().equals(locationCount) || array.size() == count){
+                    if(placeCount.getAccommodation().equals(locationCount)){
 
                         locationCount = 0;
                         count = 0;
@@ -356,6 +364,10 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
                         i.putExtra(ConstantIntent.PLACELIST,placeInfoDtoList);
                         startActivity(i);
                         finish();
+                    }
+                    else if(locationCount % pageNum == 0){
+                        page++;
+                        getPlaceData(32);
                     }
                 }
 
