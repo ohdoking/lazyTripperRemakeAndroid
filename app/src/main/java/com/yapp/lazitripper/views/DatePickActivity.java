@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.squareup.timessquare.CalendarPickerView;
 import com.yapp.lazitripper.R;
@@ -49,17 +50,24 @@ public class DatePickActivity extends BaseAppCompatActivity {
         rightImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(FLAG == 1){
-                    Log.i("ohdoking",FLAG+"");
-                    pickDate.setStartDate(new Date());
-                    pickDate.setFinishDate(new Date());
-                    pickDate.setPeriod(1l);
-                }
-                sharedPreferenceStore.savePreferences(ConstantStore.DATEKEY, pickDate);
 
-                Intent i = new Intent(DatePickActivity.this, ChooseCityActivity.class);
-                i.putExtra(ConstantIntent.PICKDATE,pickDate);
-                startActivity(i);
+
+                if(pickDate.getStartDate() != null){
+
+                    if(FLAG == 1){
+                        Log.i("ohdoking",FLAG+"");
+                        pickDate.setFinishDate(pickDate.getStartDate());
+                        pickDate.setPeriod(1l);
+                    }
+                    sharedPreferenceStore.savePreferences(ConstantStore.DATEKEY, pickDate);
+
+                    Intent i = new Intent(DatePickActivity.this, ChooseCityActivity.class);
+                    i.putExtra(ConstantIntent.PICKDATE,pickDate);
+                    startActivity(i);
+                }
+                else{
+                    Toast.makeText(DatePickActivity.this, "날짜를 선택해주세요", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
