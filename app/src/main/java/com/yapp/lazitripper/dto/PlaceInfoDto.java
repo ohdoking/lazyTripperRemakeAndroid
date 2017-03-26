@@ -30,8 +30,6 @@ import java.util.ArrayList;
     sigungucode	시군구코드	시군구코드
     tel	전화번호	전화번호
     title	제목	콘텐츠 제목
-    review 리뷰(유저키,별점,코멘트)
-    rating_avg 평균별점
 
 * */
 public class PlaceInfoDto implements Serializable {
