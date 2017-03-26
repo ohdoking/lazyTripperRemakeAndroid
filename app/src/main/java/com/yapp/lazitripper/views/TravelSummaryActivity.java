@@ -1,18 +1,16 @@
 package com.yapp.lazitripper.views;
 
+import android.content.Intent;
 import android.graphics.Color;
-import android.os.Handler;
-import android.widget.ImageView;
-import android.support.annotation.NonNull;
-import android.widget.ListView;
-
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Toast;
-import android.content.Intent;
-import android.util.Log;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -26,12 +24,10 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import com.yapp.lazitripper.R;
 import com.yapp.lazitripper.common.ConstantIntent;
@@ -41,22 +37,13 @@ import com.yapp.lazitripper.dto.RemainingDay;
 import com.yapp.lazitripper.dto.Travel;
 import com.yapp.lazitripper.store.ConstantStore;
 import com.yapp.lazitripper.store.SharedPreferenceStore;
-import com.yapp.lazitripper.util.TravelRoute;
 import com.yapp.lazitripper.views.bases.BaseAppCompatActivity;
-import com.yapp.lazitripper.views.bases.BaseFragmentActivity;
 import com.yapp.lazitripper.views.dialog.LoadingDialog;
 
-import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import me.gujun.android.taggroup.TagGroup;
 
@@ -275,7 +262,7 @@ public class TravelSummaryActivity extends BaseAppCompatActivity implements OnMa
 
         Polyline line = mMap.addPolyline(new PolylineOptions()
                 .add(latLngList)
-                .width(30)
+                .width(20)
                 .color(Color.parseColor("#FEDF6B")));
         // 마커클릭 이벤트 처리
         // GoogleMap 에 마커클릭 이벤트 설정 가능.
@@ -307,6 +294,9 @@ public class TravelSummaryActivity extends BaseAppCompatActivity implements OnMa
     class PlaceInfoAdapter extends BaseAdapter{
 
         ArrayList<PlaceInfoDto> items = new ArrayList<>();
+        //TextView addr,tel;
+        int position;
+
 
         public void addItem(PlaceInfoDto dto){
             items.add(dto);
@@ -331,6 +321,10 @@ public class TravelSummaryActivity extends BaseAppCompatActivity implements OnMa
             return position;
         }
 
+        public void assignNumber(){
+            //items.
+        }
+
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             PlaceInfoItem view = null;
@@ -341,10 +335,14 @@ public class TravelSummaryActivity extends BaseAppCompatActivity implements OnMa
             }
             PlaceInfoDto curItem = items.get(position);
 
+
             view.setImage(curItem.getFirstimage());
+
             view.setLocatioin(curItem.getAddr1());
             view.setel(curItem.getTel());
             view.setTitle(curItem.getTitle());
+
+            view.setNumber(String.valueOf(position+1));
 
             return view;
         }
