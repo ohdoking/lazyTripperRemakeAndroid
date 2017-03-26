@@ -1,5 +1,6 @@
 package com.yapp.lazitripper.views;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -50,6 +51,7 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
     HorizontalCalendar horizontalCalendar;
     ImageView selectPlaceBtn;
     RingProgressBar mRingProgressBar;
+    String TAG = "ChooseCityActivity";
 
     boolean isData = false;
     ArrayList<String> country = new ArrayList<String>();
@@ -94,7 +96,6 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
 
         sharedPreferenceStore = new SharedPreferenceStore<PickDate>(getApplicationContext(), ConstantStore.STORE);
 
-
         final PickDate pickDate = sharedPreferenceStore.getPreferences(ConstantStore.DATEKEY, PickDate.class);
         Log.i("ohdoking",pickDate.getStartDate() + " / " + pickDate.getPeriod());
 
@@ -124,6 +125,8 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
 //        chooseDates.add(tommorow);
 //        chooseDates.add(nextTommorow);
         // ---------------------------------------------------------
+
+
 
         //Week 캘린더 
         horizontalCalendar = new HorizontalCalendar.Builder(this, R.id.weekCalendar)

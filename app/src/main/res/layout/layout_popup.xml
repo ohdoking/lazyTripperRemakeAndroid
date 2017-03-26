@@ -1,0 +1,65 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/popup_element"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#000000"
+    android:orientation="vertical"
+    android:padding="10sp" >
+
+    <RatingBar
+        android:id="@+id/ratingBar"
+        style="?android:attr/ratingBarStyleIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:isIndicator="false"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/layout_btn_inpopup"
+        android:orientation="vertical"
+        android:layout_marginTop="126dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true">
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_close_popup"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="false"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="Close" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/ratingBar"
+        android:layout_alignParentStart="true">
+
+        <EditText
+            android:id="@+id/edit_comment"
+            android:layout_width="fill_parent"
+            android:layout_weight="8"
+            android:textColor="#FFFFFF"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left" />
+
+        <Button
+            android:id="@+id/btn_compelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:layout_gravity="right"
+            android:text="작성하기" />
+
+    </LinearLayout>
+
+</RelativeLayout>

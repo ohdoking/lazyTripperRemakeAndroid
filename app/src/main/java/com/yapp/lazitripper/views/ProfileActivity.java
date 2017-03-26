@@ -45,6 +45,7 @@ public class ProfileActivity extends BaseAppCompatActivity {
             }
         });
 
+        //// TODO: 2017-03-26 My Travel Route와 DB 동기화, 터치이벤트 넣고 해당 item 클릭했을 때 상세보기(TravelSummary로?)
         // SP 에서 저장된 테그들의 정보를 가져옴.
         SharedPreferenceStore<String[]> sharedPreferenceStore = new SharedPreferenceStore<String[]>(getApplicationContext(), ConstantStore.STORE);
         String[] tagList = sharedPreferenceStore.getPreferences(ConstantStore.TAGS, String[].class);
