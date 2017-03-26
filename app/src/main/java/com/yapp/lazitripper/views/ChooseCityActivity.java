@@ -155,20 +155,20 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
         country.add("한국");
         countryDropDown.setWheelData(country);
 
-        mRingProgressBar = (RingProgressBar) findViewById(R.id.progress_bar);
+//        mRingProgressBar = (RingProgressBar) findViewById(R.id.progress_bar);
 
-        showProgressBar(2L, pickDate.getPeriod());
+//        showProgressBar(2L, pickDate.getPeriod());
         // Set the progress bar's progress
-        mRingProgressBar.setOnProgressListener(new RingProgressBar.OnProgressListener()
-        {
-
-            @Override
-            public void progressToComplete()
-            {
-                // Progress reaches the maximum callback default Max value is 100
-                Toast.makeText(ChooseCityActivity.this, "complete", Toast.LENGTH_SHORT).show();
-            }
-        });
+//        mRingProgressBar.setOnProgressListener(new RingProgressBar.OnProgressListener()
+//        {
+//
+//            @Override
+//            public void progressToComplete()
+//            {
+//                // Progress reaches the maximum callback default Max value is 100
+//                Toast.makeText(ChooseCityActivity.this, "complete", Toast.LENGTH_SHORT).show();
+//            }
+//        });
 //        countryDropDown.setAdapter(adapter);
 //
         countryDropDown.setOnWheelItemSelectedListener(new WheelView.OnWheelItemSelectedListener() {
