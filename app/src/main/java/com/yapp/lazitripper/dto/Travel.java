@@ -10,6 +10,7 @@ import java.util.List;
 
 public class Travel {
     private int contenttypeid;
+    private int contentid;
     private String title;
     private String address;
     private String imageURL;
@@ -47,6 +48,14 @@ public class Travel {
         this.title = title;
         this.address = address;
         this.imageURL = imageURL;
+    }
+
+    public int getContentid() {
+        return contentid;
+    }
+
+    public void setContentid(int contentid) {
+        this.contentid = contentid;
     }
 
     public int getContenttypeid() {
