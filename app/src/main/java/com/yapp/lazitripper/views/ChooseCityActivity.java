@@ -188,15 +188,17 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
 //                i.putExtra(ConstantIntent.CITYCODE, cityNum);
 //                startActivity(i);
 
-                if(chooseDate.getFinishDate() == null ){
-                    Toast.makeText(ChooseCityActivity.this,
-                            "날짜를 선택해주세요!", Toast.LENGTH_SHORT).show();
-                }
-                else if(checkAlreadyIncludeDate(chooseDate.getStartDate())){
+
+                if(checkAlreadyIncludeDate(chooseDate.getStartDate())){
                     Toast.makeText(ChooseCityActivity.this,
                             "이미 일정을 짠 스케쥴 입니다.", Toast.LENGTH_SHORT).show();
                 }
                 else{
+                    if(chooseDate.getFinishDate() == null ) {
+                        chooseDate.setStartDate(pickDate.getStartDate());
+                        chooseDate.setFinishDate(pickDate.getStartDate());
+                        chooseDate.setPeriod(1L);
+                    }
                     //shared에 선택한 스케쥴 날짜를 넣는다
                     sharedPreferenceStore.savePreferences(ConstantStore.SCHEDULE_DATE, chooseDate);
                     SetPlaceCountDialog setPlaceCountDialog = new SetPlaceCountDialog(ChooseCityActivity.this, cityNum);
