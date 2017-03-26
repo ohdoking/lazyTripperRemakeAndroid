@@ -105,7 +105,7 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
 //        weekCalendar = (LazyWeekCalendar) findViewById(R.id.weekCalendar);
 
         //week 캘린더 화면에 보이는 기간
-        Integer period = 5;
+        Integer period = 7;
         if(pickDate.getPeriod().intValue() < period){
             period = pickDate.getPeriod().intValue();
         }
@@ -121,8 +121,8 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
         Date tommorow = calendar.getTime();
         calendar.add(Calendar.DAY_OF_YEAR, 1);
         Date nextTommorow = calendar.getTime();
-        chooseDates.add(tommorow);
-        chooseDates.add(nextTommorow);
+//        chooseDates.add(tommorow);
+//        chooseDates.add(nextTommorow);
         // ---------------------------------------------------------
 
         //Week 캘린더 
