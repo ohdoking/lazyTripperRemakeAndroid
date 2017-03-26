@@ -18,7 +18,7 @@ public class SplashActivity extends AppCompatActivity {
 
                 try {
                     // Thread will sleep for 5 seconds
-                    sleep(3*1000);
+                    sleep(2*1000);
 
                     // After 5 seconds redirect to another intent
                     Intent i=new Intent(getBaseContext(),LoginActivity.class);

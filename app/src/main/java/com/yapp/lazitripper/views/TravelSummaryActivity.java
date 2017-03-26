@@ -72,6 +72,7 @@ public class TravelSummaryActivity extends BaseAppCompatActivity implements OnMa
     String startdate;
     String key;
     LoadingDialog loadingDialog;
+    int contentid;
 
     private Boolean exit = false;
 
@@ -124,6 +125,7 @@ public class TravelSummaryActivity extends BaseAppCompatActivity implements OnMa
         ArrayList<PlaceInfoDto> beforeSelectPlaceList =
                 (ArrayList<PlaceInfoDto>)intent.getSerializableExtra(ConstantIntent.PLACELIST);
 
+        //todo 따로 flag가 필요함.. needWrite가 남은 상태에서 다른 Travel을 먼저 작업하려면????
         if(needWriteKey != null) {
             key = needWriteKey;
             Log.e(TAG, "작성중 일정 작성완료!! date key is .." + needWriteKey);
@@ -149,7 +151,11 @@ public class TravelSummaryActivity extends BaseAppCompatActivity implements OnMa
             image = beforeSelectPlaceList.get(i).getFirstimage();
 
             Travel travel = new Travel(typeid,title,addr,image);
+                travel.setContentid(beforeSelectPlaceList.get(i).getContentid());
+                //Travel CONTENTID 추가
             travelList.add(travel);
+                contentid  = travel.getContentid();
+
         }
 
         //TODO 이미지 변경 혹은 아이콘 삭제
@@ -198,7 +204,9 @@ public class TravelSummaryActivity extends BaseAppCompatActivity implements OnMa
     }
     private void saveDataToDB(){
         //// TODO: 저장버튼 누르기 전에 뒤로가면 dayRemaining만 저장되고 travel은 저장이 안되므로 해당 로직 구현해야함.
-        myRef.child("user").child(uuid).child("Travel").child(key).child(startdate).setValue(travelList);
+        String child = startdate+"@";
+        child += Integer.toString(contentid);
+        myRef.child("user").child(uuid).child("Travel").child(key).child(child).setValue(travelList);
     }
 
     private void getTravelList(){
