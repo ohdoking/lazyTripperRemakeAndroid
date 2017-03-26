@@ -161,6 +161,23 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
                 if(flingContainer.getChildCount() != 0){
                     flingContainer.removeAllViewsInLayout();
                 }
+
+                ArrayList<PlaceInfoDto> tempList = new ArrayList<PlaceInfoDto>();
+                boolean hasItem;
+                for(PlaceInfoDto placeInfo : array){
+                    hasItem = false;
+                    for(PlaceInfoDto placeInfoDto : placeInfoDtoList){
+                        if(placeInfoDto.getContentid().equals(placeInfo.getContentid())){
+                            hasItem = true;
+                            break;
+                        }
+                    }
+                    if(!hasItem){
+                        tempList.add(placeInfo);
+                    }
+                }
+                array = tempList;
+
                 myAdapter.list = array;
                 myAdapter.notifyDataSetChanged();
 
