@@ -108,7 +108,7 @@ public class TravelRoute {
         //Log.d("distance",node.size()+"");
         //Log.d("distance",node.get(node.size()-1)+"qwerwqr"+node.size());
 
-        Double temp = dis.get(node.get(0)).get(0);
+        Double temp = dis.get(node.get(0)).get(1);
         Double temp2 = dis.get(node.get(node.size()-1)).get(0);
         //Integer a = new Integer(-1);
         //Integer b = new Integer(-1);
@@ -176,41 +176,55 @@ public class TravelRoute {
     public ArrayList<Integer> findShortRoute(ArrayList<ArrayList<Double>> dis){
         ArrayList<Integer> connectedNode = new ArrayList<Integer>();
 
-        Double shortDis = dis.get(0).get(1);
+        Double shortDis;// = dis.get(0).get(1);
 
-        for(int i=0;i<dis.size();i++){
+        ArrayList<Integer> route = new ArrayList<Integer>();
 
-            for(int j=0;j<dis.get(i).size();j++){
-                if(i == j)
-                    continue;
+        if(dis.size() == 1){
+            shortDis = dis.get(0).get(0);
+            route.add(new Integer(0));
 
-                if(shortDis > dis.get(i).get(j)){
-                    shortDis = dis.get(i).get(j);
-                    connectedNode.clear();
-                    connectedNode.add(new Integer(i));
-                    connectedNode.add(new Integer(j));
-                    Log.d("distance",connectedNode.get(0)+" aaaa"+connectedNode.get(1));
+        }else if(dis.size() == 2){
+            shortDis = dis.get(0).get(0);
+            route.add(new Integer(0));
+            route.add(new Integer(1));
+
+        }else {
+            shortDis = dis.get(0).get(1);
+            for (int i = 0; i < dis.size(); i++) {
+
+                for (int j = 0; j < dis.get(i).size(); j++) {
+                    if (i == j)
+                        continue;
+
+                    if (shortDis > dis.get(i).get(j)) {
+                        shortDis = dis.get(i).get(j);
+                        connectedNode.clear();
+                        connectedNode.add(new Integer(i));
+                        connectedNode.add(new Integer(j));
+                        Log.d("distance", connectedNode.get(0) + " aaaa" + connectedNode.get(1));
+
+                    }
 
                 }
 
             }
 
-        }
+
+            for (int i = 0; i < dis.size() - 2; i++) {
+                nextRoute(dis, connectedNode);
+            }
 
 
-
-        for(int i=0;i<dis.size()-2;i++){
-            nextRoute(dis,connectedNode);
-        }
-
-        ArrayList<Integer> route = new ArrayList<Integer>();
-        for(int i=0;i<dis.size();i++){
-            //Log.d("distance","순서대로 : "+connectedNode.get(i));
-            route.add(connectedNode.get(i));
+            for (int i = 0; i < dis.size(); i++) {
+                //Log.d("distance","순서대로 : "+connectedNode.get(i));
+                route.add(connectedNode.get(i));
+            }
         }
 
         //Log.d("distance",connectedNode.get(0)+" "+connectedNode.get(1)+" "+connectedNode.get(2)+" "+connectedNode.get(3)+" "+connectedNode.get(4)+" ");
         return route;
+
     }
 
     public ArrayList<PlaceInfoDto> changeIndex(List<PlaceInfoDto> dto,ArrayList<Integer> index){
@@ -241,54 +255,68 @@ public class TravelRoute {
         routeList = changeIndex(routeList,findShortRoute(allDistance));
 
         return changeIndex(routeList,findShortRoute(allDistance));
+        //return changeIndex(routeList,outerFindShortRoute(allDistance));
 
 
-        //플로이드로...
-        /*ArrayList<ArrayList<Double>> allDistance;
-        allDistance = getAllNodeDistance(routeList);
-        showDistance(allDistance);
-        Log.d("floyd","플로이드 쓰고난후 최단거리들");
-        ArrayList<ArrayList<Double>> temp = findShortRoute(allDistance);
-
-        showDistance(temp);
-
-        return null;*/
     }
 
-    //////////////////////////////플로이드알고리즘
-    /*public ArrayList<ArrayList<Double>> findShortRoute(ArrayList<ArrayList<Double>> dis){
+    //외곽부터 찾는거
+    public ArrayList<Integer> outerFindShortRoute(ArrayList<ArrayList<Double>> dis){
 
-        ArrayList<ArrayList<Double>> shortDis = new ArrayList<ArrayList<Double>>();
-        ArrayList<Double> temp;
+        ArrayList<Integer> connectedNode = new ArrayList<Integer>();
+        ArrayList<Integer> route = new ArrayList<Integer>();
+        Double max = sumArray(dis.get(0));
+        int temp = 0;
 
+        for(int i=1;i<dis.size();i++){
 
-        int size = dis.size();
+            Double tempSum = sumArray(dis.get(i));
 
-        for(int k=0;k<size;k++){
-
-            for(int i=0;i<size;i++){
-                temp = new ArrayList<Double>();
-
-                for(int j=0;j<size;j++){
-
-                    temp.add( Math.min(dis.get(i).get(j), dis.get(i).get(k) + dis.get(k).get(j)) );
-
-                    //shortDis.get(i).set(j, Math.min(dis.get(i).get(j), dis.get(i).get(k) + dis.get(k).get(j) ));
-
-                }
-
-                shortDis.add(temp);
+            if(max < tempSum){
+                temp = i;
+                max = tempSum;
             }
-
 
         }
 
+        int temp2 = 0;
+        for(int i=0;i<dis.size();i++) {
+            Double min = Double.MAX_VALUE;
 
-        return shortDis;
+            if(i==temp)
+                continue;
 
-    }*/
+            if(dis.get(temp).get(i) < min) {
+                temp2 = i;
+                min = dis.get(temp).get(i);
+            }
+        }
+
+        connectedNode.add(temp);
+        connectedNode.add(temp2);
+
+        for (int i = 0; i < dis.size() - 2; i++) {
+            nextRoute(dis, connectedNode);
+        }
 
 
+        for (int i = 0; i < dis.size(); i++) {
+            //Log.d("distance","순서대로 : "+connectedNode.get(i));
+            route.add(connectedNode.get(i));
+        }
+
+        return route;
+
+    }
+
+    public Double sumArray(ArrayList<Double> v){
+        Double sum = 0d;
+        for(int i=0;i<v.size();i++){
+            sum += v.get(i);
+        }
+
+        return sum;
+    }
 
 
     // This function converts decimal degrees to radians

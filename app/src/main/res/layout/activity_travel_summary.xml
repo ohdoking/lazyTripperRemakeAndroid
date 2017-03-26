@@ -3,39 +3,86 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:orientation="horizontal">
-        <fragment
-            xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/map"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context="com.yapp.lazitripper.views.TravelSummaryActivity" />
 
-    </LinearLayout>
-
-    <RelativeLayout
-        android:id="@+id/tag_layout"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="13dp"
-        android:layout_centerHorizontal="true"
-        >
-        <me.gujun.android.taggroup.TagGroup
-            android:id="@+id/tag_group"
-            style="@style/TagGroup.Beauty_Gray"
-            />
-    </RelativeLayout>
-
-    <ListView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/listview">
+        android:scrollbars="vertical"
+        android:fillViewport="true">
 
-    </ListView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:orientation="horizontal">
+                <fragment
+                    xmlns:tools="http://schemas.android.com/tools"
+                    android:id="@+id/map"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:context="com.yapp.lazitripper.views.TravelSummaryActivity" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="84dp"
+                android:layout_height="18dp"
+                android:layout_marginLeft="18dp"
+                android:layout_marginTop="19dp"
+                android:text="나의 여행 키워드"
+                android:textSize="12sp" />
+
+            <View
+                android:layout_width="329dp"
+                android:layout_height="3dp"
+                android:background="#ffd8d8d8"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_gravity="center_horizontal"/>
+
+            <RelativeLayout
+                android:id="@+id/tag_layout"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="13dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_centerHorizontal="true"
+                >
+                <me.gujun.android.taggroup.TagGroup
+                    android:id="@+id/tag_group"
+                    style="@style/TagGroup.Beauty_Gray"
+                    />
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="84dp"
+                android:layout_height="18dp"
+                android:layout_marginLeft="18dp"
+                android:layout_marginTop="40dp"
+                android:text="나의 여행 키워드"
+                android:textSize="12sp" />
+
+            <View
+                android:layout_width="329dp"
+                android:layout_height="3dp"
+                android:background="#ffd8d8d8"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_gravity="center_horizontal"/>
 
 
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/listview">
+
+            </ListView>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>
