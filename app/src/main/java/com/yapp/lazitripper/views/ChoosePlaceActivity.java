@@ -146,7 +146,7 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
                 landMarkUseCount = travelRoute.getList().size() - 1 ;
             }
             callRelionInfo = laziTripperKoreanTourService.getPlaceInfoByLocation(pageNum,page,"E","Y","AND","LaziTripper",contentTypeId, travelRoute.getList().get(landMarkUseCount).getMapx(), travelRoute.getList().get(landMarkUseCount).getMapy() ,100000);
-            if(locationCount % pageNum == 0){
+            if(array.size() != count){
                 landMarkUseCount++;
             }
         }
@@ -288,7 +288,7 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
                 //If you want to use it just cast it (String) dataObject
                 Toast.makeText(ChoosePlaceActivity.this, "싫어요", Toast.LENGTH_SHORT).show();
 
-                if(locationCount % pageNum == 0){
+                if(locationCount % pageNum == 0 && locationCount != 0){
                     page++;
 
                     if(locationFlag == 0){
@@ -325,7 +325,7 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
                         //39 음식
                         getPlaceData(39);
                     }
-                    else if(locationCount % pageNum == 0){
+                    else if(locationCount % pageNum == 0 && locationCount != 0){
                         page++;
                         getPlaceData(12);
                     }
@@ -345,7 +345,7 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
                     }
                     else{
 
-                        if(locationCount % pageNum == 0){
+                        if(locationCount % pageNum == 0 && locationCount != 0){
                             page++;
                         }
                         //다음 경로의 주변 음식 가져오기
@@ -365,7 +365,7 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
                         startActivity(i);
                         finish();
                     }
-                    else if(locationCount % pageNum == 0){
+                    else if(locationCount % pageNum == 0 && locationCount != 0){
                         page++;
                         getPlaceData(32);
                     }
