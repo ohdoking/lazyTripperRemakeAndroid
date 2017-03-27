@@ -5,10 +5,17 @@
     android:orientation="vertical">
 
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="vertical"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="10dp"
             android:orientation="vertical">
 
             <LinearLayout
@@ -56,29 +63,42 @@
                     />
             </RelativeLayout>
 
-            <TextView
-                android:layout_width="84dp"
-                android:layout_height="18dp"
-                android:layout_marginLeft="18dp"
-                android:layout_marginTop="40dp"
-                android:text="나의 여행 키워드"
-                android:textSize="12sp" />
-
-            <View
-                android:layout_width="329dp"
-                android:layout_height="3dp"
-                android:background="#ffd8d8d8"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:layout_gravity="center_horizontal"/>
 
 
-            <ListView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/listview">
 
-            </ListView>
         </LinearLayout>
+
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="84dp"
+            android:layout_height="18dp"
+            android:layout_marginLeft="18dp"
+            android:layout_marginTop="10dp"
+            android:text="나의 여행 키워드"
+            android:textSize="12sp" />
+
+        <View
+            android:layout_width="329dp"
+            android:layout_height="3dp"
+            android:background="#ffd8d8d8"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_gravity="center_horizontal"/>
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/listview">
+
+        </ListView>
+
+    </LinearLayout>
 
 </LinearLayout>

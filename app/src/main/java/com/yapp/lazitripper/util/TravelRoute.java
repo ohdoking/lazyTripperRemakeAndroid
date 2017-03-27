@@ -252,9 +252,14 @@ public class TravelRoute {
         allDistance = getAllNodeDistance(routeList);
         showDistance(allDistance);
 
-        routeList = changeIndex(routeList,findShortRoute(allDistance));
+        ArrayList<PlaceInfoDto> tempList = new ArrayList<PlaceInfoDto>();
+        ArrayList<PlaceInfoDto> beforeList = new ArrayList<PlaceInfoDto>();
+        beforeList.addAll(routeList);
+        tempList.addAll(changeIndex(routeList,findShortRoute(allDistance)));
+        routeList.clear();
+        routeList.addAll(tempList);
 
-        return changeIndex(routeList,findShortRoute(allDistance));
+        return changeIndex(beforeList,findShortRoute(allDistance));
         //return changeIndex(routeList,outerFindShortRoute(allDistance));
 
 

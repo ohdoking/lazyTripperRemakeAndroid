@@ -17,7 +17,6 @@ public class PlaceInfoItem extends LinearLayout {
 
     TextView title, location, tel;
     ImageView thumbnail;
-    //TextView addrText,telText;
     TextView number;
     public PlaceInfoItem(Context context) {
         super(context);
@@ -57,12 +56,6 @@ public class PlaceInfoItem extends LinearLayout {
         this.tel.setText(lng);
     }
 
-    public void setAddrText(String t){
-        //this.addrText.setText("ADD");
-    }
-    public void setTelText(String t){
-        //this.telText.setText("TEL");
-    }
 
     public void setNumber(String t){
         this.number.setText(t);
