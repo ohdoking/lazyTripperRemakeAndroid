@@ -264,7 +264,7 @@ public class TravelSummaryActivity extends BaseAppCompatActivity implements OnMa
         LatLng[] latLngList = new LatLng[index];
         for(int i=0;i<adapter.getCount();i++){
             PlaceInfoDto temp = adapter.getItem(i);
-            makeMarker(temp.getMapy(), temp.getMapx(), temp.getAddr1(), null);
+            makeMarker(temp.getMapy(), temp.getMapx(), temp.getTitle(), null);
             latLngList[i] = new LatLng(temp.getMapy(), temp.getMapx());
         }
 
@@ -295,6 +295,7 @@ public class TravelSummaryActivity extends BaseAppCompatActivity implements OnMa
         BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.round_icon);
 
         temp.position(new LatLng(lat, lng)).title(title).snippet(sni).icon(icon);
+
         Log.i("ohdoking-lat",lat+" / " + lng);
         mMap.addMarker(temp).showInfoWindow();
     }
