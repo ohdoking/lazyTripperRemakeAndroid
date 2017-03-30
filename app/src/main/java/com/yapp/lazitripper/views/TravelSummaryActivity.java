@@ -28,6 +28,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.yapp.lazitripper.R;
 import com.yapp.lazitripper.common.ConstantIntent;
@@ -60,6 +62,7 @@ public class TravelSummaryActivity extends BaseAppCompatActivity implements OnMa
     private int i=0;
     private ArrayList<Travel> travelList = new ArrayList<Travel>();
     private String uuid;
+    private boolean IsRemain;
 
     //리스트뷰
     ListView placeListView;
@@ -73,6 +76,8 @@ public class TravelSummaryActivity extends BaseAppCompatActivity implements OnMa
     String key;
     LoadingDialog loadingDialog;
     int contentid;
+    private SharedPreferenceStore sharedPreferenceStore1;
+    PickDate alldate;
 
     private Boolean exit = false;
 
@@ -88,6 +93,7 @@ public class TravelSummaryActivity extends BaseAppCompatActivity implements OnMa
         int typeid;
         String addr;
         String image;
+        IsRemain = false;
         SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
         loadingDialog = new LoadingDialog(TravelSummaryActivity.this);
         loadingDialog.show();
@@ -96,22 +102,22 @@ public class TravelSummaryActivity extends BaseAppCompatActivity implements OnMa
         SharedPreferenceStore<String[]> sharedPreferenceStore = new SharedPreferenceStore<String[]>(getApplicationContext(), ConstantStore.STORE);
         String[] tagList = sharedPreferenceStore.getPreferences(ConstantStore.TAGS, String[].class);
 
-        //총 여행 일정
-        SharedPreferenceStore sharedPreferenceStore2 = new SharedPreferenceStore(getApplicationContext(), ConstantStore.STORE);
-        PickDate alldate = (PickDate) sharedPreferenceStore2.getPreferences(ConstantStore.DATEKEY, PickDate.class);
-        Log.e(TAG, "Allday -> startDay =" + alldate.getStartDate() + "All day -> finishDay" + alldate.getFinishDate());
-
         //UUID를 가져오기 위한 <String> SharedPreferenceStore
-        SharedPreferenceStore sharedPreferenceStore1 = new SharedPreferenceStore(getApplicationContext(), ConstantStore.STORE);
+        sharedPreferenceStore1 = new SharedPreferenceStore(getApplicationContext(), ConstantStore.STORE);
         uuid = (String)sharedPreferenceStore1.getPreferences(ConstantStore.UUID, String.class);
         needWriteKey = (String)sharedPreferenceStore1.getPreferences(ConstantStore.KEY, String.class);
+
+        alldate = (PickDate) sharedPreferenceStore1.getPreferences(ConstantStore.DATEKEY, PickDate.class);
+        Log.e(TAG, "Allday -> startDay =" + alldate.getStartDate() + "All day -> finishDay" + alldate.getFinishDate());
+
+        String remainString = (String)sharedPreferenceStore1.getPreferences(ConstantStore.REMAINFLAG, String.class);
+        if(remainString.equals("true") && remainString != null) IsRemain = true;
 
         //도시선택한 여행 일정 (Travel 단위)
         scheduleDateStore = new SharedPreferenceStore<PickDate>(getApplicationContext(), ConstantStore.STORE);
         scheduleDate = scheduleDateStore.getPreferences(ConstantStore.SCHEDULE_DATE,PickDate.class);
         totalDate = scheduleDateStore.getPreferences(ConstantStore.DATEKEY,PickDate.class);
         SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
-
         Log.e(TAG,"startDay : " + scheduleDate.getStartDate());
         Log.e(TAG,"FinishDay : " + scheduleDate.getFinishDate());
 
@@ -125,11 +131,14 @@ public class TravelSummaryActivity extends BaseAppCompatActivity implements OnMa
         ArrayList<PlaceInfoDto> beforeSelectPlaceList =
                 (ArrayList<PlaceInfoDto>)intent.getSerializableExtra(ConstantIntent.PLACELIST);
 
-        //todo 따로 flag가 필요함.. needWrite가 남은 상태에서 다른 Travel을 먼저 작업하려면????
-        if(needWriteKey != null) {
+        //// TODO: 2017-03-28 작성 완료 한 다음에, chooseCityActivity에서 다음날을 선택해서 일정을 짜기 시작하면 dayremaining이 아닌걸로 인식함.
+        //// TODO: 2017-03-28 맞는 방법은 travelSummary에서 remainingday를 저장할 때, shared에 저장해줘야한다.
+        if(needWriteKey != null && IsRemain) {
             key = needWriteKey;
             Log.e(TAG, "작성중 일정 작성완료!! date key is .." + needWriteKey);
+
         }
+
         //요게 일단 최단거리긴한데 수정중
 //        TravelRoute travelRoute = new TravelRoute(beforeSelectPlaceList);
 //        ArrayList<PlaceInfoDto> shortRoute = travelRoute.findShortRoute();
@@ -158,7 +167,6 @@ public class TravelSummaryActivity extends BaseAppCompatActivity implements OnMa
 
         }
 
-        //TODO 이미지 변경 혹은 아이콘 삭제
         rightImage.setImageResource(android.R.drawable.ic_menu_save);
         rightImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,6 +180,10 @@ public class TravelSummaryActivity extends BaseAppCompatActivity implements OnMa
      ArrayList<String> dayRemaining = new ArrayList<String>();
         //전체 일정이 하루 이상일 때
         if(1< alldate.getPeriod()){
+            //// TODO: 2017-03-29 여기서 저장(update)해야할 데이터는 전체일정 - 선택일정 이여야 함(여러날 가능)
+            sharedPreferenceStore1.savePreferences(ConstantStore.KEY,key);
+            sharedPreferenceStore1.savePreferences(ConstantStore.REMAINFLAG,"true");
+
             //마지막날까지 하루씩 증가하면서 다음날을 구함.
             for(int i=1; i<alldate.getPeriod(); i++) {
                 //시작점은 scheduleDate의 finalDate
@@ -187,7 +199,6 @@ public class TravelSummaryActivity extends BaseAppCompatActivity implements OnMa
         if(!dayRemaining.isEmpty()){
             myRef.child("user").child(uuid).child("needSelect").child(key).setValue(remainingDay);
         }
-
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -207,6 +218,57 @@ public class TravelSummaryActivity extends BaseAppCompatActivity implements OnMa
         String child = startdate+"@";
         child += Integer.toString(contentid);
         myRef.child("user").child(uuid).child("Travel").child(key).child(child).setValue(travelList);
+        //// TODO: 2017-03-29 지금은 한번에 하루만 추가 되므로 1을 빼면 됨
+        alldate.setPeriod(alldate.getPeriod()-1);
+        sharedPreferenceStore1.savePreferences(ConstantStore.DATEKEY,alldate);
+
+        if(IsRemain == true ) { // 이번에 저장한 데이터가 remaining day인 경우
+            Log.e(TAG,"is Remaining is true!");
+            deleteDataToDB(startdate);
+            Log.e(TAG,"remain day -> startDate :" + startdate);
+            //// TODO: 2017-03-29 shared 초기화-> 전체일정 작성 완료했으면 날짜들도 초기화해줘야함. period도 수정
+            sharedPreferenceStore1.savePreferences(ConstantStore.REMAINFLAG,"false");
+        }
+    }
+    ///남은 날 저장 완료 후 돌아가는 activity를 datePick에서 home으로..?
+    private void deleteDataToDB(final String deleteDate){
+        myRef.child("user").child(uuid).child("needSelect").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    RemainingDay day = child.getValue(RemainingDay.class);
+                    ArrayList<String> array = new ArrayList<String>();
+                    array = day.getDayRemaining();
+                    ArrayList<String> arr_new = new ArrayList<String>();
+                    String key = day.getKey();
+                    Log.e(TAG,"day.get key = " + key);
+                    RemainingDay newday = new RemainingDay();
+                    Log.e(TAG,"array size : "+array.size());
+
+                    if (array.size() > 1) {
+                        for (int i = 0; i < array.size(); i++) {
+                            if (array.get(i).equals(deleteDate)) {
+                            }else arr_new.add(day.getDayRemaining().get(i));
+                            }
+                         }else{//array가 1일때
+                        Log.e(TAG,"delete child to needSelect");
+                        myRef.child("user").child(uuid).child("needSelect").child(key).removeValue();
+                        arr_new = null;
+                        if(arr_new != null) {
+                            newday.setDayRemaining(arr_new);
+                            newday.setKey(key);
+                            Log.e(TAG,"update child to needSelect");
+                            myRef.child("user").child(uuid).child("needSelect").child(key).setValue(newday);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void getTravelList(){

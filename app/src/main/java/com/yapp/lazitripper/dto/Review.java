@@ -1,9 +1,14 @@
 package com.yapp.lazitripper.dto;
 
+import java.util.Date;
+
 /**
  * Created by ESENS on 2017-03-23.
  */
 
+/*
+*
+* */
 public class Review {
 
     private String userkey;
@@ -13,7 +18,7 @@ public class Review {
 
     public Review(){}
 
-    public Review(String userkey, float rating, String comment, String username){
+    public Review(String comment, float rating, String userkey, String username){
         this.userkey = userkey;
         this.rating = rating;
         this.comment = comment;

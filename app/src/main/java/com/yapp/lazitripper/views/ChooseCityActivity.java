@@ -234,7 +234,6 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
         //@TODO 국가 정보를 받아서 지역을 뿌려준다.
         Call<CommonResponse<RegionCodeDto>> callRelionInfo = laziTripperKoreanTourService.getRelionInfo(100,1,"AND","LaziTripper");
 
-
         callRelionInfo.enqueue(new Callback<CommonResponse<RegionCodeDto>>() {
             @Override
             public void onResponse(Call<CommonResponse<RegionCodeDto>> call, Response<CommonResponse<RegionCodeDto>> response) {
@@ -281,9 +280,10 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
     }
 
     void showProgressBar(Long pre, Long total){//현재일정, 총 일수
-        Long l = pre*100/total;
-        mRingProgressBar.setProgress(l.intValue());
-        
+        if(total != 0) {
+            Long l = pre * 100 / total;
+            mRingProgressBar.setProgress(l.intValue());
+        }
     }
 
     public Calendar toCalendar(Date date){

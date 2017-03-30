@@ -6,6 +6,8 @@ import android.graphics.Point;
 import android.media.Rating;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.Layout;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
@@ -16,14 +18,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.vision.face.Landmark;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -39,6 +46,7 @@ import com.yapp.lazitripper.store.SharedPreferenceStore;
 import com.yapp.lazitripper.views.adapters.ReviewAdapter;
 import com.yapp.lazitripper.views.bases.BaseAppCompatActivity;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,11 +57,14 @@ public class MyProfileActivity extends BaseAppCompatActivity {
     private float avg;
     private Review review;
     private PopupWindow pwindo;
+    private float tot; //DB에서 불러들인 리뷰들의 평점의 총합
+    private int review_size; //DB에서 불러들인 리뷰들의 개수
 
     private Button btnClosePopup;
     private Button btnOpenPopup;
     private Button btnComplete;
     private EditText comment_edt;
+    private ArrayList<Review> reviewList;
 
     private int mWidthPixels, mHeightPixels;
     private RatingBar ratingbar;
@@ -79,19 +90,20 @@ public class MyProfileActivity extends BaseAppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_profile);
-        TextView title_txt = (TextView) findViewById(R.id.title_txt);
-        TextView address_txt = (TextView) findViewById(R.id.address_txt);
         setHeader();
         review = new Review();
-
+        reviewList = new ArrayList<Review>();
+        tot = 0;
+        review_size = 0;
         adapter = new ReviewAdapter();
         landMark = new Travel();
         sharedPreferenceStore = new SharedPreferenceStore(getApplicationContext(), ConstantStore.STORE);
         uuid = (String) sharedPreferenceStore.getPreferences(ConstantStore.UUID, String.class);
         username = (String) sharedPreferenceStore.getPreferences(ConstantStore.USERNAME, String.class);
         listView = (ListView) findViewById(R.id.review_listview);
-
         listView.setAdapter(adapter);
+
+        View layout = (View) findViewById(R.id.activity_my_profile);
 
         //NXE 예방
         if (uuid == null) uuid = "null";
@@ -108,11 +120,28 @@ public class MyProfileActivity extends BaseAppCompatActivity {
         landMark.setTel(handledata.getTel());
         landMark.setTitle(handledata.getTitle());
 
+        ImageView background = (ImageView)findViewById(R.id.backgroundImage);
+        TextView title = (TextView)findViewById(R.id.name);
+        ImageView country_image = (ImageView)findViewById(R.id.country_image);
+        TextView _addr = (TextView) findViewById(R.id._addr);
+        TextView addr = (TextView) findViewById(R.id.addr);
+        TextView _tel = (TextView) findViewById(R.id._tel);
+        TextView tel = (TextView) findViewById(R.id.tel);
+
+        Glide.with(this).load(handledata.getFirstimage()).override(485, 710).centerCrop().into(background);
+        title.setText(handledata.getTitle());
+        country_image.setImageDrawable(getResources().getDrawable(R.drawable.korea));
+        _addr.setText("ADD");
+        addr.setText(handledata.getAddr1());
+        _tel.setText("TEL");
+        tel.setText(handledata.getTel());
+
         initlayout();
+
 
         //PlaceInfoDto landmark = new PlaceInfoDto(handledata.getAddr1(),handledata.getTel(),handledata);
 
-        LinearLayout btn_layout = (LinearLayout) findViewById(R.id.layout_btn);
+      /*  LinearLayout btn_layout = (LinearLayout) findViewById(R.id.layout_btn);
 
         btn_layout.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -130,28 +159,11 @@ public class MyProfileActivity extends BaseAppCompatActivity {
                         break;
                 }
             }
-        };
-
+        };*/
+/*
         btnOpenPopup = (Button) findViewById(R.id.btn_rating);
-        btnOpenPopup.setOnClickListener(onClickListener);
-
-        title_txt.setText(handledata.getTitle());
-        address_txt.setText("ADD :" + handledata.getAddr1());
-
-        if (0 < handledata.getRating_tot())
-            avg = (float) (handledata.getRating_tot() / handledata.getReview().size());
-
-        rating_avg = (RatingBar) findViewById(R.id.rating_avg);
-        rating_avg.setStepSize((float) 0.5);
-        rating_avg.setMax(5);
-
-        //만약 해당 랜드마크의 평균별점이 0이상이면 평균별점 초기값 세팅
-        if (0 < avg) {
-            rating_avg.setRating(avg);
-        }
-        //DatabaseException 발생
+        btnOpenPopup.setOnClickListener(onClickListener);*/
         getTravel();
-
     }
     private void initlayout(){
         WindowManager w = getWindowManager();
@@ -208,6 +220,8 @@ public class MyProfileActivity extends BaseAppCompatActivity {
         }
     }
 
+
+
     private View.OnClickListener listener_in_popup =
             new View.OnClickListener() {
 
@@ -222,7 +236,6 @@ public class MyProfileActivity extends BaseAppCompatActivity {
                                 saveData(landMark);
                                 getTravel();
                                 pwindo.dismiss();
-                                //// TODO: 2017-03-25 DB작업 해야하고, loginActivty를 거치지 않으면 username을 못받아옴.
                             }
                             break;
                         case R.id.btn_close_popup:
@@ -256,16 +269,32 @@ public class MyProfileActivity extends BaseAppCompatActivity {
                  @Override
                  public void onDataChange(DataSnapshot dataSnapshot) {
                      for (DataSnapshot child : dataSnapshot.getChildren()) {
-                         //saveData(child.getValue(Travel.class));
-                         Review review = child.getValue(Review.class);
-                         if (review.getComment() != null)
-                             Log.e(TAG, "저장 데이터 : " + review.getComment());
-                     }
-                 }
+                         Travel data = child.getValue(Travel.class);
+                         Review review = data.getReview();
+                         Log.e(TAG, "저장 데이터 : " + review.getComment());
+                         reviewList.add(review);
+                         review_size += 1;
+                         tot += review.getRating();
 
+                     }
+                    //// TODO: 2017-03-27 현재 마지막 review만 받아온다....
+                     landMark.setReviewList(reviewList);
+                     adapter.addItem(landMark);
+                     adapter.notifyDataSetChanged();
+                     if (0 < review_size)
+                         avg = (float) tot/ review_size;
+
+                     rating_avg = (RatingBar) findViewById(R.id.rating_avg);
+                     rating_avg.setStepSize((float) 0.5);
+                     //rating_avg.setMax(5);
+                     //만약 해당 랜드마크의 평균별점이 0이상이면 평균별점 초기값 세팅
+                     if (0 < avg) {
+                         rating_avg.setRating(avg);
+                     }
+
+                 }
                  @Override
                  public void onCancelled(DatabaseError databaseError) {
-
                  }
              });
          }

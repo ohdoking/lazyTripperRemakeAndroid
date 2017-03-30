@@ -52,9 +52,15 @@ public class ReviewAdapter extends BaseAdapter {
 
         // 아이템 내 각 위젯에 데이터 반영
         //iconImageView.setImageDrawable(listViewItem.getIcon());
-        titleTextView.setText(listViewItem.getReview().getComment());
-        descTextView.setText(listViewItem.getReview().getUsername() + "님이 작성하셨습니다.");
-
+        if(listViewItem.getReviewList().size() > 1){
+            for(int i=0; i<listViewItem.getReviewList().size(); i++){
+                titleTextView.setText(listViewItem.getReviewList().get(i).getComment());
+                descTextView.setText(listViewItem.getReviewList().get(i).getUsername() + "님이 작성하셨습니다.");
+            }
+        }else {
+            titleTextView.setText(listViewItem.getReview().getComment());
+            descTextView.setText(listViewItem.getReview().getUsername() + "님이 작성하셨습니다.");
+        }
         return convertView;
     }
 

@@ -119,7 +119,6 @@ public class LoginActivity extends FragmentActivity {
                     sharedPreferenceStore.savePreferences(ConstantStore.UUID, uuid);
                     loadingDialog.dismiss();
 
-                    //여기서 바로 시작하는 이유는??? loggedIn()은???
                     Intent i = new Intent(LoginActivity.this, KeywordSelectActivity.class);
 
                     startActivity(i);
@@ -136,7 +135,6 @@ public class LoginActivity extends FragmentActivity {
         // 로그인 되어있으면 바로 접속
         if(isLoggedIn()){
             Intent i = new Intent(LoginActivity.this, KeywordSelectActivity.class);
-            //email-> uuid 변경
             startActivity(i);
         }
 

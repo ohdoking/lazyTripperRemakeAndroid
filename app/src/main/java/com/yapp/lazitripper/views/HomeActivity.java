@@ -1,7 +1,10 @@
 package com.yapp.lazitripper.views;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -9,29 +12,51 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.yapp.lazitripper.R;
-import com.yapp.lazitripper.common.ConstantIntent;
+
+import com.yapp.lazitripper.dto.PickDate;
+import com.yapp.lazitripper.dto.RemainingDay;
 import com.yapp.lazitripper.store.ConstantStore;
 import com.yapp.lazitripper.store.SharedPreferenceStore;
 import com.yapp.lazitripper.views.bases.BaseAppCompatActivity;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 
 // 메인 화면
 
 public class HomeActivity extends BaseAppCompatActivity {
 
     LinearLayout linearLayout;
+    private String email;
+    private final String TAG = "HomeActivity";
+    private String key;
+    private String date;
+    private Date tempDate;
+    private PickDate pickDate;
+    private DatabaseReference myRef;
     private SharedPreferenceStore sharedPreferenceStore;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        //setHeader
         setHeader();
-        sharedPreferenceStore = new SharedPreferenceStore(getApplicationContext(), ConstantStore.STORE);
+        pickDate = new PickDate();
 
-        /* setHeaer */
+        sharedPreferenceStore = new SharedPreferenceStore(getApplicationContext(), ConstantStore.STORE);
+        myRef = FirebaseDatabase.getInstance().getReference("lazitripper");
         ImageView rightImage = getRightImageView();
 
-        //TODO 이미지 변경 혹은 아이콘 삭제
+        String uuid = (String)sharedPreferenceStore.getPreferences(ConstantStore.UUID, String.class);
         rightImage.setImageResource(R.drawable.more);
         rightImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,20 +67,15 @@ public class HomeActivity extends BaseAppCompatActivity {
         });
 
         TextView emailTv = (TextView) findViewById(R.id.textView2);
-        String uuid = getIntent().getStringExtra(ConstantIntent.UUID);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String userName = "";
-
-        //username으로 변경
-        //만약 firebase email login이나 , google login등의 방식을 사용한다면 userName이 아닌 getUserEmail을 사용해야한다.
-        //공백값에 대한 처리여부
 
         if (user != null) {
             userName = user.getDisplayName();
             //shared에 유저명 추가
             sharedPreferenceStore.savePreferences(ConstantStore.USERNAME,userName);
         }
-        //TODO 떠나고 싶은 여행을 까지만 노출됨, 전체적인 view 개선
+        //username이 길면 밑의 text가 짤림
         emailTv.setText(userName + "님,\n떠나고 싶은\n여행을 만나보세요");
 
         //여행 시작
@@ -67,5 +87,69 @@ public class HomeActivity extends BaseAppCompatActivity {
                 startActivity(i);
             }
         });
+
+        myRef.child("user").child(uuid).child("needSelect").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                boolean isdata = false;
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    RemainingDay day = postSnapshot.getValue(RemainingDay.class);
+                    Log.e(TAG, "Get key" + day.getKey());
+                    key = day.getKey();
+                    //현재는 무조건 리스트의 가장 첫번째 날만 작성 가능하도록 해 둠
+                    date = day.getDayRemaining().get(0);
+                    Log.e(TAG,"remaining day : " + date);
+                    if(day.getKey() != null) isdata = true;
+                }
+                if(isdata){
+                    try {
+                        SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy-MM-dd");
+                        tempDate = sdFormat.parse(date);
+                        pickDate.setStartDate(tempDate);
+                        pickDate.setFinishDate(tempDate);
+                        pickDate.setPeriod(1L);
+                    }catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    notification();
+                }else{
+                    sharedPreferenceStore.savePreferences(ConstantStore.REMAINFLAG,"false");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
+    }
+
+    private void notification(){
+        AlertDialog.Builder alert_confirm = new AlertDialog.Builder(HomeActivity.this);
+        alert_confirm.setMessage("이전에 작성 중이던 루트가 있습니다. 마저 작성하시겠습니까?").setCancelable(false).setPositiveButton("확인",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //YES
+                        sharedPreferenceStore.savePreferences(ConstantStore.KEY,key);
+                        sharedPreferenceStore.savePreferences(ConstantStore.DATEKEY, pickDate);
+                        sharedPreferenceStore.savePreferences(ConstantStore.SCHEDULE_DATE, pickDate);
+                        sharedPreferenceStore.savePreferences(ConstantStore.REMAINFLAG,"true");
+                        //전체일정과 선택일정이 같음(하루만 가능하게)
+                        Intent i = new Intent(HomeActivity.this, ChooseCityActivity.class);
+                        startActivity(i);
+                        finish();
+
+                    }
+                }).setNegativeButton("취소",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // 'No'
+                        return;
+                    }
+                });
+        AlertDialog alert = alert_confirm.create();
+        alert.show();
     }
 }
