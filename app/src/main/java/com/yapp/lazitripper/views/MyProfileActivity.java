@@ -153,14 +153,7 @@ public class MyProfileActivity extends BaseAppCompatActivity {
 
         //initlayout();
         getTravel();
-/*
-        listView.setOnTouchListener(new View.OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
-                mScrollview.requestDisallowInterceptTouchEvent(true);
-                return false;
-            }
-        });
-*/
+
     }
     private void initlayout(){
         WindowManager w = getWindowManager();
@@ -252,6 +245,7 @@ public class MyProfileActivity extends BaseAppCompatActivity {
     };
 
     private void saveData(Travel landMark){
+
         myRef.child("landmark").child(landMark.getTitle()).child(uuid).setValue(landMark);
     }
 
@@ -268,16 +262,16 @@ public class MyProfileActivity extends BaseAppCompatActivity {
                      for (DataSnapshot child : dataSnapshot.getChildren()) {
                          Travel data = child.getValue(Travel.class);
                          Review review = data.getReview();
-                         Log.e(TAG, "저장 데이터 : " + review.getComment());
 
                          reviewList.add(review);
                          review_size += 1;
                          tot += review.getRating();
+
+                         landMark.setReview(review);
+                         adapter.addItem(landMark);
                      }
 
-                     landMark.setReviewList(reviewList);
-                     adapter.addItem(landMark);
-
+                     adapter.notifyDataSetChanged();
                      if (0 < review_size)
                          avg = (float) tot/ review_size;
 
@@ -288,7 +282,7 @@ public class MyProfileActivity extends BaseAppCompatActivity {
                      if (0 < avg) {
                          rating_avg.setRating(avg);
                      }
-                     adapter.notifyDataSetChanged();
+
                  }
                  @Override
                  public void onCancelled(DatabaseError databaseError) {

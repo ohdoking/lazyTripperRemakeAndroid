@@ -108,7 +108,7 @@ public class TravelSummaryActivity extends BaseAppCompatActivity implements OnMa
         needWriteKey = (String)sharedPreferenceStore1.getPreferences(ConstantStore.KEY, String.class);
 
         alldate = (PickDate) sharedPreferenceStore1.getPreferences(ConstantStore.DATEKEY, PickDate.class);
-        Log.e(TAG, "Allday -> startDay =" + alldate.getStartDate() + "All day -> finishDay" + alldate.getFinishDate());
+        Log.d(TAG, "Allday -> startDay =" + alldate.getStartDate() + "All day -> finishDay" + alldate.getFinishDate());
 
         String remainString = (String)sharedPreferenceStore1.getPreferences(ConstantStore.REMAINFLAG, String.class);
         if(remainString.equals("true") && remainString != null) IsRemain = true;
@@ -118,24 +118,22 @@ public class TravelSummaryActivity extends BaseAppCompatActivity implements OnMa
         scheduleDate = scheduleDateStore.getPreferences(ConstantStore.SCHEDULE_DATE,PickDate.class);
         totalDate = scheduleDateStore.getPreferences(ConstantStore.DATEKEY,PickDate.class);
         SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
-        Log.e(TAG,"startDay : " + scheduleDate.getStartDate());
-        Log.e(TAG,"FinishDay : " + scheduleDate.getFinishDate());
+
+        Log.d(TAG,"startDay : " + scheduleDate.getStartDate());
+        Log.d(TAG,"FinishDay : " + scheduleDate.getFinishDate());
 
         //db에 저장될 해당 travel의 key값 설정
         key = myRef.child("user").child(uuid).child("Travel").push().getKey();
         //일정 작성한 날의 시작일.
-        //// TODO: 2017-03-25 여러 일정을 한 도시에서 보낼경우의 data를 어떻게 처리할건지 생각해봐야함.
         startdate = fmt.format(scheduleDate.getStartDate());
         // 선택 엑티비티에서 선택한 장소에 대한 정보를 가져옴.
         Intent intent = getIntent();
         ArrayList<PlaceInfoDto> beforeSelectPlaceList =
                 (ArrayList<PlaceInfoDto>)intent.getSerializableExtra(ConstantIntent.PLACELIST);
 
-        //// TODO: 2017-03-28 작성 완료 한 다음에, chooseCityActivity에서 다음날을 선택해서 일정을 짜기 시작하면 dayremaining이 아닌걸로 인식함.
-        //// TODO: 2017-03-28 맞는 방법은 travelSummary에서 remainingday를 저장할 때, shared에 저장해줘야한다.
         if(needWriteKey != null && IsRemain) {
             key = needWriteKey;
-            Log.e(TAG, "작성중 일정 작성완료!! date key is .." + needWriteKey);
+            Log.d(TAG, "작성중 일정 작성완료!! date key is .." + needWriteKey);
 
         }
 
@@ -190,7 +188,7 @@ public class TravelSummaryActivity extends BaseAppCompatActivity implements OnMa
                 //// TODO: 2017-03-25 만약 사용자가 2일 이상을 선택했고, 중간 날만 여행일정 작성 시에 이전 날짜는 저장 안됨..
                 Date nextDay = alldate.getDate(scheduleDate, i);
                 //여기서 nextDay가 사용자가 작성 안한 날
-                Log.e(TAG, sdformat.format(nextDay));
+                Log.d(TAG, sdformat.format(nextDay));
                 dayRemaining.add(sdformat.format(nextDay));
             }
         }
@@ -218,14 +216,12 @@ public class TravelSummaryActivity extends BaseAppCompatActivity implements OnMa
         String child = startdate+"@";
         child += Integer.toString(contentid);
         myRef.child("user").child(uuid).child("Travel").child(key).child(child).setValue(travelList);
-        //// TODO: 2017-03-29 지금은 한번에 하루만 추가 되므로 1을 빼면 됨
+        // 지금은 한번에 하루만 추가 되므로 1을 빼면 됨
         alldate.setPeriod(alldate.getPeriod()-1);
         sharedPreferenceStore1.savePreferences(ConstantStore.DATEKEY,alldate);
 
         if(IsRemain == true ) { // 이번에 저장한 데이터가 remaining day인 경우
-            Log.e(TAG,"is Remaining is true!");
             deleteDataToDB(startdate);
-            Log.e(TAG,"remain day -> startDate :" + startdate);
             //// TODO: 2017-03-29 shared 초기화-> 전체일정 작성 완료했으면 날짜들도 초기화해줘야함. period도 수정
             sharedPreferenceStore1.savePreferences(ConstantStore.REMAINFLAG,"false");
         }
@@ -241,9 +237,11 @@ public class TravelSummaryActivity extends BaseAppCompatActivity implements OnMa
                     array = day.getDayRemaining();
                     ArrayList<String> arr_new = new ArrayList<String>();
                     String key = day.getKey();
-                    Log.e(TAG,"day.get key = " + key);
+
+                    Log.d(TAG,"day.get key = " + key);
+                    Log.d(TAG,"array size : "+array.size());
                     RemainingDay newday = new RemainingDay();
-                    Log.e(TAG,"array size : "+array.size());
+
 
                     if (array.size() > 1) {
                         for (int i = 0; i < array.size(); i++) {
@@ -251,13 +249,13 @@ public class TravelSummaryActivity extends BaseAppCompatActivity implements OnMa
                             }else arr_new.add(day.getDayRemaining().get(i));
                             }
                          }else{//array가 1일때
-                        Log.e(TAG,"delete child to needSelect");
+                        Log.d(TAG,"delete child to needSelect");
                         myRef.child("user").child(uuid).child("needSelect").child(key).removeValue();
                         arr_new = null;
                         if(arr_new != null) {
                             newday.setDayRemaining(arr_new);
                             newday.setKey(key);
-                            Log.e(TAG,"update child to needSelect");
+                            Log.d(TAG,"update child to needSelect");
                             myRef.child("user").child(uuid).child("needSelect").child(key).setValue(newday);
                         }
                     }
@@ -285,23 +283,7 @@ public class TravelSummaryActivity extends BaseAppCompatActivity implements OnMa
                 Iterator<Travel> iterator = travelList.iterator();
                 while(iterator.hasNext()){
                     Travel travel = (Travel) iterator.next();
-                    Log.e(TAG, "save travel title .. : " + travel.getTitle());
                 }
-
-               /*GenericTypeIndicator<List<Travel>> t = new GenericTypeIndicator<List<Travel>>() {};
-
-                List<Travel> user_travelList = dataSnapshot.child("Travel").getValue(t);
-
-                //DB에 저장된 값이 있으면 list에 저장
-                if (user_travelList != null) {
-                    Iterator<Travel> iterator = user_travelList.iterator();
-
-                    while (iterator.hasNext()) {
-                        Travel travel = (Travel) iterator.next();
-                        //Log.d(TAG , "iterator test .. data is : " + travel.getTitle());
-                        addTravelList(travel);
-                    }
-                }*/
             }
             @Override
             public void onCancelled(DatabaseError error) {

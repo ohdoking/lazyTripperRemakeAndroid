@@ -51,18 +51,10 @@ public class ReviewAdapter extends BaseAdapter {
         Travel listViewItem = listViewItemList.get(position);
 
         // 아이템 내 각 위젯에 데이터 반영
-        //iconImageView.setImageDrawable(listViewItem.getIcon());
-        if(listViewItem.getReviewList().size() > 1){
-            for(int i=0; i<listViewItem.getReviewList().size(); i++){
-                titleTextView.setText(listViewItem.getReviewList().get(i).getComment());
-                descTextView.setText(listViewItem.getReviewList().get(i).getUsername() + "님이 작성하셨습니다.");
-            }
-        }else {
-            if(listViewItem.getReviewList().get(0)!= null) {
-                titleTextView.setText(listViewItem.getReviewList().get(0).getComment());
-                descTextView.setText(listViewItem.getReviewList().get(0).getUsername() + "님이 작성하셨습니다.");
-            }
-        }
+                if (listViewItem.getReview() != null) {
+                    titleTextView.setText(listViewItem.getReview().getComment());
+                    descTextView.setText(listViewItem.getReview().getUsername() + "님이 작성하셨습니다.");
+                }
         return convertView;
     }
 
