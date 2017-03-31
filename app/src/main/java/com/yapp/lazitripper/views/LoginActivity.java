@@ -123,6 +123,7 @@ public class LoginActivity extends FragmentActivity {
 
                     startActivity(i);
                     finish();
+                    overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.fade_in);
 
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
                 } else {

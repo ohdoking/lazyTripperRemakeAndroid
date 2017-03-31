@@ -364,6 +364,7 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
                         i.putExtra(ConstantIntent.PLACELIST,placeInfoDtoList);
                         startActivity(i);
                         finish();
+                        overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.fade_in);
                     }
                     else if(locationCount % pageNum == 0 && locationCount != 0){
                         page++;

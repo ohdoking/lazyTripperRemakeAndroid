@@ -4,7 +4,9 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.MotionEventCompat;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -87,6 +89,7 @@ public class HomeActivity extends BaseAppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(HomeActivity.this, DatePickActivity.class);
                 startActivity(i);
+                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.fade_in);
             }
         });
 
@@ -141,6 +144,7 @@ public class HomeActivity extends BaseAppCompatActivity {
                         Intent i = new Intent(HomeActivity.this, ChooseCityActivity.class);
                         startActivity(i);
                         finish();
+                        overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.fade_in);
 
                     }
                 }).setNegativeButton("취소",
@@ -159,5 +163,32 @@ public class HomeActivity extends BaseAppCompatActivity {
                 });
         AlertDialog alert = alert_confirm.create();
         alert.show();
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event){
+
+        int action = MotionEventCompat.getActionMasked(event);
+        String DEBUG_TAG = "dd";
+        switch(action) {
+            case (MotionEvent.ACTION_DOWN) :
+                Log.d(DEBUG_TAG,"Action was DOWN");
+                return true;
+            case (MotionEvent.ACTION_MOVE) :
+                Log.d(DEBUG_TAG,"Action was MOVE");
+                return true;
+            case (MotionEvent.ACTION_UP) :
+                Log.d(DEBUG_TAG,"Action was UP");
+                return true;
+            case (MotionEvent.ACTION_CANCEL) :
+                Log.d(DEBUG_TAG,"Action was CANCEL");
+                return true;
+            case (MotionEvent.ACTION_OUTSIDE) :
+                Log.d(DEBUG_TAG,"Movement occurred outside bounds " +
+                        "of current screen element");
+                return true;
+            default :
+                return super.onTouchEvent(event);
+        }
     }
 }

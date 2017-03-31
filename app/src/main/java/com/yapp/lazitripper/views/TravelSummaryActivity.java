@@ -177,6 +177,7 @@ public class TravelSummaryActivity extends BaseAppCompatActivity implements OnMa
                 Intent i = new Intent(TravelSummaryActivity.this, ChooseCityActivity.class);
                 startActivity(i);
                 finish();
+                overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.fade_in);
             }
         });
 

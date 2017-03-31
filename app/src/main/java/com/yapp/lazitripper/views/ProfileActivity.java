@@ -42,6 +42,7 @@ public class ProfileActivity extends BaseAppCompatActivity {
                 Intent i = new Intent(ProfileActivity.this, LoginActivity.class);
                 startActivity(i);
                 finish();
+                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.fade_in);
             }
         });
 

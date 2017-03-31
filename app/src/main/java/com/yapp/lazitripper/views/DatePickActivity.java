@@ -65,6 +65,7 @@ public class DatePickActivity extends BaseAppCompatActivity {
                     i.putExtra(ConstantIntent.PICKDATE,pickDate);
                     startActivity(i);
                     finish();
+                    overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.fade_in);
                 }
                 else{
                     Toast.makeText(DatePickActivity.this, "날짜를 선택해주세요", Toast.LENGTH_SHORT).show();

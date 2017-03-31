@@ -74,6 +74,7 @@ public class KeywordSelectActivity extends BaseAppCompatActivity implements View
                 Intent i = new Intent(KeywordSelectActivity.this, HomeActivity.class);
                 startActivity(i);
                 finish();
+                overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.fade_in);
 
             }
         });
