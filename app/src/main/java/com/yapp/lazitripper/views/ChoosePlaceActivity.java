@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,6 +57,9 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
 
     Integer cityCode;
     ImageView kindTextVeiw;
+    TextView discriptionCountTextView;
+
+    TextView titlePlaceNameTextView;
 
     LoadingDialog loadingDialog;
 
@@ -71,6 +76,7 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
     //0. 랜드마크, 1. 레스토랑 2. 호텔
     Integer locationFlag = 0;
     Integer count = 0;
+    Integer thisCount = 0;
 
     //이미 선택된 랜드마크 카운트?
     Integer landMarkUseCount = 0;
@@ -94,35 +100,28 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
 //        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 //        setProgressBarIndeterminateVisibility(true);
 
-        ImageView leftImage = getLeftImageView();
-        leftImage.setImageResource(R.drawable.map_icon);
-        leftImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
-        ImageView rightImage = getRightImageView();
-        rightImage.setImageResource(R.drawable.more);
-        rightImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(ChoosePlaceActivity.this, ProfileActivity.class);
-                i.putExtra(ConstantIntent.CITYCODE, cityCode);
-                startActivity(i);
-            }
-        });
+
 
         //이전 엑티비티에서 city code를 가져옴
         cityCode = getIntent().getIntExtra(ConstantIntent.CITYCODE,1);
         placeCount = (PlaceCount) getIntent().getSerializableExtra(ConstantIntent.PLACECOUNT);
         flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
+        discriptionCountTextView = (TextView) findViewById(R.id.discription_count);
+
+        titlePlaceNameTextView = (TextView) mCustomView.findViewById(R.id.place_name);
+        titlePlaceNameTextView.setText(makeTitleName(cityCode));
+
+
         array = new ArrayList<>();
         //12 관광지
 
         getPlaceData(12);
+        discriptionCountTextView.setText(makeSentence(thisCount));
         renderItem();
 
     }
+
+
 
     void getPlaceData(Integer contentTypeId){
 
@@ -372,6 +371,9 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
                     }
                 }
 
+                thisCount++;
+                discriptionCountTextView.setText(makeSentence(thisCount));
+
             }
 
             @Override
@@ -423,6 +425,78 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
             placeInfoDtoList.add(placeInfoDto);
         }
 
+    }
+
+    private String makeSentence(int count){
+        int totalCount;
+        totalCount = placeCount.getAccommodation() + placeCount.getLandMark() + placeCount.getRestaurant();
+        return "오른쪽으로 넘긴 여행지가 루트에 추가되요  " + count + "/" + totalCount;
+    }
+
+    //지역 코드를 지역 명으로 변환해준다
+    private String makeTitleName(Integer cityCode) {
+
+        String name = null;
+
+        switch (cityCode) {
+            case 1    : name = "서울";
+                break;
+            case 2   : name = "인천";
+                break;
+            case 3  : name = "대전";
+                break;
+            case 4  : name = "대구";
+                break;
+            case 5  : name = "광주";
+                break;
+            case 6  : name = "부산";
+                break;
+            case 7  : name = "울산";
+                break;
+            case 8  : name = "세종특별자치시";
+                break;
+            case 31  : name = "경기도";
+                break;
+            case 32  : name = "강원도";
+                break;
+            case 33  : name = "충청북도";
+                break;
+            case 34  : name = "충청남도";
+                break;
+            case 35  : name = "경상북도";
+                break;
+            case 36  : name = "경상남도";
+                break;
+            case 37  : name = "전라북도";
+                break;
+            case 38  : name = "전라남도";
+                break;
+            case 39  : name = "제주도";
+                break;
+            default    : new Exception("no place code");
+                break;
+        }
+        return "한국 " + name;
+    }
+
+    @Override
+    public void setHeader(){
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(false);
+        actionBar.setDisplayShowTitleEnabled(false);
+
+        mCustomView = LayoutInflater.from(this).inflate(R.layout.choose_place_header,null);
+        actionBar.setCustomView(mCustomView);
+
+        Toolbar parent = (Toolbar) mCustomView.getParent();
+        parent.setContentInsetsAbsolute(0,0);
+
+//        actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.facebook_btn));
+
+        ActionBar.LayoutParams params = new ActionBar.LayoutParams(ActionBar.LayoutParams.WRAP_CONTENT,
+                ActionBar.LayoutParams.WRAP_CONTENT);
+        actionBar.setCustomView(mCustomView, params);
     }
 
 }
