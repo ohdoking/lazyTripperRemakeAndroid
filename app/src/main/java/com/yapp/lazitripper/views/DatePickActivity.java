@@ -64,14 +64,13 @@ public class DatePickActivity extends BaseAppCompatActivity {
                     Intent i = new Intent(DatePickActivity.this, ChooseCityActivity.class);
                     i.putExtra(ConstantIntent.PICKDATE,pickDate);
                     startActivity(i);
+                    finish();
                 }
                 else{
                     Toast.makeText(DatePickActivity.this, "날짜를 선택해주세요", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-
-        rightImage.setImageResource(R.drawable.arrow);
 
         calendar = (CalendarPickerView) findViewById(R.id.calendar_view);
 

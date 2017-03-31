@@ -1,5 +1,6 @@
 package com.yapp.lazitripper.views.dialog;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -108,6 +109,7 @@ public class SetPlaceCountDialog extends Dialog {
                 i.putExtra(ConstantIntent.CITYCODE, cityNum);
                 i.putExtra(ConstantIntent.PLACECOUNT, placeCount);
                 context.startActivity(i);
+                ((Activity) context).finish();
                 dismiss();
             }
         });

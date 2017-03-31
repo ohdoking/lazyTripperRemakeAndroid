@@ -148,6 +148,8 @@ public class HomeActivity extends BaseAppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //취소를 누른경우 needSelect를 삭제함
+
+                        sharedPreferenceStore.savePreferences(ConstantStore.REMAINFLAG,"false");
                         DatabaseReference userRef = myRef.child("user").child(uuid);
                         DatabaseReference needSelectRef = userRef.child("needSelect");
                         userRef.child("Travel").child(key).setValue(null);

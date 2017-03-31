@@ -13,7 +13,7 @@ import com.yapp.lazitripper.R;
 
 public class BaseAppCompatActivity extends AppCompatActivity {
 
-    View mCustomView;
+    public View mCustomView;
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(TypekitContextWrapper.wrap(newBase));

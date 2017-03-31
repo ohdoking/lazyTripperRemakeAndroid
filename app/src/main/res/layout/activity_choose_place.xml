@@ -8,6 +8,7 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/discription_count"
         android:text="오른쪽으로 넘긴 여행지가 루트에 추가되요"
         android:layout_width="match_parent"
         android:textAlignment="center"

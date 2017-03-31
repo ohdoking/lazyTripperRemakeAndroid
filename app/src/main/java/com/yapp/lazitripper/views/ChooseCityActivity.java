@@ -73,6 +73,8 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
     private SharedPreferenceStore<String> uuidStore;
     private SharedPreferenceStore<PickDate> sharedPreferenceStore;
 
+
+    String remainString;
     //선택한 날짜
     PickDate chooseDate;
     //선택된 날짜들
@@ -96,15 +98,47 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
         setContentView(R.layout.activity_choose_city);
         setHeader();
 
+        //total 날짜
+        sharedPreferenceStore = new SharedPreferenceStore<PickDate>(getApplicationContext(), ConstantStore.STORE);
+
+        final PickDate pickDate = sharedPreferenceStore.getPreferences(ConstantStore.DATEKEY, PickDate.class);
+        Log.i("ohdoking",pickDate.getStartDate() + " / " + pickDate.getPeriod());
+
         //헤더
-        ImageView rightImage = getRightImageView();
-        getRightImageView().setVisibility(View.INVISIBLE);
+//        ImageView rightImage = getRightImageView();
+//        getRightImageView().setVisibility(View.INVISIBLE);
         ImageView leftImage = getLeftImageView();
         leftImage.setImageResource(R.drawable.arrow);
         leftImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+
+        //다음단계 버튼 -> 도시선택 액티비티
+        ImageView rightImage = getRightImageView();
+        rightImage.setImageResource(R.drawable.next_icon);
+        rightImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(chooseDate.getFinishDate() == null ) {
+                    chooseDate.setStartDate(pickDate.getStartDate());
+                    chooseDate.setFinishDate(pickDate.getStartDate());
+                    chooseDate.setPeriod(1L);
+                }
+
+                if(checkAlreadyIncludeDate(chooseDate.getStartDate())){
+                    Toast.makeText(ChooseCityActivity.this,
+                            "이미 일정을 짠 스케쥴 입니다.", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    //shared에 선택한 스케쥴 날짜를 넣는다
+                    sharedPreferenceStore.savePreferences(ConstantStore.SCHEDULE_DATE, chooseDate);
+                    SetPlaceCountDialog setPlaceCountDialog = new SetPlaceCountDialog(ChooseCityActivity.this, cityNum);
+                    setPlaceCountDialog.show();
+                    setPlaceCountDialog.setCancelable(true);
+                }
             }
         });
 
@@ -115,16 +149,13 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
         chooseDates = new ArrayList<Date>();
         chooseDate = new PickDate();
 
-        //total 날짜
-        sharedPreferenceStore = new SharedPreferenceStore<PickDate>(getApplicationContext(), ConstantStore.STORE);
 
-        final PickDate pickDate = sharedPreferenceStore.getPreferences(ConstantStore.DATEKEY, PickDate.class);
-        Log.i("ohdoking",pickDate.getStartDate() + " / " + pickDate.getPeriod());
 
         //선택된 날짜를 가져옴
         uuidStore = new SharedPreferenceStore(getApplicationContext(), ConstantStore.STORE);
         myRef = FirebaseDatabase.getInstance().getReference("lazitripper");
         String uuid = (String)uuidStore.getPreferences(ConstantStore.UUID, String.class);
+        remainString = (String)uuidStore.getPreferences(ConstantStore.REMAINFLAG, String.class);
         myRef = FirebaseDatabase.getInstance().getReference("lazitripper");
         myRef.child("user").child(uuid).child("needSelect").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -144,11 +175,35 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
                     if(pickDate.getPeriod().intValue() < period){
                         period = pickDate.getPeriod().intValue();
                     }
+                    horizontalCalendar = null;
 
-                    synchronized(horizontalCalendar){
-                        horizontalCalendar.setChooseDateArrayList(chooseDates);
-                        horizontalCalendar.notifyAll();
-                    }
+                    //Week 캘린더
+                    horizontalCalendar = new HorizontalCalendar.Builder(ChooseCityActivity.this, R.id.weekCalendar)
+                            .setChooseDate(chooseDates)
+                            .startDate(pickDate.getStartDate())
+                            .endDate(pickDate.getFinishDate())
+                            .datesNumberOnScreen(period)   // Number of Dates cells shown on screen (Recommended 5)
+                            .dayNameFormat("EEE")	  // WeekDay text format
+                            .dayNumberFormat("dd")    // Date format
+                            .monthFormat("MMM") 	  // Month format
+                            .showDayName(true)	  // Show or Hide dayName text
+                            .showMonthName(true)	  // Show or Hide month text
+                            .textColor(Color.LTGRAY, Color.WHITE)    // Text color for none selected Dates, Text color for selected Date.
+                            .selectedDateBackground(Color.GRAY)  // Background color of the selected date cell.
+                            .selectorColor(Color.RED)
+                            .centerToday(false)
+                            .build();
+
+                    //날짜 선택
+                    horizontalCalendar.setCalendarListener(new HorizontalCalendarListener() {
+                        @Override
+                        public void onDateSelected(Date date, int position) {
+                            chooseDate.setStartDate(date);
+                            chooseDate.setFinishDate(date);
+                            chooseDate.setPeriod(1L);
+
+                        }
+                    });
 
                 }
 
@@ -163,11 +218,11 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
         // Get reference of SpinnerView from layout/main_activity.xml
         countryDropDown =(WheelView)findViewById(R.id.country_spinner);
         cityDropDown =(WheelView)findViewById(R.id.city_spinner);
-        selectPlaceBtn = (ImageView) findViewById(R.id.selectPlaceBtn);
+//        selectPlaceBtn = (ImageView) findViewById(R.id.selectPlaceBtn);
 //        weekCalendar = (LazyWeekCalendar) findViewById(R.id.weekCalendar);
 
 
-        if(chooseDates.size() == 0){
+        if(remainString.equals("false")){
             //week 캘린더 화면에 보이는 기간
             Integer period = 7;
             if(pickDate.getPeriod().intValue() < period){
@@ -190,6 +245,17 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
                     .selectorColor(Color.RED)
                     .centerToday(false)
                     .build();
+
+            //날짜 선택
+            horizontalCalendar.setCalendarListener(new HorizontalCalendarListener() {
+                @Override
+                public void onDateSelected(Date date, int position) {
+                    chooseDate.setStartDate(date);
+                    chooseDate.setFinishDate(date);
+                    chooseDate.setPeriod(1L);
+
+                }
+            });
         }
 
 
@@ -229,7 +295,7 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
         });
 
         //다음으로 버튼
-        selectPlaceBtn.setOnClickListener(new View.OnClickListener() {
+        /*selectPlaceBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -251,18 +317,9 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
                     setPlaceCountDialog.setCancelable(true);
                 }
             }
-        });
+        });*/
 
-        //날짜 선택
-        horizontalCalendar.setCalendarListener(new HorizontalCalendarListener() {
-            @Override
-            public void onDateSelected(Date date, int position) {
-                chooseDate.setStartDate(date);
-                chooseDate.setFinishDate(date);
-                chooseDate.setPeriod(1L);
 
-            }
-        });
 
         renderSecondSpinner();
     }
