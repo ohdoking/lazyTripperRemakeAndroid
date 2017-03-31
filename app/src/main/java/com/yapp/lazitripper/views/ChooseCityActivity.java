@@ -9,12 +9,18 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.wx.wheelview.adapter.ArrayWheelAdapter;
 import com.wx.wheelview.widget.WheelView;
 import com.yapp.lazitripper.R;
 import com.yapp.lazitripper.dto.ChooseDate;
 import com.yapp.lazitripper.dto.PickDate;
 import com.yapp.lazitripper.dto.RegionCodeDto;
+import com.yapp.lazitripper.dto.RemainingDay;
 import com.yapp.lazitripper.dto.common.CommonResponse;
 import com.yapp.lazitripper.network.LaziTripperKoreanTourClient;
 import com.yapp.lazitripper.service.LaziTripperKoreanTourService;
@@ -30,11 +36,15 @@ import com.yapp.lazitripper.views.dialog.SetPlaceCountDialog;
 
 import org.joda.time.DateTime;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 import io.netopen.hotbitmapgg.library.view.RingProgressBar;
 import retrofit2.Call;
@@ -43,7 +53,7 @@ import retrofit2.Response;
 
 public class ChooseCityActivity extends BaseAppCompatActivity {
 
-    private SharedPreferenceStore<PickDate> sharedPreferenceStore;
+
 
     WheelView countryDropDown;
     WheelView cityDropDown;
@@ -57,6 +67,11 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
     ArrayList<String> country = new ArrayList<String>();
 
     ArrayList<String> cities = new ArrayList<String>();
+
+    //get select data
+    private DatabaseReference myRef;
+    private SharedPreferenceStore<String> uuidStore;
+    private SharedPreferenceStore<PickDate> sharedPreferenceStore;
 
     //선택한 날짜
     PickDate chooseDate;
@@ -81,9 +96,8 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
         setContentView(R.layout.activity_choose_city);
         setHeader();
 
-        loadingDialog = new LoadingDialog(ChooseCityActivity.this);
-        loadingDialog.show();
-
+        //헤더
+        ImageView rightImage = getRightImageView();
         getRightImageView().setVisibility(View.INVISIBLE);
         ImageView leftImage = getLeftImageView();
         leftImage.setImageResource(R.drawable.arrow);
@@ -94,10 +108,57 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
             }
         });
 
+        //로딩 화면
+        loadingDialog = new LoadingDialog(ChooseCityActivity.this);
+        loadingDialog.show();
+
+        chooseDates = new ArrayList<Date>();
+        chooseDate = new PickDate();
+
+        //total 날짜
         sharedPreferenceStore = new SharedPreferenceStore<PickDate>(getApplicationContext(), ConstantStore.STORE);
 
         final PickDate pickDate = sharedPreferenceStore.getPreferences(ConstantStore.DATEKEY, PickDate.class);
         Log.i("ohdoking",pickDate.getStartDate() + " / " + pickDate.getPeriod());
+
+        //선택된 날짜를 가져옴
+        uuidStore = new SharedPreferenceStore(getApplicationContext(), ConstantStore.STORE);
+        myRef = FirebaseDatabase.getInstance().getReference("lazitripper");
+        String uuid = (String)uuidStore.getPreferences(ConstantStore.UUID, String.class);
+        myRef = FirebaseDatabase.getInstance().getReference("lazitripper");
+        myRef.child("user").child(uuid).child("needSelect").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                chooseDates = new ArrayList<Date>();
+                ArrayList<String> remainList = null;
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    RemainingDay remainingDay = postSnapshot.getValue(RemainingDay.class);
+                    String key = remainingDay.getKey();
+                    remainList = remainingDay.getDayRemaining();
+                }
+
+                if(remainList != null){
+                    chooseDates = getDaysBetweenDates(pickDate.getStartDate(), pickDate.getFinishDate(), remainList);
+
+                    Integer period = 7;
+                    if(pickDate.getPeriod().intValue() < period){
+                        period = pickDate.getPeriod().intValue();
+                    }
+
+                    synchronized(horizontalCalendar){
+                        horizontalCalendar.setChooseDateArrayList(chooseDates);
+                        horizontalCalendar.notifyAll();
+                    }
+
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
 
         // Get reference of SpinnerView from layout/main_activity.xml
         countryDropDown =(WheelView)findViewById(R.id.country_spinner);
@@ -105,45 +166,32 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
         selectPlaceBtn = (ImageView) findViewById(R.id.selectPlaceBtn);
 //        weekCalendar = (LazyWeekCalendar) findViewById(R.id.weekCalendar);
 
-        //week 캘린더 화면에 보이는 기간
-        Integer period = 7;
-        if(pickDate.getPeriod().intValue() < period){
-            period = pickDate.getPeriod().intValue();
+
+        if(chooseDates.size() == 0){
+            //week 캘린더 화면에 보이는 기간
+            Integer period = 7;
+            if(pickDate.getPeriod().intValue() < period){
+                period = pickDate.getPeriod().intValue();
+            }
+
+            //Week 캘린더
+            horizontalCalendar = new HorizontalCalendar.Builder(this, R.id.weekCalendar)
+                    .setChooseDate(chooseDates)
+                    .startDate(pickDate.getStartDate())
+                    .endDate(pickDate.getFinishDate())
+                    .datesNumberOnScreen(period)   // Number of Dates cells shown on screen (Recommended 5)
+                    .dayNameFormat("EEE")	  // WeekDay text format
+                    .dayNumberFormat("dd")    // Date format
+                    .monthFormat("MMM") 	  // Month format
+                    .showDayName(true)	  // Show or Hide dayName text
+                    .showMonthName(true)	  // Show or Hide month text
+                    .textColor(Color.LTGRAY, Color.WHITE)    // Text color for none selected Dates, Text color for selected Date.
+                    .selectedDateBackground(Color.GRAY)  // Background color of the selected date cell.
+                    .selectorColor(Color.RED)
+                    .centerToday(false)
+                    .build();
         }
 
-        chooseDates = new ArrayList<Date>();
-        chooseDate = new PickDate();
-
-
-        //@TODO 임시로 데이터를 넣어둠 ----- 실제 완료된 일정 날짜를 삽입해야함
-        Calendar calendar = Calendar.getInstance();
-        Date today = calendar.getTime();
-        calendar.add(Calendar.DAY_OF_YEAR, 1);
-        Date tommorow = calendar.getTime();
-        calendar.add(Calendar.DAY_OF_YEAR, 1);
-        Date nextTommorow = calendar.getTime();
-//        chooseDates.add(tommorow);
-//        chooseDates.add(nextTommorow);
-        // ---------------------------------------------------------
-
-
-
-        //Week 캘린더 
-        horizontalCalendar = new HorizontalCalendar.Builder(this, R.id.weekCalendar)
-                .setChooseDate(chooseDates)
-                .startDate(pickDate.getStartDate())
-                .endDate(pickDate.getFinishDate())
-                .datesNumberOnScreen(period)   // Number of Dates cells shown on screen (Recommended 5)
-                .dayNameFormat("EEE")	  // WeekDay text format
-                .dayNumberFormat("dd")    // Date format
-                .monthFormat("MMM") 	  // Month format
-                .showDayName(true)	  // Show or Hide dayName text
-                .showMonthName(true)	  // Show or Hide month text
-                .textColor(Color.LTGRAY, Color.WHITE)    // Text color for none selected Dates, Text color for selected Date.
-                .selectedDateBackground(Color.GRAY)  // Background color of the selected date cell.
-                .selectorColor(Color.RED)
-                .centerToday(false)
-                .build();
 
 
         ArrayAdapter<String> adapter= new ArrayAdapter<String>(this,android.
@@ -184,21 +232,18 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
         selectPlaceBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent i = new Intent(ChooseCityActivity.this, ChoosePlaceActivity.class);
-//                i.putExtra(ConstantIntent.CITYCODE, cityNum);
-//                startActivity(i);
 
+                if(chooseDate.getFinishDate() == null ) {
+                    chooseDate.setStartDate(pickDate.getStartDate());
+                    chooseDate.setFinishDate(pickDate.getStartDate());
+                    chooseDate.setPeriod(1L);
+                }
 
                 if(checkAlreadyIncludeDate(chooseDate.getStartDate())){
                     Toast.makeText(ChooseCityActivity.this,
                             "이미 일정을 짠 스케쥴 입니다.", Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    if(chooseDate.getFinishDate() == null ) {
-                        chooseDate.setStartDate(pickDate.getStartDate());
-                        chooseDate.setFinishDate(pickDate.getStartDate());
-                        chooseDate.setPeriod(1L);
-                    }
                     //shared에 선택한 스케쥴 날짜를 넣는다
                     sharedPreferenceStore.savePreferences(ConstantStore.SCHEDULE_DATE, chooseDate);
                     SetPlaceCountDialog setPlaceCountDialog = new SetPlaceCountDialog(ChooseCityActivity.this, cityNum);
@@ -212,9 +257,6 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
         horizontalCalendar.setCalendarListener(new HorizontalCalendarListener() {
             @Override
             public void onDateSelected(Date date, int position) {
-                Toast.makeText(ChooseCityActivity.this,
-                        "You Selected " + date.toString(), Toast.LENGTH_SHORT).show();
-
                 chooseDate.setStartDate(date);
                 chooseDate.setFinishDate(date);
                 chooseDate.setPeriod(1L);
@@ -272,8 +314,8 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
 
                 if(isData){
                     cityNum = regionCodeDtoList.get(position).getCode();
-                    Toast.makeText(getBaseContext(), "You have selected City : " + cityNum,
-                            Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getBaseContext(), "You have selected City : " + cityNum,
+//                            Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -303,6 +345,61 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
         }
         return false;
     }
+
+    //시작날짜와 완료 날짜로 날짜리스트 구하기
+    public ArrayList<Date> getDaysBetweenDates(Date startdate, Date enddate, ArrayList<String> filterStringDateList)
+    {
+        ArrayList<Date> dates = new ArrayList<Date>();
+        ArrayList<Date> filterDateList = stringToDateList(filterStringDateList);
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(startdate);
+
+        boolean isHaveDate;
+
+        //하루 더해줌
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(enddate);
+        cal.add(Calendar.DATE, 1);
+        enddate = cal.getTime();
+
+        while (calendar.getTime().before(enddate))
+        {
+            isHaveDate = false;
+            Date result = calendar.getTime();
+            for(Date date : filterDateList){
+                if(date.compareTo(result) == 0 ){
+                    isHaveDate = true;
+                    break;
+                }
+            }
+            if(!isHaveDate){
+                dates.add(result);
+            }
+            calendar.add(Calendar.DATE, 1);
+        }
+        return dates;
+    }
+
+
+    //String Date List 를 Date 형 리스트로 변환함
+    public ArrayList<Date> stringToDateList(ArrayList<String> filterDateList){
+
+        ArrayList<Date> tempList = new ArrayList<Date>();
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        for(String stringDate : filterDateList){
+            Date date = null;
+            try {
+                date = format.parse(stringDate);
+                tempList.add(date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+        }
+        return tempList;
+    }
+
+
 
 
 }

@@ -283,6 +283,11 @@ public class HorizontalCalendar {
         return chooseDateArrayList;
     }
 
+    public void setChooseDateArrayList(ArrayList<Date> chooseDateArrayList) {
+        this.chooseDateArrayList.clear();
+        this.chooseDateArrayList.addAll(chooseDateArrayList);
+    }
+
     public Date getDateEndCalendar() {
         return dateEndCalendar;
     }
