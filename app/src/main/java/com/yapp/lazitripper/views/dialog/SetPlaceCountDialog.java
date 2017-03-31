@@ -45,7 +45,7 @@ public class SetPlaceCountDialog extends Dialog {
         this.context = context;
         this.cityNum = cityNum;
         setContentView(R.layout.set_place_count_dialog);
-        setTitle("선택해주세요 ..?");
+        setTitle("가고싶은 여행지의 갯수를 선택해주세요");
         //default 랜드마크 4, 음식점 3, 숙소 1
         placeCount = new PlaceCount(3,2,0);
 
@@ -58,9 +58,11 @@ public class SetPlaceCountDialog extends Dialog {
     void init(){
         for(int i = 1 ; i < 30 ; i++){
             landmarkList.add(i+"");
-            restarantList.add(i+"");
-            accommodationList.add(i+"");
+            if(i < 6){
+                restarantList.add(i+"");
+            }
         }
+        accommodationList.add("1");
 
         landmarkCountWheelView = (WheelView) findViewById(R.id.landmark_count_wheel_view);
         landmarkCountWheelView.setWheelAdapter(new ArrayWheelAdapter(context));
