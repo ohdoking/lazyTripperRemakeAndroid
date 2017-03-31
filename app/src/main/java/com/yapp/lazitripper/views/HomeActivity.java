@@ -44,6 +44,8 @@ public class HomeActivity extends BaseAppCompatActivity {
     private DatabaseReference myRef;
     private SharedPreferenceStore sharedPreferenceStore;
 
+    String uuid;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +58,7 @@ public class HomeActivity extends BaseAppCompatActivity {
         myRef = FirebaseDatabase.getInstance().getReference("lazitripper");
         ImageView rightImage = getRightImageView();
 
-        String uuid = (String)sharedPreferenceStore.getPreferences(ConstantStore.UUID, String.class);
+        uuid = (String)sharedPreferenceStore.getPreferences(ConstantStore.UUID, String.class);
         rightImage.setImageResource(R.drawable.more);
         rightImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,8 +134,8 @@ public class HomeActivity extends BaseAppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         //YES
                         sharedPreferenceStore.savePreferences(ConstantStore.KEY,key);
-                        sharedPreferenceStore.savePreferences(ConstantStore.DATEKEY, pickDate);
-                        sharedPreferenceStore.savePreferences(ConstantStore.SCHEDULE_DATE, pickDate);
+//                        sharedPreferenceStore.savePreferences(ConstantStore.DATEKEY, pickDate);
+//                        sharedPreferenceStore.savePreferences(ConstantStore.SCHEDULE_DATE, pickDate);
                         sharedPreferenceStore.savePreferences(ConstantStore.REMAINFLAG,"true");
                         //전체일정과 선택일정이 같음(하루만 가능하게)
                         Intent i = new Intent(HomeActivity.this, ChooseCityActivity.class);
@@ -145,7 +147,11 @@ public class HomeActivity extends BaseAppCompatActivity {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // 'No'
+                        //취소를 누른경우 needSelect를 삭제함
+                        DatabaseReference userRef = myRef.child("user").child(uuid);
+                        DatabaseReference needSelectRef = userRef.child("needSelect");
+                        userRef.child("Travel").child(key).setValue(null);
+                        needSelectRef.setValue(null);
                         return;
                     }
                 });
