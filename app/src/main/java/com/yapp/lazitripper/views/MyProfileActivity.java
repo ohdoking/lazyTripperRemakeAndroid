@@ -26,6 +26,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RatingBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -74,7 +75,7 @@ public class MyProfileActivity extends BaseAppCompatActivity {
     private SharedPreferenceStore sharedPreferenceStore;
     private String username;
     private ListView listView;
-
+    private ScrollView mScrollview;
     private Travel landMark;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -89,7 +90,7 @@ public class MyProfileActivity extends BaseAppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_profile);
+        setContentView(R.layout.activity_my_profile2);
         setHeader();
         review = new Review();
         reviewList = new ArrayList<Review>();
@@ -97,13 +98,27 @@ public class MyProfileActivity extends BaseAppCompatActivity {
         review_size = 0;
         adapter = new ReviewAdapter();
         landMark = new Travel();
+        LinearLayout layout_header = (LinearLayout) findViewById(R.id.layout_header);
+
         sharedPreferenceStore = new SharedPreferenceStore(getApplicationContext(), ConstantStore.STORE);
         uuid = (String) sharedPreferenceStore.getPreferences(ConstantStore.UUID, String.class);
         username = (String) sharedPreferenceStore.getPreferences(ConstantStore.USERNAME, String.class);
-        listView = (ListView) findViewById(R.id.review_listview);
-        listView.setAdapter(adapter);
+        listView = (ListView) findViewById(R.id.listview);
+        final View header = getLayoutInflater().inflate(R.layout.layout_header, listView, false);
 
-        View layout = (View) findViewById(R.id.activity_my_profile);
+        DisplayMetrics dm = getApplicationContext().getResources().getDisplayMetrics();
+        int width = dm.widthPixels;
+        int height = dm.heightPixels;
+
+        ViewGroup.LayoutParams params = header.getLayoutParams();
+        params.height = height-250;
+        params.width = width;
+        header.setLayoutParams(params);
+
+       /* header.setLayoutParams(new
+                LinearLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));*/
+        listView.addHeaderView(header);
+        listView.setAdapter(adapter);
 
         //NXE 예방
         if (uuid == null) uuid = "null";
@@ -128,7 +143,7 @@ public class MyProfileActivity extends BaseAppCompatActivity {
         TextView _tel = (TextView) findViewById(R.id._tel);
         TextView tel = (TextView) findViewById(R.id.tel);
 
-        Glide.with(this).load(handledata.getFirstimage()).override(485, 710).centerCrop().into(background);
+        Glide.with(this).load(handledata.getFirstimage()).override(540, 830).centerCrop().into(background);
         title.setText(handledata.getTitle());
         country_image.setImageDrawable(getResources().getDrawable(R.drawable.korea));
         _addr.setText("ADD");
@@ -136,34 +151,16 @@ public class MyProfileActivity extends BaseAppCompatActivity {
         _tel.setText("TEL");
         tel.setText(handledata.getTel());
 
-        initlayout();
-
-
-        //PlaceInfoDto landmark = new PlaceInfoDto(handledata.getAddr1(),handledata.getTel(),handledata);
-
-      /*  LinearLayout btn_layout = (LinearLayout) findViewById(R.id.layout_btn);
-
-        btn_layout.setOnTouchListener(new View.OnTouchListener() {
-            @Override
+        //initlayout();
+        getTravel();
+/*
+        listView.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
-                return true;
+                mScrollview.requestDisallowInterceptTouchEvent(true);
+                return false;
             }
         });
-
-        Button.OnClickListener onClickListener = new Button.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.btn_rating:
-                        initiatePopupWindow();
-                        break;
-                }
-            }
-        };*/
-/*
-        btnOpenPopup = (Button) findViewById(R.id.btn_rating);
-        btnOpenPopup.setOnClickListener(onClickListener);*/
-        getTravel();
+*/
     }
     private void initlayout(){
         WindowManager w = getWindowManager();
@@ -272,15 +269,15 @@ public class MyProfileActivity extends BaseAppCompatActivity {
                          Travel data = child.getValue(Travel.class);
                          Review review = data.getReview();
                          Log.e(TAG, "저장 데이터 : " + review.getComment());
+
                          reviewList.add(review);
                          review_size += 1;
                          tot += review.getRating();
-
                      }
-                    //// TODO: 2017-03-27 현재 마지막 review만 받아온다....
+
                      landMark.setReviewList(reviewList);
                      adapter.addItem(landMark);
-                     adapter.notifyDataSetChanged();
+
                      if (0 < review_size)
                          avg = (float) tot/ review_size;
 
@@ -291,7 +288,7 @@ public class MyProfileActivity extends BaseAppCompatActivity {
                      if (0 < avg) {
                          rating_avg.setRating(avg);
                      }
-
+                     adapter.notifyDataSetChanged();
                  }
                  @Override
                  public void onCancelled(DatabaseError databaseError) {

@@ -58,8 +58,10 @@ public class ReviewAdapter extends BaseAdapter {
                 descTextView.setText(listViewItem.getReviewList().get(i).getUsername() + "님이 작성하셨습니다.");
             }
         }else {
-            titleTextView.setText(listViewItem.getReview().getComment());
-            descTextView.setText(listViewItem.getReview().getUsername() + "님이 작성하셨습니다.");
+            if(listViewItem.getReviewList().get(0)!= null) {
+                titleTextView.setText(listViewItem.getReviewList().get(0).getComment());
+                descTextView.setText(listViewItem.getReviewList().get(0).getUsername() + "님이 작성하셨습니다.");
+            }
         }
         return convertView;
     }
