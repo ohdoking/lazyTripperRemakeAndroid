@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView2"
-        android:lines="3"
+        android:lines="4"
         android:textAlignment="inherit"
         android:layout_marginTop="102dp"
         android:textSize="30sp"
