@@ -80,6 +80,7 @@ public class TravelSummaryActivity extends BaseAppCompatActivity implements OnMa
     PickDate alldate;
 
     private Boolean exit = false;
+    Integer cityCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +99,9 @@ public class TravelSummaryActivity extends BaseAppCompatActivity implements OnMa
         loadingDialog = new LoadingDialog(TravelSummaryActivity.this);
         loadingDialog.show();
 
+        // 도시 코드를 가저옴
+        cityCode = getIntent().getIntExtra(ConstantIntent.CITYCODE,1);
+
         // SP 에서 저장된 테그들의 정보를 가져옴.
         SharedPreferenceStore<String[]> sharedPreferenceStore = new SharedPreferenceStore<String[]>(getApplicationContext(), ConstantStore.STORE);
         String[] tagList = sharedPreferenceStore.getPreferences(ConstantStore.TAGS, String[].class);
@@ -111,7 +115,7 @@ public class TravelSummaryActivity extends BaseAppCompatActivity implements OnMa
         Log.d(TAG, "Allday -> startDay =" + alldate.getStartDate() + "All day -> finishDay" + alldate.getFinishDate());
 
         String remainString = (String)sharedPreferenceStore1.getPreferences(ConstantStore.REMAINFLAG, String.class);
-        if(remainString.equals("true") && remainString != null) IsRemain = true;
+        if(remainString != null && remainString.equals("true")) IsRemain = true;
 
         //도시선택한 여행 일정 (Travel 단위)
         scheduleDateStore = new SharedPreferenceStore<PickDate>(getApplicationContext(), ConstantStore.STORE);
@@ -214,7 +218,7 @@ public class TravelSummaryActivity extends BaseAppCompatActivity implements OnMa
     private void saveDataToDB(){
         //// TODO: 저장버튼 누르기 전에 뒤로가면 dayRemaining만 저장되고 travel은 저장이 안되므로 해당 로직 구현해야함.
         String child = startdate+"@";
-        child += Integer.toString(contentid);
+        child += Integer.toString(cityCode);
         myRef.child("user").child(uuid).child("Travel").child(key).child(child).setValue(travelList);
         // 지금은 한번에 하루만 추가 되므로 1을 빼면 됨
         alldate.setPeriod(alldate.getPeriod()-1);

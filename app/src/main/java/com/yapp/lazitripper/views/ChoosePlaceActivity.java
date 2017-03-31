@@ -107,6 +107,7 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(ChoosePlaceActivity.this, ProfileActivity.class);
+                i.putExtra(ConstantIntent.CITYCODE, cityCode);
                 startActivity(i);
             }
         });
