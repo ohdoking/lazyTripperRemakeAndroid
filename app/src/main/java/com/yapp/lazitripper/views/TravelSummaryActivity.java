@@ -176,6 +176,7 @@ public class TravelSummaryActivity extends BaseAppCompatActivity implements OnMa
                 saveDataToDB();
                 Intent i = new Intent(TravelSummaryActivity.this, ChooseCityActivity.class);
                 startActivity(i);
+                finish();
             }
         });
 
@@ -222,7 +223,7 @@ public class TravelSummaryActivity extends BaseAppCompatActivity implements OnMa
         myRef.child("user").child(uuid).child("Travel").child(key).child(child).setValue(travelList);
         // 지금은 한번에 하루만 추가 되므로 1을 빼면 됨
         alldate.setPeriod(alldate.getPeriod()-1);
-        sharedPreferenceStore1.savePreferences(ConstantStore.DATEKEY,alldate);
+//        sharedPreferenceStore1.savePreferences(ConstantStore.DATEKEY,alldate);
 
         if(IsRemain == true ) { // 이번에 저장한 데이터가 remaining day인 경우
             deleteDataToDB(startdate);
