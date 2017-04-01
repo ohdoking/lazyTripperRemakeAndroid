@@ -370,7 +370,7 @@ public class TravelSummaryActivity extends BaseAppCompatActivity implements OnMa
                 new LatLng(adapter.getItem(0).getMapy(), adapter.getItem(0).getMapx())   // 위도, 경도
         ));
 
-        CameraUpdate zoom = CameraUpdateFactory.zoomTo(9);
+        CameraUpdate zoom = CameraUpdateFactory.zoomTo(12);
         googleMap.animateCamera(zoom);   // moveCamera 는 바로 변경하지만,
         int index = adapter.getCount();
         LatLng[] latLngList = new LatLng[index];
