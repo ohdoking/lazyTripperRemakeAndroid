@@ -166,6 +166,12 @@ public class HomeActivity extends BaseAppCompatActivity {
                         DatabaseReference needSelectRef = userRef.child("needSelect");
                         userRef.child("Travel").child(key).setValue(null);
                         needSelectRef.setValue(null);
+
+                        Intent i = new Intent(HomeActivity.this, ChooseCityActivity.class);
+                        startActivity(i);
+                        finish();
+                        overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.fade_in);
+
                         return;
                     }
                 });
