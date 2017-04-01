@@ -1,6 +1,7 @@
 package com.yapp.lazitripper.views.bases;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -45,6 +46,30 @@ public class BaseAppCompatActivity extends AppCompatActivity {
         actionBar.setCustomView(mCustomView, params);
     }
 
+
+
+
+    public void setMyHeader(){
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(false);
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setElevation(0); // 그림자 없애기
+
+        mCustomView = LayoutInflater.from(this).inflate(R.layout.myheader,null);
+        actionBar.setCustomView(mCustomView);
+        mCustomView.setBackgroundColor(Color.rgb(230,230,230));
+
+
+        Toolbar parent = (Toolbar) mCustomView.getParent();
+        parent.setContentInsetsAbsolute(0,0);
+
+//        actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.facebook_btn));
+
+        ActionBar.LayoutParams params = new ActionBar.LayoutParams(ActionBar.LayoutParams.WRAP_CONTENT,
+                ActionBar.LayoutParams.WRAP_CONTENT);
+        actionBar.setCustomView(mCustomView, params);
+    }
     /*
     *
     * actionbar 의 왼쪽 버튼의 인스턴스를 가져온다
