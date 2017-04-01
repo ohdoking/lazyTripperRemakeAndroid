@@ -5,11 +5,14 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -28,8 +31,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.yapp.lazitripper.R;
 import com.yapp.lazitripper.common.ConstantIntent;
@@ -98,6 +99,67 @@ public class TravelSummaryActivity extends BaseAppCompatActivity implements OnMa
         SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
         loadingDialog = new LoadingDialog(TravelSummaryActivity.this);
         loadingDialog.show();
+
+        LinearLayout mapLayout = (LinearLayout)findViewById(R.id.mapLayout);
+        final ScrollView scrollView = (ScrollView)findViewById(R.id.scrollView);
+        View googleMap = (View)findViewById(R.id.map);
+
+        googleMap.setOnTouchListener((new View.OnTouchListener(){
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                int action = event.getAction();
+                switch (action) {
+                    case MotionEvent.ACTION_DOWN:
+                        Log.d("scroll","asdf");
+                        scrollView.requestDisallowInterceptTouchEvent(true);
+                        return false;
+
+                    case MotionEvent.ACTION_UP:
+                        scrollView.requestDisallowInterceptTouchEvent(false);
+                        return true;
+
+                    case MotionEvent.ACTION_MOVE:
+                        scrollView.requestDisallowInterceptTouchEvent(true);
+                        return false;
+
+                    default:
+                        return true;
+                }
+            }
+        }));
+        //맵과 마찬가지로 리스트뷰가 문제가되네..이런...
+        ListView listView = (ListView) findViewById(R.id.listview);
+        listView.setOnTouchListener(new View.OnTouchListener(){
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int action = event.getAction();
+                switch (action) {
+                    case MotionEvent.ACTION_DOWN:
+                        // Disallow ScrollView to intercept touch events.
+                        scrollView.requestDisallowInterceptTouchEvent(true);
+                        // Disable touch on transparent view
+                        return false;
+
+                    case MotionEvent.ACTION_UP:
+                        // Allow ScrollView to intercept touch events.
+                        scrollView.requestDisallowInterceptTouchEvent(false);
+                        return true;
+
+                    case MotionEvent.ACTION_MOVE:
+                        scrollView.requestDisallowInterceptTouchEvent(true);
+                        return false;
+
+                    default:
+                        return true;
+                }
+            }
+
+        });
+
+
+
+
 
         // 도시 코드를 가저옴
         cityCode = getIntent().getIntExtra(ConstantIntent.CITYCODE,1);
