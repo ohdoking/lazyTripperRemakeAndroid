@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 
 import com.wx.wheelview.adapter.ArrayWheelAdapter;
@@ -46,7 +47,8 @@ public class SetPlaceCountDialog extends Dialog {
         this.context = context;
         this.cityNum = cityNum;
         setContentView(R.layout.set_place_count_dialog);
-        setTitle("가고싶은 여행지의 갯수를 선택해주세요");
+//        setTitle("가고싶은 여행지의 갯수를 선택해주세요");
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);
         //default 랜드마크 4, 음식점 3, 숙소 1
         placeCount = new PlaceCount(3,2,0);
 
