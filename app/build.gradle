@@ -17,6 +17,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    //동현
+    defaultConfig {
+        multiDexEnabled true
+    }
+
+    repositories {
+        jcenter()
+    }
 }
 
 dependencies {
@@ -81,5 +90,8 @@ dependencies {
     //loading
     compile 'me.zhanghai.android.materialprogressbar:library:1.3.0'
 
+
+    // card view
+    compile 'com.frosquivel:scrollinfinite:2.0'
 }
 apply plugin: 'com.google.gms.google-services'
