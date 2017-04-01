@@ -47,6 +47,7 @@ public class HomeActivity extends BaseAppCompatActivity {
     private SharedPreferenceStore sharedPreferenceStore;
 
     String uuid;
+    boolean isdata = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,16 +88,22 @@ public class HomeActivity extends BaseAppCompatActivity {
         linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(HomeActivity.this, DatePickActivity.class);
-                startActivity(i);
-                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.fade_in);
+
+                if(isdata){
+                    notification();
+                }
+                else{
+                    Intent i = new Intent(HomeActivity.this, DatePickActivity.class);
+                    startActivity(i);
+                    overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.fade_in);
+                }
             }
         });
 
         myRef.child("user").child(uuid).child("needSelect").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                boolean isdata = false;
+                isdata = false;
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     RemainingDay day = postSnapshot.getValue(RemainingDay.class);
                     Log.e(TAG, "Get key" + day.getKey());
@@ -116,7 +123,8 @@ public class HomeActivity extends BaseAppCompatActivity {
                     }catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    notification();
+
+//                    notification();
                 }else{
                     sharedPreferenceStore.savePreferences(ConstantStore.REMAINFLAG,"false");
                 }
