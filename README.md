@@ -1,4 +1,9 @@
-# lazitripper
+# lazitripper Remake Proejct
+
+lazitripper라는 프로젝트를 리메이크 하는 프로젝트이다.
+
+lazitripper는 여행 계획을 짜는 것에 부담을 느끼는 사용자에게
+편리하게 계획을 짤 수 있도록 도움을 주는 애플리케이션이다.
 
 ## 사용한 기술
 
