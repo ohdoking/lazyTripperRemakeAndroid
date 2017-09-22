@@ -436,31 +436,7 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
                     }
                 }
                 else if (locationCount.equals(4)){
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext())
-                            .setTitle(R.string.warning)
-                            .setIcon(R.mipmap.ic_launcher)
-                            .setMessage(R.string.alert4below)
-                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    radius = 3;
-                                    loadingDialog.show();
-                                    setClosedDate(currentLat, currentLat,radius);
-                                }
-                            })
-                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Intent i = new Intent(ChoosePlaceActivity.this, TravelSummaryActivity.class);
-                                    i.putExtra(ConstantIntent.PLACELIST,placeInfoDtoList);
-                                    startActivity(i);
-                                    finish();
-                                    overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.fade_in);
-                                }
-                            });
-
-                    AlertDialog alertDialog = builder.create();
-                    alertDialog.show();
+                    showAlertDialog();
                 }
                 else{
                     radius = 1;
@@ -633,6 +609,34 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
         animation.setRepeatCount(1); // Repeat animation infinitely
         animation.setRepeatMode(Animation.REVERSE); // Reverse animation at the end so the button will fade back in
         overlayView.startAnimation(animation);
+    }
+
+    void showAlertDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setTitle(R.string.warning)
+                .setIcon(R.mipmap.ic_launcher)
+                .setMessage(R.string.alert4below)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        radius = 3;
+                        loadingDialog.show();
+                        setClosedDate(currentLat, currentLat,radius);
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent i = new Intent(ChoosePlaceActivity.this, TravelSummaryActivity.class);
+                        i.putExtra(ConstantIntent.PLACELIST,placeInfoDtoList);
+                        startActivity(i);
+                        finish();
+                        overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.fade_in);
+                    }
+                });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
 }
