@@ -1,15 +1,22 @@
 package com.yapp.lazitripper.views;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -18,6 +25,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.firebase.geofire.GeoFire;
+import com.firebase.geofire.GeoLocation;
+import com.firebase.geofire.GeoQuery;
+import com.firebase.geofire.GeoQueryEventListener;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 import com.yapp.lazitripper.R;
 import com.yapp.lazitripper.common.ConstantIntent;
@@ -48,6 +66,7 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
     public MyAdapter myAdapter;
     public ViewHolder viewHolder;
     private List<PlaceInfoDto> array;
+    private List<PlaceInfoDto> hateList;
     SwipeFlingAdapterView flingContainer;
 
     public PlaceInfoDto placeInfoDto;
@@ -56,6 +75,8 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
     private String TAG = "ChoosePlaceActivity";
 
     Integer cityCode;
+    Integer day;
+    Integer totalDay;
     ImageView kindTextVeiw;
     TextView discriptionCountTextView;
 
@@ -88,6 +109,20 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
 
     private Boolean exit = false;
 
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference firebaseRef = database.getReference("lazitripper");
+    DatabaseReference geoFireRef = firebaseRef.child("geofire");
+    DatabaseReference placeInfoRef;
+
+    GeoQuery geoQuery;
+    GeoFire geoFire;
+
+    //km
+    int radius = 1 ;
+    Float currentLat;
+    Float currentLon;
+
+    View overlayView;
 
     ArrayList<PlaceInfoDto> placeInfoDtoList = new ArrayList<PlaceInfoDto>();
     @Override
@@ -95,29 +130,127 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
         super.onCreate(savedInstanceState);
         setHeader();
         setContentView(R.layout.activity_choose_place);
-        loadingDialog = new LoadingDialog(ChoosePlaceActivity.this);
+
 
 //        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 //        setProgressBarIndeterminateVisibility(true);
-
+        array = new ArrayList<>();
+        hateList = new ArrayList<>();
 
 
         //이전 엑티비티에서 city code를 가져옴
         cityCode = getIntent().getIntExtra(ConstantIntent.CITYCODE,1);
         placeCount = (PlaceCount) getIntent().getSerializableExtra(ConstantIntent.PLACECOUNT);
-        flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
-        discriptionCountTextView = (TextView) findViewById(R.id.discription_count);
 
-        titlePlaceNameTextView = (TextView) mCustomView.findViewById(R.id.place_name);
-        titlePlaceNameTextView.setText(makeTitleName(cityCode));
+        initView();
+        //TODO day를 받아와서 넣어줘야함
+        day = 1;
+        //TODO Total day를 받아와서 넣어줘야함
+        totalDay = 1;
+        titlePlaceNameTextView.setText(makeTitleName(day, cityCode));
+
+        //firebase settting
+        geoFire = new GeoFire(geoFireRef);
+        placeInfoRef = firebaseRef.child("placeInfo").child(String.valueOf(cityCode));
 
 
-        array = new ArrayList<>();
-        //12 관광지
-
+        //12 관광지 데이터를 가져옴
         getPlaceData(12);
         discriptionCountTextView.setText(makeSentence(thisCount));
         renderItem();
+
+    }
+
+    /**
+     * view 를 초기화화
+     */
+    void initView(){
+        loadingDialog = new LoadingDialog(ChoosePlaceActivity.this);
+
+        flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
+        discriptionCountTextView = (TextView) findViewById(R.id.discription_count);
+        overlayView = findViewById(R.id.overlay);
+        titlePlaceNameTextView = (TextView) mCustomView.findViewById(R.id.place_name);
+    }
+
+
+    /**
+     * 가까운 관광지를 가져옴
+     * @param lat 위도
+     * @param lon 경도
+     * @param radius 반경
+     */
+    void setClosedDate(Float lat, Float lon, int radius){
+        final int tempRadius = radius;
+
+        geoQuery = geoFire.queryAtLocation(new GeoLocation(lat,lon), radius);
+        array = new ArrayList<PlaceInfoDto>();
+        geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
+            @Override
+            public void onKeyEntered(String key, GeoLocation location) {
+                Log.i("ohdoking-test", key + " * " );
+                loadingDialog.dismiss();
+
+                Query placeInfoQuery = placeInfoRef.child(key);
+                placeInfoQuery.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        PlaceInfoDto placeInfoDto = dataSnapshot.getValue(PlaceInfoDto.class);
+                        Log.i("ohdoking", placeInfoDto.getTitle());
+                        array.add(placeInfoDto);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onKeyExited(String key) {
+                Log.i("ohdoking-nbo",key + " * " + tempRadius);
+                // 데이터가없는경우 더 넓혀서 찾아본다.
+                setClosedDate(currentLat,currentLon, tempRadius*2);
+            }
+
+            @Override
+            public void onKeyMoved(String key, GeoLocation location) {
+
+            }
+
+            @Override
+            public void onGeoQueryReady() {
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        //화면 클리어
+                        if(flingContainer.getChildCount() != 0){
+                            flingContainer.removeAllViewsInLayout();
+                        }
+
+                        //싫어하는 리스트와 이미 선택한 리스트 필터링
+                        array = getFilterList(array, placeInfoDtoList);
+                        array = getFilterList(array, hateList);
+
+                        if(array.size() == 0){
+                            loadingDialog.show();
+                            setClosedDate(currentLat,currentLon, tempRadius*2);
+                        }
+
+                        myAdapter.list = array;
+                        myAdapter.notifyDataSetChanged();
+
+                        loadingDialog.dismiss();
+                    }
+                }, 500);
+            }
+
+            @Override
+            public void onGeoQueryError(DatabaseError error) {
+
+            }
+        });
 
     }
 
@@ -132,26 +265,8 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
 
         Call<CommonResponse<PlaceInfoDto>> callRelionInfo;
 
-
-        //contenttype이 관광지면 도시 기반으로 가져오고 나머지인경우 위치에 가까운 식당이나 숙소 데이터를 가져온다.
-        if(contentTypeId == 12){
-            callRelionInfo = laziTripperKoreanTourService.getPlaceInfoByCity(pageNum,page,"B","Y","AND","LaziTripper",cityCode, contentTypeId);
-        }
-        else{
-            if(landMarkUseCount >= placeCount.getLandMark()){
-                landMarkUseCount = placeCount.getLandMark()-1;
-            }
-            else if(contentTypeId == 32){
-                //숙소는 마지막 랜드마크 다음
-                landMarkUseCount = travelRoute.getList().size() - 1 ;
-            }
-            callRelionInfo = laziTripperKoreanTourService.getPlaceInfoByLocation(pageNum,page,"E","Y","AND","LaziTripper",contentTypeId, travelRoute.getList().get(landMarkUseCount).getMapx(), travelRoute.getList().get(landMarkUseCount).getMapy() ,100000);
-            if(array.size() != count){
-                landMarkUseCount++;
-            }
-        }
-
-
+        //contenttype이 관광지를를 가져옴
+       callRelionInfo = laziTripperKoreanTourService.getPlaceInfoByCity(pageNum,page,"B","Y","AND","LaziTripper",cityCode, contentTypeId);
         callRelionInfo.enqueue(new Callback<CommonResponse<PlaceInfoDto>>() {
             @Override
             public void onResponse(Call<CommonResponse<PlaceInfoDto>> call, Response<CommonResponse<PlaceInfoDto>> response) {
@@ -163,21 +278,12 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
                     flingContainer.removeAllViewsInLayout();
                 }
 
-                ArrayList<PlaceInfoDto> tempList = new ArrayList<PlaceInfoDto>();
-                boolean hasItem;
-                for(PlaceInfoDto placeInfo : array){
-                    hasItem = false;
-                    for(PlaceInfoDto placeInfoDto : placeInfoDtoList){
-                        if(placeInfoDto.getContentid().equals(placeInfo.getContentid())){
-                            hasItem = true;
-                            break;
-                        }
-                    }
-                    if(!hasItem){
-                        tempList.add(placeInfo);
-                    }
+                array = getFilterList(array, placeInfoDtoList);
+
+                if(array.size() == 0){
+                    loadingDialog.show();
+                    setClosedDate(currentLat,currentLon, radius*2);
                 }
-                array = tempList;
 
                 myAdapter.list = array;
                 myAdapter.notifyDataSetChanged();
@@ -286,91 +392,82 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
                 //Do something on the left!
                 //You also have access to the original object.
                 //If you want to use it just cast it (String) dataObject
-                Toast.makeText(ChoosePlaceActivity.this, "싫어요", Toast.LENGTH_SHORT).show();
-
-                if(locationCount % pageNum == 0 && locationCount != 0){
-                    page++;
-
-                    if(locationFlag == 0){
+                //Toast.makeText(ChoosePlaceActivity.this, "싫어요", Toast.LENGTH_SHORT).show();
+                animationOverlayView(false);
+                PlaceInfoDto placeInfoDto = (PlaceInfoDto) dataObject;
+                hateList.add(placeInfoDto);
+                if(myAdapter.list.size() == 0){
+                    loadingDialog.show();
+                    if(locationCount == 0){
+                        page++;
                         getPlaceData(12);
                     }
-                    else if(locationFlag == 1){
-                        getPlaceData(39);
-                    }
-                    else if(locationFlag == 2){
-                        getPlaceData(32);
+                    else{
+                        radius = radius * 2;
+                        setClosedDate(currentLat, currentLon,radius);
                     }
                 }
             }
 
             @Override
             public void onRightCardExit(Object dataObject) {
-
                 count++;
                 locationCount++;
-                Toast.makeText(ChoosePlaceActivity.this,  locationCount + "회 좋아요", Toast.LENGTH_SHORT).show();
-                if(locationFlag == 0){
-                    placeInfoDtoList.add((PlaceInfoDto) dataObject);
-                    if(placeCount.getLandMark().equals(locationCount)){
-
-                        locationCount = 0;
-                        locationFlag = 1;
-                        count = 0;
-                        page = 1;
-
-                        //최단거리 구함
-                        travelRoute = new TravelRoute(placeInfoDtoList);
-                        placeInfoDtoList = travelRoute.findShortRoute();
-
-                        //39 음식
-                        getPlaceData(39);
-                    }
-                    else if(locationCount % pageNum == 0 && locationCount != 0){
-                        page++;
-                        getPlaceData(12);
-                    }
-                }
-                else if(locationFlag == 1){
-                    //랜드마크와 랜드마크 사이에 음식점 넣기
-                    inputLandMarkAndLandMark((PlaceInfoDto) dataObject);
-                    if(placeCount.getRestaurant().equals(locationCount)) {
-
-                        locationCount = 0;
-                        locationFlag = 2;
-                        count = 0;
-                        page = 1;
-
-                        //32 숙박
-                        getPlaceData(32);
-                    }
-                    else{
-
-                        if(locationCount % pageNum == 0 && locationCount != 0){
-                            page++;
-                        }
-                        //다음 경로의 주변 음식 가져오기
-                        getPlaceData(39);
-                    }
-
-                }
-                else if(locationFlag == 2){
-                    placeInfoDtoList.add((PlaceInfoDto) dataObject);
-                    if(placeCount.getAccommodation().equals(locationCount)){
-
-                        locationCount = 0;
-                        count = 0;
-                        page = 1;
+                //Toast.makeText(ChoosePlaceActivity.this,  locationCount + "회 좋아요", Toast.LENGTH_SHORT).show();
+                animationOverlayView(true);
+                PlaceInfoDto placeInfoDto = (PlaceInfoDto) dataObject;
+                placeInfoDtoList.add(placeInfoDto);
+                currentLat = placeInfoDto.getMapy();
+                currentLon = placeInfoDto.getMapx();
+                //5개이상은 선택할 수 없음 알림 메시지와 함께 다음 일정으로
+                //4개를 선택하면 더 선택할것인지 물어봄
+                if(locationCount.equals(5)){
+                    Toast.makeText(ChoosePlaceActivity.this,R.string.alert5below, Toast.LENGTH_SHORT).show();
+                    if(totalDay == day){
+                        //TODO 모든 날의 일정을 다 설정하면 다음 써머리화면으로 넘어가야함(데이터를 한꺼번에 넘김?)
                         Intent i = new Intent(ChoosePlaceActivity.this, TravelSummaryActivity.class);
                         i.putExtra(ConstantIntent.PLACELIST,placeInfoDtoList);
                         startActivity(i);
                         finish();
                         overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.fade_in);
                     }
-                    else if(locationCount % pageNum == 0 && locationCount != 0){
-                        page++;
-                        getPlaceData(32);
+                    else{
+                        //TODO 다시 해당 뷰를 호출해야함(다음 날 설정)
                     }
                 }
+                else if (locationCount.equals(4)){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext())
+                            .setTitle(R.string.warning)
+                            .setIcon(R.mipmap.ic_launcher)
+                            .setMessage(R.string.alert4below)
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    radius = 3;
+                                    loadingDialog.show();
+                                    setClosedDate(currentLat, currentLat,radius);
+                                }
+                            })
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent i = new Intent(ChoosePlaceActivity.this, TravelSummaryActivity.class);
+                                    i.putExtra(ConstantIntent.PLACELIST,placeInfoDtoList);
+                                    startActivity(i);
+                                    finish();
+                                    overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.fade_in);
+                                }
+                            });
+
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+                }
+                else{
+                    radius = 1;
+                    loadingDialog.show();
+                    setClosedDate(placeInfoDto.getMapy(), placeInfoDto.getMapx(),radius);
+                }
+
 
                 thisCount++;
                 discriptionCountTextView.setText(makeSentence(thisCount));
@@ -429,13 +526,13 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
     }
 
     private String makeSentence(int count){
-        int totalCount;
-        totalCount = placeCount.getAccommodation() + placeCount.getLandMark() + placeCount.getRestaurant();
-        return "오른쪽으로 넘긴 여행지가 루트에 추가되요  " + count + "/" + totalCount;
+        //int totalCount;
+        //totalCount = placeCount.getAccommodation() + placeCount.getLandMark() + placeCount.getRestaurant();
+        return "오른쪽으로 넘긴 여행지가 루트에 추가되요  " + count + "/5";
     }
 
     //지역 코드를 지역 명으로 변환해준다
-    private String makeTitleName(Integer cityCode) {
+    private String makeTitleName(Integer day, Integer cityCode) {
 
         String name = null;
 
@@ -477,7 +574,7 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
             default    : new Exception("no place code");
                 break;
         }
-        return "한국 " + name;
+        return day +"일차 한국 " + name;
     }
 
     @Override
@@ -498,6 +595,44 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
         ActionBar.LayoutParams params = new ActionBar.LayoutParams(ActionBar.LayoutParams.WRAP_CONTENT,
                 ActionBar.LayoutParams.WRAP_CONTENT);
         actionBar.setCustomView(mCustomView, params);
+    }
+
+    public List getFilterList(List<PlaceInfoDto> originalList, List<PlaceInfoDto> filterList){
+        ArrayList<PlaceInfoDto> tempList = new ArrayList<PlaceInfoDto>();
+        boolean hasItem;
+        for(PlaceInfoDto placeInfo : originalList){
+            hasItem = false;
+            for(PlaceInfoDto placeInfoDto : filterList){
+                if(placeInfoDto.getContentid().equals(placeInfo.getContentid())){
+                    hasItem = true;
+                    break;
+                }
+            }
+            if(!hasItem){
+                if(!"".equals(placeInfo.getFirstimage())){
+                    tempList.add(placeInfo);
+                }
+            }
+        }
+        return tempList;
+    }
+
+    /**
+     * o,x 화면 나왓다 사라지는 애니메이션
+     */
+    void animationOverlayView(boolean pass){
+        if(pass){
+            overlayView.setBackgroundResource(R.drawable.pass);
+        }
+        else{
+            overlayView.setBackgroundResource(R.drawable.reject);
+        }
+        final Animation animation = new AlphaAnimation(0, 1); // Change alpha from fully visible to invisible
+        animation.setDuration(300); // duration - half a second
+        animation.setInterpolator(new LinearInterpolator()); // do not alter animation rate
+        animation.setRepeatCount(1); // Repeat animation infinitely
+        animation.setRepeatMode(Animation.REVERSE); // Reverse animation at the end so the button will fade back in
+        overlayView.startAnimation(animation);
     }
 
 }
