@@ -66,8 +66,6 @@ dependencies {
     //facebook
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
 //    compile 'com.google.android.gms:play-services-appindexing:10.0.0'
-    //tinder뭐시기
-    compile 'com.lorentzos.swipecards:library:1.0.9'
     //timeline
     compile 'com.github.vipulasri:timelineview:1.0.3'
     //RecyclerView
