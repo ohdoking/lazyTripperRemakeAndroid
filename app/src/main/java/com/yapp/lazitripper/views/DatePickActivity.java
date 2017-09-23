@@ -65,10 +65,11 @@ public class DatePickActivity extends BaseAppCompatActivity {
                             datePick.startAnimation(shake);
                             datePick.setText("30");
                         }
-                        else if(TextUtils.isEmpty(datePick.getText().toString())) {
+                        else {
                             Animation shake = AnimationUtils.loadAnimation(DatePickActivity.this, R.anim.shake);
                             datePick.startAnimation(shake);
                         }
+
                     }
                 }
         );
