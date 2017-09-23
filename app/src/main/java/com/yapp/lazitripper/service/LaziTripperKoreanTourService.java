@@ -1,13 +1,12 @@
 package com.yapp.lazitripper.service;
 
+import com.yapp.lazitripper.dto.CommonInfoDto;
 import com.yapp.lazitripper.dto.PlaceInfoDto;
-import com.yapp.lazitripper.dto.common.CommonItems;
-import com.yapp.lazitripper.dto.common.CommonResponse;
 import com.yapp.lazitripper.dto.RegionCodeDto;
+import com.yapp.lazitripper.dto.common.CommonResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
-import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
@@ -119,5 +118,22 @@ public interface LaziTripperKoreanTourService {
             @Query("mapX") Float mapX,
             @Query("mapY") Float mapY,
             @Query("radius") Integer radius);
+
+
+
+
+    @GET("rest/KorService/detailCommon")
+    Call<CommonInfoDto> getPlaceInfoByDetailCommon(
+            @Query("MobileOS") String MobileOS,
+            @Query("MobileApp") String MobileApp,
+            @Query("contentId") Integer contentId,
+            @Query("contentTypeId") Integer contentTypeId,
+            @Query("defaultYN") String defaultYN,
+            @Query("firstImageYN") String firstImageYN,
+            @Query("areacodeYN") String areacodeYN,
+            @Query("catcodeYN") String catcodeYN,
+            @Query("addrinfoYN") String addrinfoYN,
+            @Query("mapinfoYN") String mapinfoYN,
+            @Query("overviewYN") String overviewYN);
 
 }

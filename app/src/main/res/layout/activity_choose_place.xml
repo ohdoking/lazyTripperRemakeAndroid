@@ -17,12 +17,12 @@
         android:layout_height="30dp" />
 
 
-    <com.lorentzos.flingswipe.SwipeFlingAdapterView
+    <com.yapp.lazitripper.flinglibrary.SwipeFlingAdapterView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="530dp"
         android:id="@+id/frame">
 
-    </com.lorentzos.flingswipe.SwipeFlingAdapterView>
+    </com.yapp.lazitripper.flinglibrary.SwipeFlingAdapterView>
 
 
 </LinearLayout>

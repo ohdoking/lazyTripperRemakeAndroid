@@ -1,5 +1,6 @@
 package com.yapp.lazitripper.views;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,17 +14,16 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 import com.yapp.lazitripper.R;
 import com.yapp.lazitripper.common.ConstantIntent;
 import com.yapp.lazitripper.dto.PlaceCount;
 import com.yapp.lazitripper.dto.PlaceInfoDto;
 import com.yapp.lazitripper.dto.common.CommonResponse;
+import com.yapp.lazitripper.flinglibrary.SwipeFlingAdapterView;
 import com.yapp.lazitripper.network.LaziTripperKoreanTourClient;
 import com.yapp.lazitripper.service.LaziTripperKoreanTourService;
 import com.yapp.lazitripper.util.TravelRoute;
@@ -99,7 +99,6 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
 
 //        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 //        setProgressBarIndeterminateVisibility(true);
-
 
 
         //이전 엑티비티에서 city code를 가져옴
@@ -197,7 +196,6 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
     public static class ViewHolder{
         public ImageView background;
         public TextView name;
-        public ImageView image;
         public TextView _addr;
         public TextView addr;
         public TextView _tel;
@@ -236,7 +234,6 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
                 viewHolder = new ViewHolder();
                 viewHolder.background = (ImageView) rowView.findViewById(R.id.backgroundImage);
                 viewHolder.name = (TextView) rowView.findViewById(R.id.name);
-                viewHolder.image = (ImageView) rowView.findViewById(R.id.country_image);
                 viewHolder._addr = (TextView) rowView.findViewById(R.id._addr);
                 viewHolder.addr = (TextView) rowView.findViewById(R.id.addr);
                 viewHolder._tel = (TextView) rowView.findViewById(R.id._tel);
@@ -247,17 +244,15 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
             }else{
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-            PlaceInfoDto curItem = list.get(position);
-            Log.i("ohdoking",curItem.getTitle());
+            final PlaceInfoDto curItem = list.get(position);
 
-//            viewHolder.background.set(0xff556677);
             Glide.with(context).load(curItem.getFirstimage()).override(485, 710).centerCrop().into(viewHolder.background);
             viewHolder.name.setText(curItem.getTitle());
-            viewHolder.image.setImageDrawable(getResources().getDrawable(R.drawable.korea));
             viewHolder._addr.setText("ADD");
             viewHolder.addr.setText(curItem.getAddr1());
             viewHolder._tel.setText("TEL");
             viewHolder.tel.setText(curItem.getTel());
+
             return rowView;
         }
     }
@@ -386,13 +381,14 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
 
         flingContainer.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
             @Override
-            public void onItemClicked(int itemPosition, Object dataObject) {
+            public void onItemClicked(int itemPosition, Object dataObject,View frame) {
                 PlaceInfoDto infodto = (PlaceInfoDto) dataObject;
-
-                Log.e(TAG,"position = " + itemPosition + ", Object" + infodto.getAddr1());
-                Intent intent = new Intent(getApplicationContext(),MyProfileActivity.class);
+                ImageView ivChoosePlace = (ImageView)frame.findViewById(R.id.backgroundImage);
+                Intent intent = new Intent(ChoosePlaceActivity.this,PlaceDetailActivity.class);
+                View sharedView = ivChoosePlace;
+                ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(ChoosePlaceActivity.this, sharedView, getString(R.string.transitionImageName));
                 intent.putExtra("placeInfo",infodto);
-                startActivity(intent);
+                startActivity(intent,transitionActivityOptions.toBundle());
 
             }
         });
@@ -435,7 +431,7 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
     }
 
     //지역 코드를 지역 명으로 변환해준다
-    private String makeTitleName(Integer cityCode) {
+    public String makeTitleName(Integer cityCode) {
 
         String name = null;
 
@@ -477,7 +473,7 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
             default    : new Exception("no place code");
                 break;
         }
-        return "한국 " + name;
+        return name;
     }
 
     @Override

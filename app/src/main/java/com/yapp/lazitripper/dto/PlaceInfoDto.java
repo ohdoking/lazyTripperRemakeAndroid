@@ -17,7 +17,7 @@ import java.util.ArrayList;
     cat1	대분류	대분류 코드
     cat2	중분류	중분류 코드
     cat3	소분류	소분류 코드
-    contentid	콘텐츠ID	콘텐츠ID
+    contentid	콘텐츠ID
     contenttypeid	콘텐츠타입ID	관광타입(관광지, 숙박 등) ID
     createdtime	등록일	콘텐츠 최초 등록일
     firstimage	대표이미지(원본)	원본 대표이미지(약 500*333 size) URL 응답
