@@ -15,7 +15,7 @@
         android:layout_weight="1"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="90dp"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="60dp"
         android:text="Step 1/2"
         android:textAlignment="inherit"
         android:textColor="#000000"
