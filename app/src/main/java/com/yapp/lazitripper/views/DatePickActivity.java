@@ -3,7 +3,9 @@ package com.yapp.lazitripper.views;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -21,18 +23,13 @@ import java.util.Date;
 //여행 시작 -> 날짜 선택
 public class DatePickActivity extends BaseAppCompatActivity {
 
-    private int FLAG = 0;
-    private PickDate pickDate;
-    private CalendarPickerView calendar;
-    private SharedPreferenceStore<PickDate> sharedPreferenceStore;
+    private EditText datePick;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_date_pick);
         setHeader();
-
-        sharedPreferenceStore = new SharedPreferenceStore<PickDate>(getApplicationContext(), ConstantStore.STORE);
 
         //뒤로가기, 액티비티 종료
         ImageView leftImage = getLeftImageView();
@@ -50,19 +47,10 @@ public class DatePickActivity extends BaseAppCompatActivity {
         rightImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
-                if(pickDate.getStartDate() != null){
-
-                    if(FLAG == 1){
-                        Log.i("ohdoking",FLAG+"");
-                        pickDate.setFinishDate(pickDate.getStartDate());
-                        pickDate.setPeriod(1l);
-                    }
-                    sharedPreferenceStore.savePreferences(ConstantStore.DATEKEY, pickDate);
+                if(datePick != null){
 
                     Intent i = new Intent(DatePickActivity.this, ChooseCityActivity.class);
-                    i.putExtra(ConstantIntent.PICKDATE,pickDate);
+                    i.putExtra("name",datePick.getText().toString());
                     startActivity(i);
                     finish();
                     overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.fade_in);
@@ -73,62 +61,17 @@ public class DatePickActivity extends BaseAppCompatActivity {
             }
         });
 
-        calendar = (CalendarPickerView) findViewById(R.id.calendar_view);
-
-        Calendar nextYear = Calendar.getInstance();
-        nextYear.add(Calendar.YEAR, 1);
-
-        Date today = new Date();
-        calendar.init(today, nextYear.getTime())
-                .inMode(CalendarPickerView.SelectionMode.RANGE);
-
-        pickDate = new PickDate();
-        
-        //날짜 선택 Listener
-        calendar.setOnDateSelectedListener(new CalendarPickerView.OnDateSelectedListener() {
+        datePick = (EditText) findViewById(R.id.datePick);
+        datePick.setOnKeyListener(new View.OnKeyListener() {
             @Override
-            public void onDateSelected(Date date) {
-                if (FLAG == 0){
-                    pickDate.setStartDate(date);
-                    FLAG = 1;
-                }
-                else{
-                    pickDate.setFinishDate(date);
-                    long diff = Math.abs(pickDate.getStartDate().getTime() - date.getTime());
-                    long diffDays = (diff / (24 * 60 * 60 * 1000)) + 1;
-
-                    pickDate.setPeriod(diffDays);
-                    Log.i("ohdoking",diffDays+"");
-                    FLAG = 0;
-                }
-            }
-
-            @Override
-            public void onDateUnselected(Date date) {
-                Log.i("ohdoking","onDateUnselected");
-                pickDate = new PickDate();
-            }
-        });
-
-        /*
-        * 이전날짜 선택시 시작 날짜가 이전날짜가 되도록 수정
-        * */
-        calendar.setCellClickInterceptor(new CalendarPickerView.CellClickInterceptor() {
-            @Override
-            public boolean onCellClicked(Date date) {
-                if (FLAG == 1){
-                    long diff = pickDate.getStartDate().getTime() - date.getTime();
-                    if(diff > 0){
-                        calendar.clearHighlightedDates();
-                        FLAG = 0;
-                        return false;
-                    }
-                    else{
-                        return false;
-                    }
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    //Enter키눌렀을때 처리
+                    return true;
                 }
                 return false;
             }
         });
+
     }
 }
