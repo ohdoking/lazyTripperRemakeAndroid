@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <selector>
+        <item android:state_focused="false" android:state_pressed="false">
+            <shape>
+                <solid android:color="#FF00FF00" />
+                <corners android:radius="1000dp" />
+                <padding android:bottom="30dp" android:left="30dp"
+                    android:right="30dp" android:top="30dp" />
+            </shape>
+        </item>
+    </selector>
+
+</LinearLayout>

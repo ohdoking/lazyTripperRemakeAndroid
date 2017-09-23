@@ -70,8 +70,13 @@
             android:label="@string/title_activity_travel_summary" />
         <activity android:name=".views.KeywordSelectActivity" />
         <activity android:name=".views.HomeActivity" />
+
         <activity android:name=".views.TravelDiaryActivity">
         </activity>
+
+        <activity
+            android:theme="@style/Theme.Transparent"
+            android:name=".views.TempScheduleActivity"></activity>
     </application>
 
 </manifest>

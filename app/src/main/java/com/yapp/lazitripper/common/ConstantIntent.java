@@ -15,5 +15,7 @@ public class ConstantIntent {
     public static String UUID = "UUID";
     public static String NAME = "name";
     public static String PLACECOUNT = "place-count";
-
+    public static String TEMPSCHEDULELIST = "temp-schedule-list";
+    public static String AllTRAVELINFO = "all-travel-info";
+    public static String CURRENTDAY = "current-day";
 }

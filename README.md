@@ -31,6 +31,9 @@ lazitripper는 여행 계획을 짜는 것에 부담을 느끼는 사용자에�
 - Google Play
 	- com.google.android.gms:play-services
 
+- GeoFire
+    - com.firebase:geofire-android:2.1.2
+
 ### UI
 
 - tag UI 
@@ -50,3 +53,5 @@ lazitripper는 여행 계획을 짜는 것에 부담을 느끼는 사용자에�
 	- com.github.medyo:fancybuttons
 - WheelView
 	- com.wx.wheelview:wheelview
+- TimelineView
+    - com.github.qapqap:TimelineView:v1.6'
