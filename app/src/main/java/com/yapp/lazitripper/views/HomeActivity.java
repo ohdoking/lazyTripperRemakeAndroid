@@ -54,7 +54,6 @@ public class HomeActivity extends BaseAppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        //setHeader
         setHeader();
         pickDate = new PickDate();
 
@@ -63,14 +62,6 @@ public class HomeActivity extends BaseAppCompatActivity {
         ImageView rightImage = getRightImageView();
 
         uuid = (String)sharedPreferenceStore.getPreferences(ConstantStore.UUID, String.class);
-        rightImage.setImageResource(R.drawable.more);
-        rightImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(HomeActivity.this, ProfileActivity.class);
-                startActivity(i);
-            }
-        });
 
         TextView emailTv = (TextView) findViewById(R.id.textView2);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -82,7 +73,7 @@ public class HomeActivity extends BaseAppCompatActivity {
             sharedPreferenceStore.savePreferences(ConstantStore.USERNAME,userName);
         }
         //username이 길면 밑의 text가 짤림
-        emailTv.setText(userName + "님,\n떠나고 싶은\n여행을 만나보세요");
+        emailTv.setText(userName + "님,\n편하게 여행지를\n골라보세요:-)");
 
         //여행 만들기
         Button btnMakeRoot = (Button) findViewById(R.id.btnMakeRoot);
