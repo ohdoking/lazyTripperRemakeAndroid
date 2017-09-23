@@ -219,6 +219,7 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
             @Override
             public void onKeyExited(String key) {
                 Log.i("ohdoking-nbo",key + " * " + tempRadius);
+                loadingDialog.show();
                 // 데이터가없는경우 더 넓혀서 찾아본다.
                 setClosedDate(currentLat,currentLon, tempRadius*2);
             }
