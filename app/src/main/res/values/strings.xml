@@ -22,4 +22,5 @@
     <string name="alert5below">하루에 추가할 수 있는 최대 일정에 도달했습니다. 더 이상의         일정 선택은 불가능합니다.</string>
     <string name="warning">경고</string>
     <string name="AND">and</string>
+    <string name="more1">하루에 한 곳 이상의 장소를 선택해야 합니다</string>
 </resources>

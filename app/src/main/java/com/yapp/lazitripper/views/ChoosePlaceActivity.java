@@ -21,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,20 +37,25 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 import com.yapp.lazitripper.R;
 import com.yapp.lazitripper.common.ConstantIntent;
 import com.yapp.lazitripper.dto.AllTravelInfo;
+import com.yapp.lazitripper.dto.PickDate;
 import com.yapp.lazitripper.dto.PlaceCount;
 import com.yapp.lazitripper.dto.PlaceInfoDto;
 import com.yapp.lazitripper.dto.TravelInfo;
 import com.yapp.lazitripper.dto.common.CommonResponse;
 import com.yapp.lazitripper.network.LaziTripperKoreanTourClient;
 import com.yapp.lazitripper.service.LaziTripperKoreanTourService;
+import com.yapp.lazitripper.store.ConstantStore;
+import com.yapp.lazitripper.store.SharedPreferenceStore;
 import com.yapp.lazitripper.util.TravelRoute;
 import com.yapp.lazitripper.views.bases.BaseAppCompatActivity;
 import com.yapp.lazitripper.views.dialog.LoadingDialog;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,7 +91,8 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
     TextView discriptionCountTextView;
 
     TextView titlePlaceNameTextView;
-    TextView nextDayTextView;
+    ImageView nextDayImageView;
+    ImageView previewTextView;
 
     LoadingDialog loadingDialog;
 
@@ -108,6 +115,8 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference firebaseRef = database.getReference("lazitripper");
     DatabaseReference geoFireRef = firebaseRef.child("geofire");
+    DatabaseReference userInfoRef = firebaseRef.child("user");
+
     DatabaseReference placeInfoRef;
 
     GeoQuery geoQuery;
@@ -119,6 +128,9 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
     Float currentLon;
 
     View overlayView;
+
+    private String uuid;
+    private SharedPreferenceStore sharedPreferenceStore1;
 
     ArrayList<PlaceInfoDto> placeInfoDtoList = new ArrayList<PlaceInfoDto>();
     @Override
@@ -143,17 +155,6 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
         initView();
 
         titlePlaceNameTextView.setText(makeTitleName(day, cityCode));
-        titlePlaceNameTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                allTravelInfo.getAllTraveInfo().get(day-1).setPlaceInfoDtoList(placeInfoDtoList);
-                Intent i = new Intent(ChoosePlaceActivity.this, TempScheduleActivity.class);
-                i.putExtra(ConstantIntent.TEMPSCHEDULELIST,allTravelInfo);
-                i.putExtra(ConstantIntent.CURRENTDAY,day);
-                startActivity(i);
-            }
-        });
-
 
         //nextDayTextView.setText(makeNextDayName(day, totalDay));
         //firebase settting
@@ -165,6 +166,29 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
         getPlaceData(12);
         discriptionCountTextView.setText(makeSentence(thisCount));
         renderItem();
+
+        nextDayImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!locationCount.equals(0)){
+                    goNextActivity();
+                }
+                else{
+                    Toast.makeText(ChoosePlaceActivity.this, R.string.more1, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        previewTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                allTravelInfo.getAllTraveInfo().get(day-1).setPlaceInfoDtoList(placeInfoDtoList);
+                Intent i = new Intent(ChoosePlaceActivity.this, TempScheduleActivity.class);
+                i.putExtra(ConstantIntent.TEMPSCHEDULELIST,allTravelInfo);
+                i.putExtra(ConstantIntent.CURRENTDAY,day);
+                startActivity(i);
+            }
+        });
 
     }
 
@@ -179,7 +203,8 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
         discriptionCountTextView = (TextView) findViewById(R.id.discription_count);
         overlayView = findViewById(R.id.overlay);
         titlePlaceNameTextView = (TextView) mCustomView.findViewById(R.id.place_name);
-        nextDayTextView = (TextView) mCustomView.findViewById(R.id.next_day);
+        nextDayImageView = (ImageView) mCustomView.findViewById(R.id.next_day);
+        previewTextView = (ImageView) findViewById(R.id.preview);
     }
 
 
@@ -552,7 +577,7 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
             default    : new Exception("no place code");
                 break;
         }
-        return day +"일차 한국 " + name;
+        return "DAY" +day +" " + name;
     }
 
     @Override
@@ -647,7 +672,16 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
         //TODO 모든 날의 일정을 다 설정하면 다음 써머리화면으로 넘어가야함(데이터를 한꺼번에 넘김?)
         // 결과 데이터를
         allTravelInfo.getAllTraveInfo().get(day-1).setPlaceInfoDtoList(placeInfoDtoList);
+
         if(day.equals(totalDay)){
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+            Gson gson = new Gson();
+            String jsonString = gson.toJson(allTravelInfo);
+            AllTravelInfo allTravelInfo1 = gson.fromJson(jsonString, AllTravelInfo.class);
+            sharedPreferenceStore1 = new SharedPreferenceStore(getApplicationContext(), ConstantStore.STORE);
+            uuid = (String)sharedPreferenceStore1.getPreferences(ConstantStore.UUID, String.class);
+            //firebase 에 데이터 저장
+            userInfoRef.child(uuid).child("Travel").child(String.valueOf(timestamp.getTime())).setValue(allTravelInfo1);
             Intent i = new Intent(ChoosePlaceActivity.this, TravelSummaryActivity.class);
             i.putExtra(ConstantIntent.AllTRAVELINFO, allTravelInfo);
             startActivity(i);
