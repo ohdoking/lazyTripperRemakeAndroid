@@ -8,6 +8,7 @@ import android.support.v4.view.MotionEventCompat;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -83,22 +84,16 @@ public class HomeActivity extends BaseAppCompatActivity {
         //username이 길면 밑의 text가 짤림
         emailTv.setText(userName + "님,\n떠나고 싶은\n여행을 만나보세요");
 
-        //여행 시작
-        linearLayout = (LinearLayout) findViewById(R.id.nextPageBtn);
-        linearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if(isdata){
-                    notification();
+        //여행 만들기
+        Button btnMakeRoot = (Button) findViewById(R.id.btnMakeRoot);
+        btnMakeRoot.setOnClickListener(
+                new Button.OnClickListener() {
+                    public void onClick(View v) {
+                        Intent intent = new Intent(HomeActivity.this, DatePickActivity.class);
+                        startActivity(intent);
+                    }
                 }
-                else{
-                    Intent i = new Intent(HomeActivity.this, DatePickActivity.class);
-                    startActivity(i);
-                    overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.fade_in);
-                }
-            }
-        });
+        );
 
         myRef.child("user").child(uuid).child("needSelect").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

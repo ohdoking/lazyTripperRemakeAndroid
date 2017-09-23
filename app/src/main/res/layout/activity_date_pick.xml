@@ -10,23 +10,40 @@
     tools:context="com.yapp.lazitripper.views.DatePickActivity">
 
     <TextView
-        android:text="여행날짜를 선택해주세요."
-        android:layout_width="match_parent"
-        android:textAlignment="center"
-        android:gravity="center"
-        android:textSize="12sp"
-        android:layout_height="18dp" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="70dp"
+        android:text="며칠동안\n여행을 떠나세요?"
+        android:textAlignment="inherit"
+        android:textColor="#000000"
+        android:textSize="30sp"
+        android:textStyle="bold" />
 
-    <!--<Button-->
-        <!--android:id="@+id/chooseDateCompleteBtn"-->
-        <!--android:text="Done"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content" />-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="70dp"
+        android:text="여행 일 수(예:5) 최대 30일"
+        android:textAlignment="inherit"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
-    <com.squareup.timessquare.CalendarPickerView
-        android:id="@+id/calendar_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+
+    <EditText
+        android:id="@+id/datePick"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="5dp"
+        android:digits="0123456789"
+        android:inputType="number"
+        android:maxLength="2"
+        android:textSize="30sp" />
 
 </LinearLayout>
