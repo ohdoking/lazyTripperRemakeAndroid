@@ -148,7 +148,14 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
         //TODO Total day를 받아와서 넣어줘야함
         totalDay = 1;
         titlePlaceNameTextView.setText(makeTitleName(day, cityCode));
-
+        titlePlaceNameTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ChoosePlaceActivity.this, TempScheduleActivity.class);
+                i.putExtra(ConstantIntent.TEMPSCHEDULELIST,placeInfoDtoList);
+                startActivity(i);
+            }
+        });
         //firebase settting
         geoFire = new GeoFire(geoFireRef);
         placeInfoRef = firebaseRef.child("placeInfo").child(String.valueOf(cityCode));
@@ -613,27 +620,27 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
 
     void showAlertDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this)
-                .setTitle(R.string.warning)
-                .setIcon(R.mipmap.ic_launcher)
-                .setMessage(R.string.alert4below)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        radius = 3;
-                        loadingDialog.show();
-                        setClosedDate(currentLat, currentLat,radius);
-                    }
-                })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent i = new Intent(ChoosePlaceActivity.this, TravelSummaryActivity.class);
-                        i.putExtra(ConstantIntent.PLACELIST,placeInfoDtoList);
-                        startActivity(i);
-                        finish();
-                        overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.fade_in);
-                    }
-                });
+            .setTitle(R.string.warning)
+            .setIcon(R.mipmap.ic_launcher)
+            .setMessage(R.string.alert4below)
+            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    radius = 3;
+                    loadingDialog.show();
+                    setClosedDate(currentLat, currentLat,radius);
+                }
+            })
+            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent i = new Intent(ChoosePlaceActivity.this, TravelSummaryActivity.class);
+                    i.putExtra(ConstantIntent.PLACELIST,placeInfoDtoList);
+                    startActivity(i);
+                    finish();
+                    overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.fade_in);
+                }
+            });
 
         AlertDialog alertDialog = builder.create();
         alertDialog.show();

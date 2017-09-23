@@ -21,4 +21,5 @@
     <string name="alert4below">하루에 4군데 이상은 가기 힘듭니다. 계속 하시겠습니까?</string>
     <string name="alert5below">하루에 추가할 수 있는 최대 일정에 도달했습니다. 더 이상의         일정 선택은 불가능합니다.</string>
     <string name="warning">경고</string>
+    <string name="AND">and</string>
 </resources>
