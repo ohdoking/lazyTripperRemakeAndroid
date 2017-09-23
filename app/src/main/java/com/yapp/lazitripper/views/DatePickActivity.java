@@ -2,9 +2,13 @@ package com.yapp.lazitripper.views;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -31,36 +35,6 @@ public class DatePickActivity extends BaseAppCompatActivity {
         setContentView(R.layout.activity_date_pick);
         setHeader();
 
-        //뒤로가기, 액티비티 종료
-        ImageView leftImage = getLeftImageView();
-        leftImage.setImageResource(R.drawable.arrow);
-        leftImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-        //다음단계 버튼 -> 도시선택 액티비티
-        ImageView rightImage = getRightImageView();
-        rightImage.setImageResource(R.drawable.next_icon);
-        rightImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(datePick != null){
-
-                    Intent i = new Intent(DatePickActivity.this, ChooseCityActivity.class);
-                    i.putExtra("name",datePick.getText().toString());
-                    startActivity(i);
-                    finish();
-                    overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.fade_in);
-                }
-                else{
-                    Toast.makeText(DatePickActivity.this, "날짜를 선택해주세요", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
         datePick = (EditText) findViewById(R.id.datePick);
         datePick.setOnKeyListener(new View.OnKeyListener() {
             @Override
@@ -72,6 +46,34 @@ public class DatePickActivity extends BaseAppCompatActivity {
                 return false;
             }
         });
+
+        //다음단계 버튼 -> 도시선택 액티비티
+        Button btnMakeRoot = (Button) findViewById(R.id.next);
+        btnMakeRoot.setOnClickListener(
+                new Button.OnClickListener() {
+                    public void onClick(View v) {
+
+                        if(Integer.parseInt(datePick.getText().toString()) <= 30) {
+                            Intent i = new Intent(DatePickActivity.this, ChooseCityActivity.class);
+                            i.putExtra("name", Integer.parseInt(datePick.getText().toString()));
+                            startActivity(i);
+                            finish();
+                            overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.fade_in);
+                        }
+                        else if(Integer.parseInt(datePick.getText().toString()) > 30) {
+                            Animation shake = AnimationUtils.loadAnimation(DatePickActivity.this, R.anim.shake);
+                            datePick.startAnimation(shake);
+                            datePick.setText("30");
+                        }
+                        else if(TextUtils.isEmpty(datePick.getText().toString())) {
+                            Animation shake = AnimationUtils.loadAnimation(DatePickActivity.this, R.anim.shake);
+                            datePick.startAnimation(shake);
+                        }
+                    }
+                }
+        );
+
+
 
     }
 }

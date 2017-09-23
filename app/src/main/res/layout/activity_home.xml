@@ -20,39 +20,40 @@
         android:textColor="#9b9b9b" />
 
     <TextView
-        android:text="님,\n떠나고 싶은\n여행을 만나보세요"
+        android:text="님,\n편하게 여행지를\n골라보세요:-)"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView2"
         android:lines="4"
         android:textAlignment="inherit"
-        android:layout_marginTop="102dp"
+        android:layout_marginTop="70dp"
         android:textSize="30sp"
-        android:layout_marginLeft="66dp"
-        android:layout_marginRight="65dp"
-        android:textStyle="bold"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="90dp"
         android:textColor="#000000" />
 
     <Button
         android:id="@+id/btnMakeRoot"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/bt_corner"
         android:layout_gravity="center"
-        android:paddingLeft="80dp"
-        android:paddingRight="80dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:text="여행 만들기" />
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="90dp"
+        android:textStyle="bold"
+        android:text="여행만들기  >" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="50dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="100dp"
         android:text="최근 작성한 여행지"
         android:textAlignment="inherit"
-        android:textColor="#000000"
+        android:textColor="#FF767679"
         android:textSize="15sp" />
 
 

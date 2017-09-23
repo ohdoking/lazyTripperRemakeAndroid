@@ -102,7 +102,7 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
         sharedPreferenceStore = new SharedPreferenceStore<PickDate>(getApplicationContext(), ConstantStore.STORE);
 
         final PickDate pickDate = sharedPreferenceStore.getPreferences(ConstantStore.DATEKEY, PickDate.class);
-        Log.i("ohdoking",pickDate.getStartDate() + " / " + pickDate.getPeriod());
+        //Log.i("ohdoking",pickDate.getStartDate() + " / " + pickDate.getPeriod());
 
         //헤더
 //        ImageView rightImage = getRightImageView();
