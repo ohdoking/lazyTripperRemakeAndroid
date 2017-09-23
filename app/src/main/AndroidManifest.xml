@@ -18,20 +18,14 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:supportsRtl="true"
         android:largeHeap="true"
+        android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".views.MainActivity" />
         <activity android:name=".views.ChoosePlaceActivity" />
         <activity
             android:name=".views.SplashActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
         <activity android:name=".views.MyProfileActivity" />
         ChooseCityActivity
         <activity android:name=".views.ChooseCityActivity" />
@@ -63,12 +57,33 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".views.ProfileActivity"></activity>
+        <activity android:name=".views.ProfileActivity" />
         <activity
             android:name=".views.TravelSummaryActivity"
             android:label="@string/title_activity_travel_summary" />
         <activity android:name=".views.KeywordSelectActivity" />
-        <activity android:name=".views.HomeActivity"></activity>
+        <activity android:name=".views.HomeActivity" />
+        <activity
+            android:name=".views.KeywordActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".views.TestActivity"
+            android:label="@string/title_activity_test"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
+        <activity
+            android:name=".views.Test2Activity"
+            android:label="@string/title_activity_test2"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
     </application>
 
 </manifest>
