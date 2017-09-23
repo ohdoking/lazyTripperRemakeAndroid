@@ -1,4 +1,7 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
 
 android {
     compileSdkVersion 25
@@ -33,67 +36,87 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.1.1'
+
+    compile 'com.android.support:appcompat-v7:25.0.2'
     testCompile 'junit:junit:4.12'
 
     allprojects {
         repositories {
             maven { url "https://jitpack.io" }
+
         }
     }
     //progressbar
-    compile 'com.github.HotBitmapGG:RingProgressBar:V1.2.2'
+
+    //support
+    compile 'com.android.support:design:25.3.1'
 
     //Tag
-    compile 'me.gujun.android.taggroup:library:1.4@aar'
     //circular view
-    compile 'de.hdodenhof:circleimageview:2.1.0'
     //typekit
-    compile 'com.tsengvn:typekit:1.0.1'
 
     //api
-    compile 'com.squareup.retrofit2:retrofit:2.2.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
 
     // Firebase
+
+    //glide
+
+    //facebook
+
+    //    compile 'com.google.android.gms:play-services-appindexing:10.0.0'
+
+    compile 'com.facebook.android:facebook-android-sdk:[4,5)'
+//    compile 'com.google.android.gms:play-services-appindexing:10.0.0'
+
+
+    //tinder뭐시기
+    //timeline
+    //RecyclerView
+    //카드뷰
+    //compile project (':timelineview')
+    // calendar 라이브러리
+    //button
+
+    //loading
+
+    // card view
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+    compile 'com.github.vipulasri:timelineview:1.0.3'
+    compile 'com.github.vipulasri:timelineview:1.0.3'
+    compile 'com.android.support:appcompat-v7:25.1.1'
+    compile 'com.github.HotBitmapGG:RingProgressBar:V1.2.2'
+    compile 'me.gujun.android.taggroup:library:1.4@aar'
+    compile 'de.hdodenhof:circleimageview:2.1.0'
+    compile 'com.tsengvn:typekit:1.0.1'
+    compile 'com.squareup.retrofit2:retrofit:2.2.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'com.google.firebase:firebase-database:10.0.0'
     compile 'com.google.firebase:firebase-auth:10.0.0'
     compile 'com.google.firebase:firebase-appindexing:10.0.0'
-
-    //glide
     compile 'com.github.bumptech.glide:glide:3.7.0'
-
-    //facebook
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
-//    compile 'com.google.android.gms:play-services-appindexing:10.0.0'
-    //tinder뭐시기
     compile 'com.lorentzos.swipecards:library:1.0.9'
-    //timeline
-    compile 'com.github.vipulasri:timelineview:1.0.3'
-    //RecyclerView
-    compile 'com.android.support:recyclerview-v7:25.+'
-    //카드뷰
-    compile 'com.android.support:cardview-v7:25.+'
-    //compile project (':timelineview')
-    compile 'com.github.vipulasri:timelineview:1.0.3'
-    // calendar 라이브러리
+    compile 'com.android.support:recyclerview-v7:25.3.1'
+    compile 'com.android.support:cardview-v7:25.3.1'
     compile 'com.squareup:android-times-square:1.6.5@aar'
     compile 'com.google.android.gms:play-services:10.0.0'
-    //button
     compile 'com.github.medyo:fancybuttons:1.8.3'
-
     compile 'com.wx.wheelview:wheelview:1.3.3'
-
     compile 'noman.weekcalendar:weekcalendar:1.0.6'
     compile 'devs.mulham.horizontalcalendar:horizontalcalendar:1.1.0'
-
-    //loading
     compile 'me.zhanghai.android.materialprogressbar:library:1.3.0'
-
 
     // card view
     compile 'com.frosquivel:scrollinfinite:2.0'
+
     //geo fire
     compile 'com.firebase:geofire-android:2.1.2'
+
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.github.igalata:Bubble-Picker:v0.2.4'
+    compile 'com.android.support:design:25.3.1'
+    testCompile 'junit:junit:4.12'
+
 }
 apply plugin: 'com.google.gms.google-services'

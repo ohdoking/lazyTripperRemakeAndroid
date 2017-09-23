@@ -57,8 +57,6 @@ import retrofit2.Response;
 
 public class ChooseCityActivity extends BaseAppCompatActivity {
 
-
-
     WheelView countryDropDown;
     WheelView cityDropDown;
 //    LazyWeekCalendar weekCalendar;

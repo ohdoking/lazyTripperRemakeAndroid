@@ -192,7 +192,7 @@ public class TravelSummaryActivity extends BaseAppCompatActivity implements OnMa
         key = myRef.child("user").child(uuid).child("Travel").push().getKey();
         //일정 작성한 날의 시작일.
         startdate = fmt.format(scheduleDate.getStartDate());
-        // 선택 엑티비티에서 선택한 장소에 대한 정보를 가져옴.
+        // 선택 액티비티에서 선택한 장소에 대한 정보를 가져옴.
         Intent intent = getIntent();
         ArrayList<PlaceInfoDto> beforeSelectPlaceList =
                 (ArrayList<PlaceInfoDto>)intent.getSerializableExtra(ConstantIntent.PLACELIST);
