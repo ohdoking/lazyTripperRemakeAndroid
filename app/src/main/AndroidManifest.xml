@@ -33,7 +33,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".views.MyProfileActivity" />
-        ChooseCityActivity
+        
         <activity android:name=".views.ChooseCityActivity" />
         <activity android:name=".views.TempActivity" />
         <activity android:name=".views.LoginActivity" />
@@ -70,8 +70,17 @@
         <activity android:name=".views.KeywordSelectActivity" />
         <activity android:name=".views.HomeActivity" />
         <activity
+
             android:theme="@style/Theme.Transparent"
             android:name=".views.TempScheduleActivity"></activity>
+
+        <activity android:name=".views.KeywordActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+
+        </activity>
+
+
+
     </application>
 
 </manifest>
