@@ -41,6 +41,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light" >
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
     <style name="FacebookLoginButton">
         <item name="android:textSize">@dimen/calendar_text_small</item>
         <item name="android:background">@drawable/facebook_btn</item>
