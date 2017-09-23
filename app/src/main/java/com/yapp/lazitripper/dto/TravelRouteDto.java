@@ -5,6 +5,9 @@ package com.yapp.lazitripper.dto;
 /**
  * Created by donghyunkim on 2017. 3. 30..
  */
+
+import com.google.android.gms.maps.model.LatLng;
+
 /**
  * Created by ESENS on 2017-03-12.
  * DB에 넣을 여행기록
@@ -17,6 +20,8 @@ public class TravelRouteDto {
     private String address;
     private String imageURL;
     private float rating_tot;
+    private double latitude;
+    private double longitude;
 
     public TravelRouteDto(int contenttypeid, int contentid, String title, String address, String imageURL, float rating_tot) {
         this.contenttypeid = contenttypeid;
@@ -27,7 +32,37 @@ public class TravelRouteDto {
         this.rating_tot = rating_tot;
     }
 
+    public void setLatLng(LatLng latLng){
+        this.latitude = latLng.latitude;
+        this.longitude = latLng.longitude;
+    }
+
+    public LatLng getLatLng(){
+        return new LatLng(latitude, longitude);
+    }
+
     public TravelRouteDto() {
+    }
+
+    public TravelRouteDto(String title, String imageURL) {
+        this.title = title;
+        this.imageURL = imageURL;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
     public int getContenttypeid() {

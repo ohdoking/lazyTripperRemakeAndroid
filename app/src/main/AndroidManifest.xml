@@ -13,6 +13,9 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
+    <uses-permission android:name="android.permission.WRITE_OWNER_DATA"/>
+    <uses-permission android:name="android.permission.READ_OWNER_DATA"/>
+
     <application
         android:name=".common.LazitripperApplication"
         android:allowBackup="true"
@@ -28,12 +31,11 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".views.MyProfileActivity" />
-        
+
         <activity android:name=".views.ChooseCityActivity" />
         <activity android:name=".views.TempActivity" />
         <activity android:name=".views.LoginActivity" />
@@ -57,7 +59,7 @@
              Note that the API key is linked to the encryption key used to sign the APK.
              You need a different API key for each encryption key, including the release key that is used to
              sign the APK for publishing.
-             You can define the keys for the debug and release targets in src/debug/ and src/release/. 
+             You can define the keys for the debug and release targets in src/debug/ and src/release/.
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -69,6 +71,10 @@
             android:label="@string/title_activity_travel_summary" />
         <activity android:name=".views.KeywordSelectActivity" />
         <activity android:name=".views.HomeActivity" />
+
+        <activity android:name=".views.TravelDiaryActivity">
+        </activity>
+
         <activity
 
             android:theme="@style/Theme.Transparent"
