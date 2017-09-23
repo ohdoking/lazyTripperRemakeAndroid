@@ -43,8 +43,8 @@ public class TempScheduleActivity extends BaseAppCompatActivity {
     private ArrayList<TimelineRow> timelineRowsList = new ArrayList<>();
     ArrayAdapter<TimelineRow> myAdapter;
 
-    int imageSize = 130;
-    int backgroundSize = 150;
+    int imageSize = 115;
+    int backgroundSize = 130;
     String point = " · ";
 
     @Override
@@ -177,7 +177,7 @@ public class TempScheduleActivity extends BaseAppCompatActivity {
     private TimelineRow createEmptyTimelineRow(int index){
         // Create new timeline row (pass your Id)
         TimelineRow myRow = new TimelineRow(index);
-        myRow.setBackgroundColor(Color.CYAN);
+        myRow.setBackgroundColor(Color.GRAY);
         myRow.setBackgroundSize(20);
         return myRow;
     }

@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:background="#77000000"
+    android:background="#55000000"
     android:id="@+id/linearlayoutservicerow">
 
     <ListView

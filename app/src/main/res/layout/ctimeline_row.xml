@@ -6,14 +6,14 @@
     >
 
     <RelativeLayout
-        android:layout_width="100dp"
+        android:layout_width="115dp"
         android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:padding="5dp"
 
         >
 
         <TextView
-            android:paddingTop="60dp"
+            android:paddingTop="50dp"
             android:id="@+id/crowDesc"
             android:layout_width="match_parent"
             android:textAlignment="textEnd"
@@ -29,8 +29,8 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_width="150dp"
-        android:layout_height="200dp"
+        android:layout_width="130dp"
+        android:layout_height="145dp"
         >
 
 
@@ -74,14 +74,12 @@
             android:layout_centerInParent="true"
             />
 
-
-
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:padding="5dp"
         >
 
         <TextView
@@ -93,7 +91,7 @@
             />
 
         <TextView
-            android:paddingTop="60dp"
+            android:paddingTop="50dp"
             android:id="@+id/crowTitle"
             android:layout_width="wrap_content"
             android:textSize="20sp"
