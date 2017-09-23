@@ -18,6 +18,7 @@ import android.widget.ListView;
 
 import com.yapp.lazitripper.R;
 import com.yapp.lazitripper.common.ConstantIntent;
+import com.yapp.lazitripper.dto.AllTravelInfo;
 import com.yapp.lazitripper.dto.PlaceCount;
 import com.yapp.lazitripper.dto.PlaceInfoDto;
 import com.yapp.lazitripper.dto.TimelineRow;
@@ -37,7 +38,9 @@ public class TempScheduleActivity extends BaseAppCompatActivity {
 
 
     ImageView closeBtn;
-    private List<PlaceInfoDto> placeInfoDtoList;
+    private AllTravelInfo allTravelInfo;
+    private PlaceInfoDto lastPlaceInfoDto;
+    private int lastCount = 0;
 
     //Create Timeline Rows List
     private ArrayList<TimelineRow> timelineRowsList = new ArrayList<>();
@@ -45,6 +48,7 @@ public class TempScheduleActivity extends BaseAppCompatActivity {
 
     int imageSize = 115;
     int backgroundSize = 130;
+    int day=1;
     String point = " · ";
 
     @Override
@@ -56,20 +60,20 @@ public class TempScheduleActivity extends BaseAppCompatActivity {
         windowManager.dimAmount = 0.75f;
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
 
-        placeInfoDtoList = (List<PlaceInfoDto>) getIntent().getSerializableExtra(ConstantIntent.TEMPSCHEDULELIST);
-
-
+        allTravelInfo = (AllTravelInfo) getIntent().getSerializableExtra(ConstantIntent.TEMPSCHEDULELIST);
+        day = getIntent().getIntExtra(ConstantIntent.CURRENTDAY, 1);
         // Add Random Rows to the List
-        for (int i = 0; i < 15; i++) {
-            //add the new row to the list
-            if(i == 14){
-                timelineRowsList.add(createTimeLastLineRow(i,new PlaceInfoDto()));
-            }
-            else{
-                timelineRowsList.add(createTimeLineRow(i,new PlaceInfoDto()));
+        for (int i = 0; i < day; i++) {
+            for(int j = 0 ; j < allTravelInfo.getAllTraveInfo().get(i).getPlaceInfoDtoList().size(); j++ ){
+                PlaceInfoDto placeInfoDto = allTravelInfo.getAllTraveInfo().get(i).getPlaceInfoDtoList().get(j);
+                timelineRowsList.add(createTimeLineRow(lastCount,placeInfoDto));
+                lastPlaceInfoDto = placeInfoDto;
+                lastCount++;
             }
         }
-        timelineRowsList.add(createEmptyTimelineRow(16));
+        timelineRowsList.remove(lastCount-1);
+        timelineRowsList.add(createTimeLastLineRow(lastCount-1,lastPlaceInfoDto));
+        timelineRowsList.add(createEmptyTimelineRow(lastCount));
 
         //Create the Timeline Adapter
         myAdapter = new TimelineViewAdapter(this, 0, timelineRowsList,
@@ -139,12 +143,12 @@ public class TempScheduleActivity extends BaseAppCompatActivity {
 
         TimelineRow myRow = new TimelineRow(index);
         if(index%2==0){
-            myRow.setTitle(point + "Paris");
+            myRow.setTitle(point + placeInfoDto.getTitle());
         }
         else{
-            myRow.setDescription("Paris" + point);
+            myRow.setDescription(placeInfoDto.getTitle() + point);
         }
-        myRow.setImage("http://holotrip.co.kr/wp-content/uploads/2017/05/%EC%83%B9%EB%93%9C%EB%A7%88%EB%A5%B4%EC%8A%A4-%EA%B3%B5%EC%9B%90.jpg");
+        myRow.setImage(placeInfoDto.getFirstimage());
         myRow.setBellowLineColor(Color.GRAY);
         myRow.setBellowLineSize(4);
         myRow.setImageSize(imageSize);
@@ -157,12 +161,12 @@ public class TempScheduleActivity extends BaseAppCompatActivity {
 
         TimelineRow myRow = new TimelineRow(index);
         if(index%2==0){
-            myRow.setTitle(point + "Paris");
+            myRow.setTitle(point + placeInfoDto.getTitle());
         }
         else{
-            myRow.setDescription("Paris" + point);
+            myRow.setDescription(placeInfoDto.getTitle()+ point);
         }
-        myRow.setImage("http://holotrip.co.kr/wp-content/uploads/2017/05/%EC%83%B9%EB%93%9C%EB%A7%88%EB%A5%B4%EC%8A%A4-%EA%B3%B5%EC%9B%90.jpg");
+        myRow.setImage(placeInfoDto.getFirstimage());
         myRow.setBellowLineColor(Color.GRAY);
         myRow.setBellowLineSize(4);
         myRow.setImageSize(imageSize);
