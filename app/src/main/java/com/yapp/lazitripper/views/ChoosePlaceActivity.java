@@ -39,8 +39,10 @@ import com.google.firebase.database.ValueEventListener;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 import com.yapp.lazitripper.R;
 import com.yapp.lazitripper.common.ConstantIntent;
+import com.yapp.lazitripper.dto.AllTravelInfo;
 import com.yapp.lazitripper.dto.PlaceCount;
 import com.yapp.lazitripper.dto.PlaceInfoDto;
+import com.yapp.lazitripper.dto.TravelInfo;
 import com.yapp.lazitripper.dto.common.CommonResponse;
 import com.yapp.lazitripper.network.LaziTripperKoreanTourClient;
 import com.yapp.lazitripper.service.LaziTripperKoreanTourService;
@@ -74,6 +76,8 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
     public LaziTripperKoreanTourService laziTripperKoreanTourService;
     private String TAG = "ChoosePlaceActivity";
 
+    AllTravelInfo allTravelInfo;
+
     Integer cityCode;
     Integer day;
     Integer totalDay;
@@ -81,17 +85,9 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
     TextView discriptionCountTextView;
 
     TextView titlePlaceNameTextView;
+    TextView nextDayTextView;
 
     LoadingDialog loadingDialog;
-
-    /*
-        기본 선택 값들
-
-        Integer landMarkCount = 4;
-        Integer restaurantCount = 3;
-        Integer hotelCount = 1;
-    * */
-    PlaceCount placeCount;
 
     Integer locationCount = 0;
     //0. 랜드마크, 1. 레스토랑 2. 호텔
@@ -131,31 +127,35 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
         setHeader();
         setContentView(R.layout.activity_choose_place);
 
+        //TODO day를 받아와서 넣어줘야함
+        Intent beforeIntent = getIntent();
+        day = beforeIntent.getIntExtra(ConstantIntent.CURRENTDAY, 0);
+        allTravelInfo = (AllTravelInfo) beforeIntent.getSerializableExtra(ConstantIntent.AllTRAVELINFO);
+        totalDay = allTravelInfo.getTotalDay();
+        //이전 엑티비티에서 city code를 가져옴
+        cityCode = allTravelInfo.getAllTraveInfo().get(day-1).getCityCode();
 
 //        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 //        setProgressBarIndeterminateVisibility(true);
         array = new ArrayList<>();
         hateList = new ArrayList<>();
 
-
-        //이전 엑티비티에서 city code를 가져옴
-        cityCode = getIntent().getIntExtra(ConstantIntent.CITYCODE,1);
-        placeCount = (PlaceCount) getIntent().getSerializableExtra(ConstantIntent.PLACECOUNT);
-
         initView();
-        //TODO day를 받아와서 넣어줘야함
-        day = 1;
-        //TODO Total day를 받아와서 넣어줘야함
-        totalDay = 1;
+
         titlePlaceNameTextView.setText(makeTitleName(day, cityCode));
         titlePlaceNameTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                allTravelInfo.getAllTraveInfo().get(day-1).setPlaceInfoDtoList(placeInfoDtoList);
                 Intent i = new Intent(ChoosePlaceActivity.this, TempScheduleActivity.class);
-                i.putExtra(ConstantIntent.TEMPSCHEDULELIST,placeInfoDtoList);
+                i.putExtra(ConstantIntent.TEMPSCHEDULELIST,allTravelInfo);
+                i.putExtra(ConstantIntent.CURRENTDAY,day);
                 startActivity(i);
             }
         });
+
+
+        //nextDayTextView.setText(makeNextDayName(day, totalDay));
         //firebase settting
         geoFire = new GeoFire(geoFireRef);
         placeInfoRef = firebaseRef.child("placeInfo").child(String.valueOf(cityCode));
@@ -168,6 +168,7 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
 
     }
 
+
     /**
      * view 를 초기화화
      */
@@ -178,6 +179,7 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
         discriptionCountTextView = (TextView) findViewById(R.id.discription_count);
         overlayView = findViewById(R.id.overlay);
         titlePlaceNameTextView = (TextView) mCustomView.findViewById(R.id.place_name);
+        nextDayTextView = (TextView) mCustomView.findViewById(R.id.next_day);
     }
 
 
@@ -430,17 +432,9 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
                 //4개를 선택하면 더 선택할것인지 물어봄
                 if(locationCount.equals(5)){
                     Toast.makeText(ChoosePlaceActivity.this,R.string.alert5below, Toast.LENGTH_SHORT).show();
-                    if(totalDay == day){
-                        //TODO 모든 날의 일정을 다 설정하면 다음 써머리화면으로 넘어가야함(데이터를 한꺼번에 넘김?)
-                        Intent i = new Intent(ChoosePlaceActivity.this, TravelSummaryActivity.class);
-                        i.putExtra(ConstantIntent.PLACELIST,placeInfoDtoList);
-                        startActivity(i);
-                        finish();
-                        overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.fade_in);
-                    }
-                    else{
-                        //TODO 다시 해당 뷰를 호출해야함(다음 날 설정)
-                    }
+
+                    goNextActivity();
+                    overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.fade_in);
                 }
                 else if (locationCount.equals(4)){
                     showAlertDialog();
@@ -618,6 +612,9 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
         overlayView.startAnimation(animation);
     }
 
+    /**
+     * 경고메시지
+     */
     void showAlertDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this)
             .setTitle(R.string.warning)
@@ -634,16 +631,34 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
             .setNegativeButton("No", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    Intent i = new Intent(ChoosePlaceActivity.this, TravelSummaryActivity.class);
-                    i.putExtra(ConstantIntent.PLACELIST,placeInfoDtoList);
-                    startActivity(i);
-                    finish();
-                    overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.fade_in);
+                    goNextActivity();
                 }
             });
 
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    /**
+     * 다음페이지로 전환
+     */
+    private void goNextActivity(){
+        //TODO 모든 날의 일정을 다 설정하면 다음 써머리화면으로 넘어가야함(데이터를 한꺼번에 넘김?)
+        // 결과 데이터를
+        allTravelInfo.getAllTraveInfo().get(day-1).setPlaceInfoDtoList(placeInfoDtoList);
+        if(day.equals(totalDay)){
+            Intent i = new Intent(ChoosePlaceActivity.this, TravelSummaryActivity.class);
+            i.putExtra(ConstantIntent.AllTRAVELINFO, allTravelInfo);
+            startActivity(i);
+            finish();
+        }
+        else{
+            Intent i = new Intent(ChoosePlaceActivity.this, ChoosePlaceActivity.class);
+            i.putExtra(ConstantIntent.AllTRAVELINFO,allTravelInfo);
+            i.putExtra(ConstantIntent.CURRENTDAY,++day);
+            startActivity(i);
+            finish();
+        }
     }
 
 }

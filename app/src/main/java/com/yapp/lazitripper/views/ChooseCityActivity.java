@@ -1,5 +1,6 @@
 package com.yapp.lazitripper.views;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -17,10 +18,13 @@ import com.google.firebase.database.ValueEventListener;
 import com.wx.wheelview.adapter.ArrayWheelAdapter;
 import com.wx.wheelview.widget.WheelView;
 import com.yapp.lazitripper.R;
+import com.yapp.lazitripper.common.ConstantIntent;
+import com.yapp.lazitripper.dto.AllTravelInfo;
 import com.yapp.lazitripper.dto.ChooseDate;
 import com.yapp.lazitripper.dto.PickDate;
 import com.yapp.lazitripper.dto.RegionCodeDto;
 import com.yapp.lazitripper.dto.RemainingDay;
+import com.yapp.lazitripper.dto.TravelInfo;
 import com.yapp.lazitripper.dto.common.CommonResponse;
 import com.yapp.lazitripper.network.LaziTripperKoreanTourClient;
 import com.yapp.lazitripper.service.LaziTripperKoreanTourService;
@@ -122,23 +126,13 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
         rightImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(chooseDate.getFinishDate() == null ) {
-                    chooseDate.setStartDate(pickDate.getStartDate());
-                    chooseDate.setFinishDate(pickDate.getStartDate());
-                    chooseDate.setPeriod(1L);
-                }
 
-                if(checkAlreadyIncludeDate(chooseDate.getStartDate())){
-                    Toast.makeText(ChooseCityActivity.this,
-                            "이미 일정을 짠 스케쥴 입니다.", Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    //shared에 선택한 스케쥴 날짜를 넣는다
-                    sharedPreferenceStore.savePreferences(ConstantStore.SCHEDULE_DATE, chooseDate);
-                    SetPlaceCountDialog setPlaceCountDialog = new SetPlaceCountDialog(ChooseCityActivity.this, cityNum);
-                    setPlaceCountDialog.show();
-                    setPlaceCountDialog.setCancelable(true);
-                }
+                AllTravelInfo allTravelInfo = setAllTravleInfo();
+                Intent i = new Intent(ChooseCityActivity.this, ChoosePlaceActivity.class);
+                i.putExtra(ConstantIntent.AllTRAVELINFO, allTravelInfo);
+                i.putExtra(ConstantIntent.CURRENTDAY,1);
+                startActivity(i);
+                finish();
             }
         });
 
@@ -454,6 +448,31 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
 
         }
         return tempList;
+    }
+
+    //TODO 삭제해야할 목객체
+    public AllTravelInfo setAllTravleInfo(){
+        AllTravelInfo allTravelInfo = new AllTravelInfo();
+
+        allTravelInfo.setTotalDay(3);
+
+        TravelInfo travelInfo = new TravelInfo();
+        travelInfo.setDay(1);
+        travelInfo.setCityCode(1);
+
+        TravelInfo travelInfo2 = new TravelInfo();
+        travelInfo2.setDay(2);
+        travelInfo2.setCityCode(2);
+
+        TravelInfo travelInfo3 = new TravelInfo();
+        travelInfo3.setDay(3);
+        travelInfo3.setCityCode(3);
+
+        allTravelInfo.setTraveInfoItem(travelInfo);
+        allTravelInfo.setTraveInfoItem(travelInfo2);
+        allTravelInfo.setTraveInfoItem(travelInfo3);
+
+        return allTravelInfo;
     }
 
 
