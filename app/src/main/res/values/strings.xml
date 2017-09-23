@@ -18,4 +18,8 @@
     <string name="exception">Exception: %1$s</string>
     <string name="title_activity_travel_summary">Map</string>
     <string name="back_cause">"한번 더 뒤로 가기 버튼을 누르시면 저장되지 않은 내용이 전부 사라집니다."</string>
+
+    <!-- xml에서 사용 -->
+    <string name="title_text">20170819 작성한 여행일지</string>
+    <string name="item_text">1일차 (부산)</string>
 </resources>

@@ -33,7 +33,7 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.1.1'
+    compile 'com.android.support:appcompat-v7:25.0.2'
     testCompile 'junit:junit:4.12'
 
     allprojects {
@@ -43,6 +43,9 @@ dependencies {
     }
     //progressbar
     compile 'com.github.HotBitmapGG:RingProgressBar:V1.2.2'
+
+    //support
+    compile 'com.android.support:design:25.3.1'
 
     //Tag
     compile 'me.gujun.android.taggroup:library:1.4@aar'
@@ -66,6 +69,8 @@ dependencies {
     //facebook
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
 //    compile 'com.google.android.gms:play-services-appindexing:10.0.0'
+
+
     //tinder뭐시기
     compile 'com.lorentzos.swipecards:library:1.0.9'
     //timeline
@@ -89,7 +94,6 @@ dependencies {
 
     //loading
     compile 'me.zhanghai.android.materialprogressbar:library:1.3.0'
-
 
     // card view
     compile 'com.frosquivel:scrollinfinite:2.0'
