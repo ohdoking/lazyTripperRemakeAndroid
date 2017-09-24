@@ -1,6 +1,5 @@
 package com.yapp.lazitripper.views;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -8,7 +7,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -20,7 +18,6 @@ import com.wx.wheelview.widget.WheelView;
 import com.yapp.lazitripper.R;
 import com.yapp.lazitripper.common.ConstantIntent;
 import com.yapp.lazitripper.dto.AllTravelInfo;
-import com.yapp.lazitripper.dto.ChooseDate;
 import com.yapp.lazitripper.dto.PickDate;
 import com.yapp.lazitripper.dto.RegionCodeDto;
 import com.yapp.lazitripper.dto.RemainingDay;
@@ -31,14 +28,9 @@ import com.yapp.lazitripper.service.LaziTripperKoreanTourService;
 import com.yapp.lazitripper.store.ConstantStore;
 import com.yapp.lazitripper.store.SharedPreferenceStore;
 import com.yapp.lazitripper.views.bases.BaseAppCompatActivity;
-import com.yapp.lazitripper.views.component.weekcalendar.LazyWeekCalendar;
-import com.yapp.lazitripper.views.component.weekcalendar.OnDateClickListener;
 import com.yapp.lazitripper.views.component.weekcalendar2.HorizontalCalendar;
 import com.yapp.lazitripper.views.component.weekcalendar2.HorizontalCalendarListener;
 import com.yapp.lazitripper.views.dialog.LoadingDialog;
-import com.yapp.lazitripper.views.dialog.SetPlaceCountDialog;
-
-import org.joda.time.DateTime;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -99,6 +91,9 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_city);
         setHeader();
+
+        Intent intent = getIntent();
+        String data = intent.getStringExtra("date");
 
         //total 날짜
         sharedPreferenceStore = new SharedPreferenceStore<PickDate>(getApplicationContext(), ConstantStore.STORE);
