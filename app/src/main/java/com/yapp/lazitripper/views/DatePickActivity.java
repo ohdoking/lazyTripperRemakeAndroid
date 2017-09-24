@@ -45,23 +45,27 @@ public class DatePickActivity extends BaseAppCompatActivity {
                 new Button.OnClickListener() {
                     public void onClick(View v) {
 
-                        if(Integer.parseInt(datePick.getText().toString()) <= 30 && Integer.parseInt(datePick.getText().toString()) > 0) {
-                            Intent i = new Intent(DatePickActivity.this, ChooseCityActivity.class);
-                            i.putExtra("date", datePick.getText().toString());
-                            startActivity(i);
-                            //finish();
-                            overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.fade_in);
+
+                        if(TextUtils.isEmpty(datePick.getText().toString())){
+                            Toast.makeText(DatePickActivity.this, "숫자를 입력하세요", Toast.LENGTH_SHORT).show();
+                            return;
                         }
-                        else if(Integer.parseInt(datePick.getText().toString()) > 30) {
+                        else if(Integer.parseInt(datePick.getText().toString()) == 0) {
+                            Animation shake = AnimationUtils.loadAnimation(DatePickActivity.this, R.anim.shake);
+                            datePick.startAnimation(shake);
+                        }
+                       else if(Integer.parseInt(datePick.getText().toString()) > 30) {
                             Animation shake = AnimationUtils.loadAnimation(DatePickActivity.this, R.anim.shake);
                             datePick.startAnimation(shake);
                             datePick.setText("30");
                         }
-                        else if(TextUtils.isEmpty(datePick.getText().toString())){
-                            Toast.makeText(DatePickActivity.this, "숫자를 입력하세요", Toast.LENGTH_SHORT).show();
-                            return;
+                        else if(Integer.parseInt(datePick.getText().toString()) <= 30 && Integer.parseInt(datePick.getText().toString()) > 0) {
+                            Intent i = new Intent(DatePickActivity.this, ChooseCityActivity.class);
+                            i.putExtra("date", datePick.getText().toString());
+                            startActivity(i);
+                            finish();
+                            overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.fade_in);
                         }
-
                     }
                 }
         );

@@ -209,41 +209,6 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
 //        weekCalendar = (LazyWeekCalendar) findViewById(R.id.weekCalendar);
 
 
-        if(remainString.equals("false")){
-            //week 캘린더 화면에 보이는 기간
-            Integer period = 7;
-            if(pickDate.getPeriod().intValue() < period){
-                period = pickDate.getPeriod().intValue();
-            }
-
-            //Week 캘린더
-            horizontalCalendar = new HorizontalCalendar.Builder(this, R.id.weekCalendar)
-                    .setChooseDate(chooseDates)
-                    .startDate(pickDate.getStartDate())
-                    .endDate(pickDate.getFinishDate())
-                    .datesNumberOnScreen(period)   // Number of Dates cells shown on screen (Recommended 5)
-                    .dayNameFormat("EEE")	  // WeekDay text format
-                    .dayNumberFormat("dd")    // Date format
-                    .monthFormat("MMM") 	  // Month format
-                    .showDayName(true)	  // Show or Hide dayName text
-                    .showMonthName(true)	  // Show or Hide month text
-                    .textColor(Color.LTGRAY, Color.WHITE)    // Text color for none selected Dates, Text color for selected Date.
-                    .selectedDateBackground(Color.GRAY)  // Background color of the selected date cell.
-                    .selectorColor(Color.RED)
-                    .centerToday(false)
-                    .build();
-
-            //날짜 선택
-            horizontalCalendar.setCalendarListener(new HorizontalCalendarListener() {
-                @Override
-                public void onDateSelected(Date date, int position) {
-                    chooseDate.setStartDate(date);
-                    chooseDate.setFinishDate(date);
-                    chooseDate.setPeriod(1L);
-
-                }
-            });
-        }
 
 
 
