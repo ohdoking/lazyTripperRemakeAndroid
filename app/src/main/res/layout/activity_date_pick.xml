@@ -41,6 +41,8 @@
         android:paddingLeft="20dp"
         android:paddingRight="40dp"
         android:paddingTop="5dp"
+        android:inputType="number"
+        android:imeOptions="actionDone"
         android:paddingBottom="5dp"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="90dp"

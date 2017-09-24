@@ -1,7 +1,6 @@
 package com.yapp.lazitripper.views;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,8 +19,6 @@ import android.view.animation.LinearInterpolator;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,7 +27,6 @@ import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQuery;
 import com.firebase.geofire.GeoQueryEventListener;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -38,15 +34,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
-import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 import com.yapp.lazitripper.R;
 import com.yapp.lazitripper.common.ConstantIntent;
 import com.yapp.lazitripper.dto.AllTravelInfo;
-import com.yapp.lazitripper.dto.PickDate;
-import com.yapp.lazitripper.dto.PlaceCount;
 import com.yapp.lazitripper.dto.PlaceInfoDto;
-import com.yapp.lazitripper.dto.TravelInfo;
 import com.yapp.lazitripper.dto.common.CommonResponse;
+import com.yapp.lazitripper.flinglibrary.SwipeFlingAdapterView;
 import com.yapp.lazitripper.network.LaziTripperKoreanTourClient;
 import com.yapp.lazitripper.service.LaziTripperKoreanTourService;
 import com.yapp.lazitripper.store.ConstantStore;
@@ -198,7 +191,6 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
      */
     void initView(){
         loadingDialog = new LoadingDialog(ChoosePlaceActivity.this);
-
         flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
         discriptionCountTextView = (TextView) findViewById(R.id.discription_count);
         overlayView = findViewById(R.id.overlay);
@@ -338,7 +330,6 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
     public static class ViewHolder{
         public ImageView background;
         public TextView name;
-        public ImageView image;
         public TextView _addr;
         public TextView addr;
         public TextView _tel;
@@ -377,7 +368,6 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
                 viewHolder = new ViewHolder();
                 viewHolder.background = (ImageView) rowView.findViewById(R.id.backgroundImage);
                 viewHolder.name = (TextView) rowView.findViewById(R.id.name);
-                viewHolder.image = (ImageView) rowView.findViewById(R.id.country_image);
                 viewHolder._addr = (TextView) rowView.findViewById(R.id._addr);
                 viewHolder.addr = (TextView) rowView.findViewById(R.id.addr);
                 viewHolder._tel = (TextView) rowView.findViewById(R.id._tel);
@@ -388,17 +378,15 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
             }else{
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-            PlaceInfoDto curItem = list.get(position);
-            Log.i("ohdoking",curItem.getTitle());
+            final PlaceInfoDto curItem = list.get(position);
 
-//            viewHolder.background.set(0xff556677);
             Glide.with(context).load(curItem.getFirstimage()).override(485, 710).centerCrop().into(viewHolder.background);
             viewHolder.name.setText(curItem.getTitle());
-            viewHolder.image.setImageDrawable(getResources().getDrawable(R.drawable.korea));
             viewHolder._addr.setText("ADD");
             viewHolder.addr.setText(curItem.getAddr1());
             viewHolder._tel.setText("TEL");
             viewHolder.tel.setText(curItem.getTel());
+
             return rowView;
         }
     }
@@ -457,7 +445,7 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
                 //5개이상은 선택할 수 없음 알림 메시지와 함께 다음 일정으로
                 //4개를 선택하면 더 선택할것인지 물어봄
                 if(locationCount.equals(5)){
-                    Toast.makeText(ChoosePlaceActivity.this,R.string.alert5below, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ChoosePlaceActivity.this,R.string.alert5below, Toast.LENGTH_LONG).show();
 
                     goNextActivity();
                     overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.fade_in);
@@ -486,13 +474,14 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
 
         flingContainer.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
             @Override
-            public void onItemClicked(int itemPosition, Object dataObject) {
+            public void onItemClicked(int itemPosition, Object dataObject,View frame) {
                 PlaceInfoDto infodto = (PlaceInfoDto) dataObject;
-
-                Log.e(TAG,"position = " + itemPosition + ", Object" + infodto.getAddr1());
-                Intent intent = new Intent(getApplicationContext(),MyProfileActivity.class);
+                ImageView ivChoosePlace = (ImageView)frame.findViewById(R.id.backgroundImage);
+                Intent intent = new Intent(ChoosePlaceActivity.this,PlaceDetailActivity.class);
+                View sharedView = ivChoosePlace;
+                ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(ChoosePlaceActivity.this, sharedView, getString(R.string.transitionImageName));
                 intent.putExtra("placeInfo",infodto);
-                startActivity(intent);
+                startActivity(intent,transitionActivityOptions.toBundle());
 
             }
         });
@@ -535,7 +524,7 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
     }
 
     //지역 코드를 지역 명으로 변환해준다
-    private String makeTitleName(Integer day, Integer cityCode) {
+    public String makeTitleName(Integer day, Integer cityCode) {
 
         String name = null;
 
