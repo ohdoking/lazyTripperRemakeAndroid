@@ -24,10 +24,13 @@
         android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".views.MainActivity" />
-        <activity android:name=".views.ChoosePlaceActivity" />
+        <activity android:name=".views.MainActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".views.ChoosePlaceActivity"
+            android:screenOrientation="portrait"  />
         <activity
             android:name=".views.SplashActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,10 +39,14 @@
         </activity>
 
         <activity android:name=".views.PlaceDetailActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
-        <activity android:name=".views.ChooseCityActivity" />
-        <activity android:name=".views.TempActivity" />
-        <activity android:name=".views.LoginActivity" />
+        <activity android:name=".views.ChooseCityActivity"
+            android:screenOrientation="portrait"  />
+        <activity android:name=".views.TempActivity"
+            android:screenOrientation="portrait"  />
+        <activity android:name=".views.LoginActivity"
+            android:screenOrientation="portrait"  />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -52,8 +59,10 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".views.DatePickActivity" />
-        <activity android:name=".views.TimeLineActivity" />
+        <activity android:name=".views.DatePickActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".views.TimeLineActivity"
+            android:screenOrientation="portrait" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -66,22 +75,27 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".views.ProfileActivity" />
+        <activity android:name=".views.ProfileActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".views.TravelSummaryActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_travel_summary" />
-        <activity android:name=".views.KeywordSelectActivity" />
+        <activity android:name=".views.KeywordSelectActivity"
+            android:screenOrientation="portrait"  />
         <activity android:name=".views.HomeActivity" />
 
-        <activity android:name=".views.TravelDiaryActivity">
+        <activity android:name=".views.TravelDiaryActivity"
+            android:screenOrientation="portrait" >
         </activity>
 
         <activity
-
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Transparent"
             android:name=".views.TempScheduleActivity"></activity>
 
         <activity android:name=".views.KeywordActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
