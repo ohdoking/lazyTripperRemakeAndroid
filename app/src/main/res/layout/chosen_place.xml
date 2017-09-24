@@ -9,7 +9,8 @@
     <ImageView
         android:id="@+id/backgroundImage"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:transitionName="@string/transitionImageName"
+        android:layout_height="530dp" />
 
     <LinearLayout
         android:id="@+id/frameview"

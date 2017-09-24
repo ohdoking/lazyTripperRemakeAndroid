@@ -71,9 +71,11 @@ public class TempScheduleActivity extends BaseAppCompatActivity {
                 lastCount++;
             }
         }
-        timelineRowsList.remove(lastCount-1);
-        timelineRowsList.add(createTimeLastLineRow(lastCount-1,lastPlaceInfoDto));
-        timelineRowsList.add(createEmptyTimelineRow(lastCount));
+        if(lastCount != 0){
+            timelineRowsList.remove(lastCount-1);
+            timelineRowsList.add(createTimeLastLineRow(lastCount-1,lastPlaceInfoDto));
+            timelineRowsList.add(createEmptyTimelineRow(lastCount));
+        }
 
         //Create the Timeline Adapter
         myAdapter = new TimelineViewAdapter(this, 0, timelineRowsList,
@@ -110,13 +112,11 @@ public class TempScheduleActivity extends BaseAppCompatActivity {
                 this.currentVisibleItemCount = visibleItemCount;
                 this.totalItem = totalItemCount;
 
-
             }
 
             private void isScrollCompleted() {
                 if (totalItem - currentFirstVisibleItem == currentVisibleItemCount
                         && this.currentScrollState == SCROLL_STATE_IDLE) {
-
                     //TODO 데이터가 더있다면
 //                    for (int i = 0; i < 15; i++) {
 //                        myAdapter.add(createRandomTimelineRow(i));

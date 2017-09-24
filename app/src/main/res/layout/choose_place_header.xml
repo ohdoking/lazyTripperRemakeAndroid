@@ -25,12 +25,24 @@
         android:textSize="25sp"
         android:id="@+id/place_name"/>
 
-    <TextView
-        android:layout_width="64dp"
+    <ImageView
+        android:src="@drawable/more"
+        android:id="@+id/preview"
+        android:layout_width="32dp"
+        android:layout_height="wrap_content"
+        android:maxHeight="64dp"
+        android:layout_gravity="right|center"
+        android:gravity="right"/>
+
+
+    <ImageView
+        android:src="@drawable/next_icon"
+        android:id="@+id/next_day"
+        android:layout_width="32dp"
         android:layout_height="wrap_content"
         android:maxHeight="64dp"
         android:layout_gravity="right|center"
         android:gravity="right"
-        android:id="@+id/next_day"/>
+       />
 
 </LinearLayout>
