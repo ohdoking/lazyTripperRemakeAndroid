@@ -82,7 +82,9 @@
 
         <activity android:name=".views.KeywordActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".views.LoginActivity" />
         </activity>
 
 
