@@ -4,10 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by ohdoking on 2017. 9. 24..
- */
-
 public class AllTravelInfo implements Serializable {
 
     private int totalDay;
@@ -35,6 +31,11 @@ public class AllTravelInfo implements Serializable {
 
     public void setTraveInfoItem(TravelInfo TraveInfo) {
         this.allTraveInfo.add(TraveInfo);
+    }
+
+    public String toString(){
+        return allTraveInfo.get(0).getDay()
+                + allTraveInfo.get(0).getPlaceInfoDtoList().get(0).getAddr1();
     }
 
 }

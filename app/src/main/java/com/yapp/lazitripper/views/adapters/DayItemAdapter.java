@@ -49,4 +49,9 @@ public class DayItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return itemList.size();
     }
 
+    @Override
+    public int getItemViewType(int position){
+        return 0;
+    }
+
 }

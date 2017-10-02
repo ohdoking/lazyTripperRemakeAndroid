@@ -42,6 +42,7 @@ import com.yapp.lazitripper.common.ConstantIntent;
 import com.yapp.lazitripper.dto.AllTravelInfo;
 import com.yapp.lazitripper.dto.PlaceCount;
 import com.yapp.lazitripper.dto.PlaceInfoDto;
+import com.yapp.lazitripper.dto.TravelDiary;
 import com.yapp.lazitripper.dto.TravelInfo;
 import com.yapp.lazitripper.dto.common.CommonResponse;
 import com.yapp.lazitripper.network.LaziTripperKoreanTourClient;
@@ -147,7 +148,7 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
             @Override
             public void onClick(View v) {
                 allTravelInfo.getAllTraveInfo().get(day-1).setPlaceInfoDtoList(placeInfoDtoList);
-                Intent i = new Intent(ChoosePlaceActivity.this, TempScheduleActivity.class);
+                Intent i = new Intent(ChoosePlaceActivity.this, TravelSummaryActivity.class);
                 i.putExtra(ConstantIntent.TEMPSCHEDULELIST,allTravelInfo);
                 i.putExtra(ConstantIntent.CURRENTDAY,day);
                 startActivity(i);

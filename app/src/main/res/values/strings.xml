@@ -27,4 +27,10 @@
     <string name="title_text">20170819 작성한 여행일지</string>
     <string name="item_text">1일차 (부산)</string>
     <string name="AND">and</string>
+    <string name="number_ex">1</string>
+    <string name="item_location">부산</string>
+    <string name="title_ex">몽상드애월</string>
+    <string name="item_day_text">DAY  </string>
+    <string name="address_ex">제주특별자치도 애월읍 애월북서길 56-1</string>
 </resources>
+

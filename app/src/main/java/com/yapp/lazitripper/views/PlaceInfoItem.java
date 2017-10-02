@@ -18,6 +18,7 @@ public class PlaceInfoItem extends LinearLayout {
     TextView title, location, tel;
     ImageView thumbnail;
     TextView number;
+
     public PlaceInfoItem(Context context) {
         super(context);
 
@@ -32,12 +33,11 @@ public class PlaceInfoItem extends LinearLayout {
 
     private void init(Context context){
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.place_info_item,this,true);
+        inflater.inflate(R.layout.item_place_info,this,true);/*
         thumbnail = (ImageView) findViewById(R.id.thumbnail);
         title = (TextView) findViewById(R.id.place_title);
         location = (TextView) findViewById(R.id.place_location);
-        tel = (TextView) findViewById(R.id.place_tel);
-        number = (TextView) findViewById(R.id.number);
+        number = (TextView) findViewById(R.id.number);  */
 
     }
 
@@ -47,7 +47,6 @@ public class PlaceInfoItem extends LinearLayout {
     public void setTitle(String name){
         this.title.setText(name);
     }
-
     public void setLocatioin(String lat){
         this.location.setText(lat);
     }

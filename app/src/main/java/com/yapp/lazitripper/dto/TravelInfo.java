@@ -1,7 +1,5 @@
 package com.yapp.lazitripper.dto;
 
-import com.yapp.lazitripper.dto.PlaceInfoDto;
-
 import java.io.Serializable;
 import java.util.List;
 
