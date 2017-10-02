@@ -1,7 +1,6 @@
 package com.yapp.lazitripper.views;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,7 +19,6 @@ import android.view.animation.LinearInterpolator;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,28 +27,28 @@ import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQuery;
 import com.firebase.geofire.GeoQueryEventListener;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.lorentzos.flingswipe.SwipeFlingAdapterView;
+import com.google.gson.Gson;
 import com.yapp.lazitripper.R;
 import com.yapp.lazitripper.common.ConstantIntent;
 import com.yapp.lazitripper.dto.AllTravelInfo;
-import com.yapp.lazitripper.dto.PlaceCount;
 import com.yapp.lazitripper.dto.PlaceInfoDto;
-import com.yapp.lazitripper.dto.TravelDiary;
-import com.yapp.lazitripper.dto.TravelInfo;
 import com.yapp.lazitripper.dto.common.CommonResponse;
+import com.yapp.lazitripper.flinglibrary.SwipeFlingAdapterView;
 import com.yapp.lazitripper.network.LaziTripperKoreanTourClient;
 import com.yapp.lazitripper.service.LaziTripperKoreanTourService;
+import com.yapp.lazitripper.store.ConstantStore;
+import com.yapp.lazitripper.store.SharedPreferenceStore;
 import com.yapp.lazitripper.util.TravelRoute;
 import com.yapp.lazitripper.views.bases.BaseAppCompatActivity;
 import com.yapp.lazitripper.views.dialog.LoadingDialog;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,7 +84,8 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
     TextView discriptionCountTextView;
 
     TextView titlePlaceNameTextView;
-    TextView nextDayTextView;
+    ImageView nextDayImageView;
+    ImageView previewTextView;
 
     LoadingDialog loadingDialog;
 
@@ -109,6 +108,8 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference firebaseRef = database.getReference("lazitripper");
     DatabaseReference geoFireRef = firebaseRef.child("geofire");
+    DatabaseReference userInfoRef = firebaseRef.child("user");
+
     DatabaseReference placeInfoRef;
 
     GeoQuery geoQuery;
@@ -120,6 +121,9 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
     Float currentLon;
 
     View overlayView;
+
+    private String uuid;
+    private SharedPreferenceStore sharedPreferenceStore1;
 
     ArrayList<PlaceInfoDto> placeInfoDtoList = new ArrayList<PlaceInfoDto>();
     @Override
@@ -144,17 +148,6 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
         initView();
 
         titlePlaceNameTextView.setText(makeTitleName(day, cityCode));
-        titlePlaceNameTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                allTravelInfo.getAllTraveInfo().get(day-1).setPlaceInfoDtoList(placeInfoDtoList);
-                Intent i = new Intent(ChoosePlaceActivity.this, TravelSummaryActivity.class);
-                i.putExtra(ConstantIntent.TEMPSCHEDULELIST,allTravelInfo);
-                i.putExtra(ConstantIntent.CURRENTDAY,day);
-                startActivity(i);
-            }
-        });
-
 
         //nextDayTextView.setText(makeNextDayName(day, totalDay));
         //firebase settting
@@ -167,6 +160,29 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
         discriptionCountTextView.setText(makeSentence(thisCount));
         renderItem();
 
+        nextDayImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!locationCount.equals(0)){
+                    goNextActivity();
+                }
+                else{
+                    Toast.makeText(ChoosePlaceActivity.this, R.string.more1, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        previewTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                allTravelInfo.getAllTraveInfo().get(day-1).setPlaceInfoDtoList(placeInfoDtoList);
+                Intent i = new Intent(ChoosePlaceActivity.this, TempScheduleActivity.class);
+                i.putExtra(ConstantIntent.TEMPSCHEDULELIST,allTravelInfo);
+                i.putExtra(ConstantIntent.CURRENTDAY,day);
+                startActivity(i);
+            }
+        });
+
     }
 
 
@@ -175,12 +191,12 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
      */
     void initView(){
         loadingDialog = new LoadingDialog(ChoosePlaceActivity.this);
-
         flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
         discriptionCountTextView = (TextView) findViewById(R.id.discription_count);
         overlayView = findViewById(R.id.overlay);
         titlePlaceNameTextView = (TextView) mCustomView.findViewById(R.id.place_name);
-        nextDayTextView = (TextView) mCustomView.findViewById(R.id.next_day);
+        nextDayImageView = (ImageView) mCustomView.findViewById(R.id.next_day);
+        previewTextView = (ImageView) findViewById(R.id.preview);
     }
 
 
@@ -245,7 +261,7 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
                         array = getFilterList(array, hateList);
 
                         if(array.size() == 0){
-                            loadingDialog.show();
+                            //loadingDialog.show();   // todo 계속중지되어서주석처리했는데확인해주세여
                             setClosedDate(currentLat,currentLon, tempRadius*2);
                         }
 
@@ -277,7 +293,7 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
         Call<CommonResponse<PlaceInfoDto>> callRelionInfo;
 
         //contenttype이 관광지를를 가져옴
-       callRelionInfo = laziTripperKoreanTourService.getPlaceInfoByCity(pageNum,page,"B","Y","AND","LaziTripper",cityCode, contentTypeId);
+        callRelionInfo = laziTripperKoreanTourService.getPlaceInfoByCity(pageNum,page,"B","Y","AND","LaziTripper",cityCode, contentTypeId);
         callRelionInfo.enqueue(new Callback<CommonResponse<PlaceInfoDto>>() {
             @Override
             public void onResponse(Call<CommonResponse<PlaceInfoDto>> call, Response<CommonResponse<PlaceInfoDto>> response) {
@@ -314,7 +330,6 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
     public static class ViewHolder{
         public ImageView background;
         public TextView name;
-        public ImageView image;
         public TextView _addr;
         public TextView addr;
         public TextView _tel;
@@ -353,7 +368,6 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
                 viewHolder = new ViewHolder();
                 viewHolder.background = (ImageView) rowView.findViewById(R.id.backgroundImage);
                 viewHolder.name = (TextView) rowView.findViewById(R.id.name);
-                viewHolder.image = (ImageView) rowView.findViewById(R.id.country_image);
                 viewHolder._addr = (TextView) rowView.findViewById(R.id._addr);
                 viewHolder.addr = (TextView) rowView.findViewById(R.id.addr);
                 viewHolder._tel = (TextView) rowView.findViewById(R.id._tel);
@@ -364,17 +378,15 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
             }else{
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-            PlaceInfoDto curItem = list.get(position);
-            Log.i("ohdoking",curItem.getTitle());
+            final PlaceInfoDto curItem = list.get(position);
 
-//            viewHolder.background.set(0xff556677);
             Glide.with(context).load(curItem.getFirstimage()).override(485, 710).centerCrop().into(viewHolder.background);
             viewHolder.name.setText(curItem.getTitle());
-            viewHolder.image.setImageDrawable(getResources().getDrawable(R.drawable.korea));
             viewHolder._addr.setText("ADD");
             viewHolder.addr.setText(curItem.getAddr1());
             viewHolder._tel.setText("TEL");
             viewHolder.tel.setText(curItem.getTel());
+
             return rowView;
         }
     }
@@ -433,7 +445,7 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
                 //5개이상은 선택할 수 없음 알림 메시지와 함께 다음 일정으로
                 //4개를 선택하면 더 선택할것인지 물어봄
                 if(locationCount.equals(5)){
-                    Toast.makeText(ChoosePlaceActivity.this,R.string.alert5below, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ChoosePlaceActivity.this,R.string.alert5below, Toast.LENGTH_LONG).show();
 
                     goNextActivity();
                     overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.fade_in);
@@ -462,13 +474,15 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
 
         flingContainer.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
             @Override
-            public void onItemClicked(int itemPosition, Object dataObject) {
+            public void onItemClicked(int itemPosition, Object dataObject,View frame) {
                 PlaceInfoDto infodto = (PlaceInfoDto) dataObject;
-
-                Log.e(TAG,"position = " + itemPosition + ", Object" + infodto.getAddr1());
-                Intent intent = new Intent(getApplicationContext(),MyProfileActivity.class);
+                ImageView ivChoosePlace = (ImageView)frame.findViewById(R.id.backgroundImage);
+                Intent intent = new Intent(ChoosePlaceActivity.this,PlaceDetailActivity.class);
+                View sharedView = ivChoosePlace;
+                ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(ChoosePlaceActivity.this, sharedView, getString(R.string.transitionImageName));
                 intent.putExtra("placeInfo",infodto);
-                startActivity(intent);
+                startActivity(intent,transitionActivityOptions.toBundle());
+                finish(); //  추가했습니당
 
             }
         });
@@ -511,7 +525,7 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
     }
 
     //지역 코드를 지역 명으로 변환해준다
-    private String makeTitleName(Integer day, Integer cityCode) {
+    public String makeTitleName(Integer day, Integer cityCode) {
 
         String name = null;
 
@@ -553,7 +567,7 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
             default    : new Exception("no place code");
                 break;
         }
-        return day +"일차 한국 " + name;
+        return "DAY" +day +" " + name;
     }
 
     @Override
@@ -619,23 +633,23 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
      */
     void showAlertDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this)
-            .setTitle(R.string.warning)
-            .setIcon(R.mipmap.ic_launcher)
-            .setMessage(R.string.alert4below)
-            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    radius = 3;
-                    loadingDialog.show();
-                    setClosedDate(currentLat, currentLat,radius);
-                }
-            })
-            .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    goNextActivity();
-                }
-            });
+                .setTitle(R.string.warning)
+                .setIcon(R.mipmap.ic_launcher)
+                .setMessage(R.string.alert4below)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        radius = 3;
+                        loadingDialog.show();
+                        setClosedDate(currentLat, currentLat,radius);
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        goNextActivity();
+                    }
+                });
 
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
@@ -648,7 +662,16 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
         //TODO 모든 날의 일정을 다 설정하면 다음 써머리화면으로 넘어가야함(데이터를 한꺼번에 넘김?)
         // 결과 데이터를
         allTravelInfo.getAllTraveInfo().get(day-1).setPlaceInfoDtoList(placeInfoDtoList);
+
         if(day.equals(totalDay)){
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+            Gson gson = new Gson();
+            String jsonString = gson.toJson(allTravelInfo);
+            AllTravelInfo allTravelInfo1 = gson.fromJson(jsonString, AllTravelInfo.class);
+            sharedPreferenceStore1 = new SharedPreferenceStore(getApplicationContext(), ConstantStore.STORE);
+            uuid = (String)sharedPreferenceStore1.getPreferences(ConstantStore.UUID, String.class);
+            //firebase 에 데이터 저장
+            userInfoRef.child(uuid).child("Travel").child(String.valueOf(timestamp.getTime())).setValue(allTravelInfo1);
             Intent i = new Intent(ChoosePlaceActivity.this, TravelSummaryActivity.class);
             i.putExtra(ConstantIntent.AllTRAVELINFO, allTravelInfo);
             startActivity(i);

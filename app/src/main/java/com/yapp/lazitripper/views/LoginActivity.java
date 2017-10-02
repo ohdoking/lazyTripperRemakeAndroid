@@ -119,7 +119,7 @@ public class LoginActivity extends FragmentActivity {
                     sharedPreferenceStore.savePreferences(ConstantStore.UUID, uuid);
                     loadingDialog.dismiss();
 
-                    Intent i = new Intent(LoginActivity.this, KeywordSelectActivity.class);
+                    Intent i = new Intent(LoginActivity.this, KeywordActivity.class);
 
                     startActivity(i);
                     finish();
@@ -135,7 +135,7 @@ public class LoginActivity extends FragmentActivity {
 
         // 로그인 되어있으면 바로 접속
         if(isLoggedIn()){
-            Intent i = new Intent(LoginActivity.this, KeywordSelectActivity.class);
+            Intent i = new Intent(LoginActivity.this, KeywordActivity.class);
             startActivity(i);
         }
 

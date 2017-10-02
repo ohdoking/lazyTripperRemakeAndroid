@@ -1,6 +1,5 @@
 package com.yapp.lazitripper.views;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -8,7 +7,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -20,7 +18,6 @@ import com.wx.wheelview.widget.WheelView;
 import com.yapp.lazitripper.R;
 import com.yapp.lazitripper.common.ConstantIntent;
 import com.yapp.lazitripper.dto.AllTravelInfo;
-import com.yapp.lazitripper.dto.ChooseDate;
 import com.yapp.lazitripper.dto.PickDate;
 import com.yapp.lazitripper.dto.RegionCodeDto;
 import com.yapp.lazitripper.dto.RemainingDay;
@@ -31,14 +28,9 @@ import com.yapp.lazitripper.service.LaziTripperKoreanTourService;
 import com.yapp.lazitripper.store.ConstantStore;
 import com.yapp.lazitripper.store.SharedPreferenceStore;
 import com.yapp.lazitripper.views.bases.BaseAppCompatActivity;
-import com.yapp.lazitripper.views.component.weekcalendar.LazyWeekCalendar;
-import com.yapp.lazitripper.views.component.weekcalendar.OnDateClickListener;
 import com.yapp.lazitripper.views.component.weekcalendar2.HorizontalCalendar;
 import com.yapp.lazitripper.views.component.weekcalendar2.HorizontalCalendarListener;
 import com.yapp.lazitripper.views.dialog.LoadingDialog;
-import com.yapp.lazitripper.views.dialog.SetPlaceCountDialog;
-
-import org.joda.time.DateTime;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -99,6 +91,9 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_city);
         setHeader();
+
+        Intent intent = getIntent();
+        String data = intent.getStringExtra("date");
 
         //total 날짜
         sharedPreferenceStore = new SharedPreferenceStore<PickDate>(getApplicationContext(), ConstantStore.STORE);
@@ -214,41 +209,6 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
 //        weekCalendar = (LazyWeekCalendar) findViewById(R.id.weekCalendar);
 
 
-        if(remainString.equals("false")){
-            //week 캘린더 화면에 보이는 기간
-            Integer period = 7;
-            if(pickDate.getPeriod().intValue() < period){
-                period = pickDate.getPeriod().intValue();
-            }
-
-            //Week 캘린더
-            horizontalCalendar = new HorizontalCalendar.Builder(this, R.id.weekCalendar)
-                    .setChooseDate(chooseDates)
-                    .startDate(pickDate.getStartDate())
-                    .endDate(pickDate.getFinishDate())
-                    .datesNumberOnScreen(period)   // Number of Dates cells shown on screen (Recommended 5)
-                    .dayNameFormat("EEE")	  // WeekDay text format
-                    .dayNumberFormat("dd")    // Date format
-                    .monthFormat("MMM") 	  // Month format
-                    .showDayName(true)	  // Show or Hide dayName text
-                    .showMonthName(true)	  // Show or Hide month text
-                    .textColor(Color.LTGRAY, Color.WHITE)    // Text color for none selected Dates, Text color for selected Date.
-                    .selectedDateBackground(Color.GRAY)  // Background color of the selected date cell.
-                    .selectorColor(Color.RED)
-                    .centerToday(false)
-                    .build();
-
-            //날짜 선택
-            horizontalCalendar.setCalendarListener(new HorizontalCalendarListener() {
-                @Override
-                public void onDateSelected(Date date, int position) {
-                    chooseDate.setStartDate(date);
-                    chooseDate.setFinishDate(date);
-                    chooseDate.setPeriod(1L);
-
-                }
-            });
-        }
 
 
 

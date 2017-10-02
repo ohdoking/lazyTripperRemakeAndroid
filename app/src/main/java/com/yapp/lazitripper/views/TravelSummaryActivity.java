@@ -17,6 +17,7 @@ import com.yapp.lazitripper.views.bases.BaseAppCompatActivity;
 
 import java.util.List;
 
+import static android.R.id.list;
 import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 
 /*
@@ -27,7 +28,7 @@ public class TravelSummaryActivity extends BaseAppCompatActivity  {
 
     private AllTravelInfo allTravelInfo = new AllTravelInfo();
     private RecyclerView recyclerView;
-    private PlaceInfoAdapter recycler_adapter;
+    private PlaceInfoAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +44,16 @@ public class TravelSummaryActivity extends BaseAppCompatActivity  {
 
     void init() {
 
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_day_list);
-        recycler_adapter = new PlaceInfoAdapter(this, allTravelInfo);
-        recyclerView.setAdapter(recycler_adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_travel_list);
+        adapter = new PlaceInfoAdapter(this,allTravelInfo);
+
+        LinearLayoutManager manager = new LinearLayoutManager(this);
+
+        recyclerView.setLayoutManager(manager);
+        adapter.setLayoutManager(manager);
+        adapter.shouldShowHeadersForEmptySections(false);
+        adapter.shouldShowFooters(true);
+        adapter.expandAllSections();
+        recyclerView.setAdapter(adapter);
     }
 }

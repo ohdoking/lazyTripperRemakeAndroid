@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/lazitripper.iml" filepath="$PROJECT_DIR$/lazitripper.iml" />
       <module fileurl="file://$PROJECT_DIR$/lazyTripperRemakeAndroid.iml" filepath="$PROJECT_DIR$/lazyTripperRemakeAndroid.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lazyTripperRemakeAndroid-master.iml" filepath="$PROJECT_DIR$/lazyTripperRemakeAndroid-master.iml" />
     </modules>
   </component>
 </project>

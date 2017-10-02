@@ -60,7 +60,6 @@ public class BaseAppCompatActivity extends AppCompatActivity {
         actionBar.setCustomView(mCustomView);
         mCustomView.setBackgroundColor(Color.rgb(230,230,230));
 
-
         Toolbar parent = (Toolbar) mCustomView.getParent();
         parent.setContentInsetsAbsolute(0,0);
 

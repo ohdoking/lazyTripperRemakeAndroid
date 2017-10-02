@@ -11,7 +11,22 @@
         <!--<item name="android:windowLightStatusBar">true</item>-->
 
     </style>
+    <style name="SwipeFling">
+        <item name="rotation_degrees">15</item>
+        <item name="min_adapter_stack">6</item>
+        <item name="max_visible">4</item>
+    </style>
 
+    <style name="MaterialAnimations" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowContentTransitions">true</item>
+        <!-- specify enter and exit transitions -->
+        <item name="android:windowEnterTransition">@transition/explode</item>
+        <item name="android:windowExitTransition">@transition/explode</item>
+
+        <!-- specify shared element transitions -->
+        <item name="android:windowSharedElementEnterTransition">@transition/slide_and_changebounds</item>
+        <item name="android:windowSharedElementExitTransition">@transition/slide_and_changebounds</item>
+    </style>
     <style name="style_layout">
         <item name="android:background">@mipmap/ic_launcher</item>
     </style>
@@ -35,7 +50,7 @@
         <item name="atg_checkedBackgroundColor">#fafafa</item>
     </style>
 
-    <style name="AppBaseTheme" parent="android:Theme.Holo.Light" >
+    <style name="AppBaseTheme" parent="android:Theme.Holo.Light">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -68,5 +83,15 @@
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:windowFullscreen">true</item>
     </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <!--<style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />-->
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
 
 </resources>

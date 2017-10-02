@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="countries">
+        <item>뮤지컬</item>
+        <item>스포츠경기</item>
+        <item>한식</item>
+        <item>중식</item>
+        <item>자연생태\n관광지</item>
+        <item>공원</item>
+        <item>연극</item>
+        <item>서양식</item>
+        <item>이색체험</item>
+        <item>섬</item>
+        <item>박물관</item>
+        <item>영화관</item>
+        <item>일식</item>
+        <item>유적지</item>
+        <item>산</item>
+    </string-array>
+
+    <integer-array name="images">
+        <item>@drawable/musical</item>
+        <item>@drawable/sport</item>
+        <item>@drawable/koreanfood</item>
+        <item>@drawable/chinesefood</item>
+        <item>@drawable/nature</item>
+        <item>@drawable/park</item>
+        <item>@drawable/opera</item>
+        <item>@drawable/westernfood</item>
+        <item>@drawable/unique</item>
+        <item>@drawable/island</item>
+        <item>@drawable/museum</item>
+        <item>@drawable/movie</item>
+        <item>@drawable/japanesefood</item>
+        <item>@drawable/historicsite</item>
+        <item>@drawable/mountain</item>
+    </integer-array>
+
+    <integer-array name="colors">
+        <item>@color/itemStart</item>
+        <item>@color/itemEnd</item>
+    </integer-array>
+
+</resources>

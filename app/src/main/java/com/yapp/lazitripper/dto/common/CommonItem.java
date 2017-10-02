@@ -21,4 +21,5 @@ public class CommonItem<T> {
     public void setItems(List<T> items) {
         this.items = items;
     }
+
 }
