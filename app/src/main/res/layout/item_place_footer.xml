@@ -8,6 +8,6 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="30dp"
-        android:background="@color/gray_fade" />
+        android:background="@color/light_gray" />
 
 </LinearLayout>

@@ -48,7 +48,10 @@ public class PlaceInfoAdapter extends SectionedRecyclerViewAdapter<PlaceInfoAdap
 
     @Override
     public void onBindHeaderViewHolder(MainVH holder, int section, boolean expanded) {
-        holder.textTitle.setText(makeTitleName(list.get(section).getCityCode(), list.get(section).getDay()));
+
+        String headerTitle =  "DAY" + list.get(section).getDay() + "    " + list.get(section).getCityName();
+        holder.textTitle.setText(headerTitle);
+
     }
 
     @Override
@@ -114,67 +117,5 @@ public class PlaceInfoAdapter extends SectionedRecyclerViewAdapter<PlaceInfoAdap
         }
     }
 
-    //지역 코드를 지역 명으로 변환해준다
-    private String makeTitleName(Integer day, Integer cityCode) {  //todo 이거정리하기
 
-        String name = null;
-
-        switch (cityCode) {
-            case 1:
-                name = "서울";
-                break;
-            case 2:
-                name = "인천";
-                break;
-            case 3:
-                name = "대전";
-                break;
-            case 4:
-                name = "대구";
-                break;
-            case 5:
-                name = "광주";
-                break;
-            case 6:
-                name = "부산";
-                break;
-            case 7:
-                name = "울산";
-                break;
-            case 8:
-                name = "세종특별자치시";
-                break;
-            case 31:
-                name = "경기도";
-                break;
-            case 32:
-                name = "강원도";
-                break;
-            case 33:
-                name = "충청북도";
-                break;
-            case 34:
-                name = "충청남도";
-                break;
-            case 35:
-                name = "경상북도";
-                break;
-            case 36:
-                name = "경상남도";
-                break;
-            case 37:
-                name = "전라북도";
-                break;
-            case 38:
-                name = "전라남도";
-                break;
-            case 39:
-                name = "제주도";
-                break;
-            default:
-                new Exception("no place code");
-                break;
-        }
-        return "DAY" + day + "    " + name;
-    }
 }

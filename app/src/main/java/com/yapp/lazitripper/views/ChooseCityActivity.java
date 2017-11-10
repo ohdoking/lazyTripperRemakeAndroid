@@ -154,7 +154,7 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
                     String key = remainingDay.getKey();
                     remainList = remainingDay.getDayRemaining();
                 }
-
+/* todo 계속 에러떠서 주석처리합니다 ㅠㅠ
                 if(remainList != null){
                     chooseDates = getDaysBetweenDates(pickDate.getStartDate(), pickDate.getFinishDate(), remainList);
 
@@ -192,7 +192,7 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
                         }
                     });
 
-                }
+                }*/
 
 
             }

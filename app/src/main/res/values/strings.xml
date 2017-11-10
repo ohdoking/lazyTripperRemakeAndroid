@@ -35,6 +35,8 @@
     <string name="item_day_text">DAY  </string>
     <string name="address_ex">제주특별자치도 애월읍 애월북서길 56-1</string>
     <string name="more1">하루에 한 곳 이상의 장소를 선택해야 합니다</string>
+    <string name="get_title">여행일지의 제목을 입력해주세요.</string>
+    <string name="save_completed">저장되었습니다</string>
 
     <string name="title_activity_test">TestActivity</string>
     <string name="title_activity_test2">Test2Activity</string>

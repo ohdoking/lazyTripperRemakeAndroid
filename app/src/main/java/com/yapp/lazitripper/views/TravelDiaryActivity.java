@@ -61,11 +61,6 @@ public class TravelDiaryActivity extends BaseAppCompatActivity {
 
         itemList = new ArrayList<>(); // todo 파이어베이스에서 받아오기
         itemList.add(new TravelRouteDto("hihi 11111", "http://goos.wiki/images/thumb/1/13/%ED%95%98%EB%8A%98.JPG/800px-%ED%95%98%EB%8A%98.JPG"));
-        itemList.add(new TravelRouteDto("hihi 22222", "http://blog.fursys.com/wp-content/uploads/2016/04/160401-cherryblossom-01.png"));
-        itemList.add(new TravelRouteDto("hihi 33333", "http://goos.wiki/images/thumb/1/13/%ED%95%98%EB%8A%98.JPG/800px-%ED%95%98%EB%8A%98.JPG"));
-        itemList.add(new TravelRouteDto("hihi 444444", "http://post.phinf.naver.net/MjAxNzAyMjdfMjUy/MDAxNDg4MTgzMTQ4MDY1.FigGe-J9X8gDsx0C2M6k-rsHg2X1QjTfmAub8du46Oog.EdloZuaV3W5c6m8iSEgFpoMSsHKK-S3j6BHiNiGShycg.JPEG/2017%EB%85%84%EB%B2%9A%EA%BD%83%EA%B0%9C%ED%99%94%EC%8B%9C%EA%B8%B06.jpg?type=w1200"));
-        itemList.add(new TravelRouteDto("hihi 555555", "http://goos.wiki/images/thumb/1/13/%ED%95%98%EB%8A%98.JPG/800px-%ED%95%98%EB%8A%98.JPG"));
-        itemList.add(new TravelRouteDto("hihi 666666", "http://post.phinf.naver.net/MjAxNzAyMjdfMjUy/MDAxNDg4MTgzMTQ4MDY1.FigGe-J9X8gDsx0C2M6k-rsHg2X1QjTfmAub8du46Oog.EdloZuaV3W5c6m8iSEgFpoMSsHKK-S3j6BHiNiGShycg.JPEG/2017%EB%85%84%EB%B2%9A%EA%BD%83%EA%B0%9C%ED%99%94%EC%8B%9C%EA%B8%B06.jpg?type=w1200"));
 
         return itemList;
     }
@@ -76,17 +71,10 @@ public class TravelDiaryActivity extends BaseAppCompatActivity {
 
             googleMap = Map;
 
-            PolylineOptions polylineOptions;
             LatLng latLng = new LatLng(37.5665350, 126.9779690);
             LatLng latLng2 = new LatLng(37.5752428, 127.1317776);
 
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
-
-            ArrayList<LatLng> arrayPoints = new ArrayList<>();
-            arrayPoints.add(latLng);
-            arrayPoints.add(latLng2);
-
-            //add marker
 
             TravelRouteDto td = new TravelRouteDto();
             td.setLatLng(latLng);

@@ -93,7 +93,6 @@ public class ProfileActivity extends BaseAppCompatActivity {
         rDatabase =  FirebaseDatabase.getInstance().getReference("lazitripper");
 
 
-
         String userId = Profile.getCurrentProfile().getId();
         String profileURL = "http://graph.facebook.com/" + userId + "/picture?type=large";
         ImageView profileImageView = (ImageView) findViewById(R.id.user_profile_photo);
@@ -150,30 +149,20 @@ public class ProfileActivity extends BaseAppCompatActivity {
                 }
 
 
-
-
-
-
-
                 ScrollInfiniteAdapter adapter = new ScrollInfiniteAdapter(ctx, travelTotalList, R.layout.activity_route, 5, 5){
                     @Override
                     public View getView(int position, View convertView, ViewGroup parent) {
 
                         View view=null;
 
-
                         HashMap<String,ArrayList<TravelRouteDto>> routeMap = (HashMap<String,ArrayList<TravelRouteDto>>)getItem(position);
-
                         Object[] keyList = routeMap.keySet().toArray();
-
                         String[] stringKeyList = Arrays.copyOf(keyList, keyList.length, String[].class);
-
 
                         Arrays.sort(stringKeyList);
 
                         if(convertView == null){
                             view = LayoutInflater.from(getContext()).inflate(R.layout.activity_route, null);
-
 
                         }else{
                             view = convertView;

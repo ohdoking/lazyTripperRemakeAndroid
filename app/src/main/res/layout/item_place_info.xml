@@ -7,7 +7,7 @@
     android:layout_marginStart="20dp"
     android:layout_marginEnd="20dp"
     android:layout_marginTop="20dp"
-    app:cardCornerRadius="20dp"
+    app:cardCornerRadius="15dp"
     app:cardElevation="7dp">
 
     <LinearLayout
@@ -46,7 +46,6 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:text="2"
                     android:layout_marginLeft="2dp"
                     android:background="@drawable/round_icon"
                     android:textColor="@color/black"
@@ -78,6 +77,7 @@
                 <ImageView
                     android:layout_width="14dp"
                     android:layout_height="14dp"
+                    android:layout_marginStart="5dp"
                     android:src="@drawable/icon_navagation"/>
 
                 <TextView
