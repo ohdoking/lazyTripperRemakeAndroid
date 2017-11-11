@@ -8,6 +8,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.yapp.lazitripper.R;
 import com.yapp.lazitripper.dto.CommonInfoDto;
 import com.yapp.lazitripper.dto.PlaceInfoDto;
@@ -25,6 +27,7 @@ public class PlaceDetailActivity extends BaseAppCompatActivity {
     private String TAG = "PlaceDetailActivity";
     private Travel landMark;
     private CommonInfoDto commonInfoDto;
+    private DatabaseReference reference ;
     public LaziTripperKoreanTourClient laziTripperKoreanTourClient;
     public LaziTripperKoreanTourService laziTripperKoreanTourService;
 
@@ -36,11 +39,10 @@ public class PlaceDetailActivity extends BaseAppCompatActivity {
 
         landMark = new Travel();
         //NXE 예방
-
+        reference =  FirebaseDatabase.getInstance().getReference("lazitripper");
         Intent intent = getIntent();
         PlaceInfoDto handledata = (PlaceInfoDto) intent.getSerializableExtra("placeInfo");
         getPlaceData(handledata);
-
         landMark.setTel(handledata.getTel());
         landMark.setAddress(handledata.getAddr1());
         landMark.setTitle(handledata.getTitle());
@@ -90,6 +92,7 @@ public class PlaceDetailActivity extends BaseAppCompatActivity {
 
             @Override
             public void onFailure(Call<CommonInfoDto> call, Throwable t) {
+
 
             }
         });

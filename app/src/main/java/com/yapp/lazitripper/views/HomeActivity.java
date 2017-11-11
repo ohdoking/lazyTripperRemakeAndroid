@@ -73,7 +73,7 @@ public class HomeActivity extends BaseAppCompatActivity {
             sharedPreferenceStore.savePreferences(ConstantStore.USERNAME,userName);
         }
         //username이 길면 밑의 text가 짤림
-        emailTv.setText(userName + "님,\n편하게 여행지를\n골라보세요:-)");
+        emailTv.setText(userName + "님,\n편하게 여행을\n만들어보세요:-)");
 
         //여행 만들기
         Button btnMakeRoot = (Button) findViewById(R.id.btnMakeRoot);
