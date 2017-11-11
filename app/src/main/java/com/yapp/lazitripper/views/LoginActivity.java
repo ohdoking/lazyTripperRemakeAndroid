@@ -1,9 +1,9 @@
 package com.yapp.lazitripper.views;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -23,13 +23,13 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.yapp.lazitripper.R;
-import com.yapp.lazitripper.common.ConstantIntent;
 import com.yapp.lazitripper.store.ConstantStore;
 import com.yapp.lazitripper.store.SharedPreferenceStore;
 import com.yapp.lazitripper.views.dialog.LoadingDialog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
 /*
 *
 * 로그인 화면
@@ -133,11 +133,6 @@ public class LoginActivity extends FragmentActivity {
             }
         };
 
-        // 로그인 되어있으면 바로 접속
-        if(isLoggedIn()){
-            Intent i = new Intent(LoginActivity.this, KeywordActivity.class);
-            startActivity(i);
-        }
 
     }
 
@@ -155,26 +150,32 @@ public class LoginActivity extends FragmentActivity {
 
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         mAuth.signInWithCredential(credential)
-            .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    Log.d("ohdoking-task", "signInWithCredential:onComplete:" + task.isSuccessful());
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d("ohdoking-task", "signInWithCredential:onComplete:" + task.isSuccessful());
 
-                    if (!task.isSuccessful()) {
-                        Log.w("ohdoking-task", "signInWithCredential", task.getException());
-                        Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                Toast.LENGTH_SHORT).show();
+                        if (!task.isSuccessful()) {
+                            Log.w("ohdoking-task", "signInWithCredential", task.getException());
+                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
                     }
-
-                }
-            });
+                });
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        mAuth.addAuthStateListener(mAuthListener);
-
+        // 로그인 되어있으면 바로 접속
+        if (isLoggedIn()) {
+            Intent i = new Intent(LoginActivity.this, KeywordActivity.class);
+            startActivity(i);
+            finish();
+        } else {
+            mAuth.addAuthStateListener(mAuthListener);
+        }
     }
 
     @Override
@@ -194,6 +195,7 @@ public class LoginActivity extends FragmentActivity {
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         return accessToken != null;
     }
+
     @Override
     protected void onResume() {
         super.onResume();
