@@ -261,10 +261,16 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
                         array = getFilterList(array, placeInfoDtoList);
                         array = getFilterList(array, hateList);
 
+<<<<<<< HEAD
                         if (array.size() == 0) {
                             if (loadingDialog != null)
                                 loadingDialog.show();
                             setClosedDate(currentLat, currentLon, tempRadius * 2);
+=======
+                        if(array.size() == 0){
+                            //loadingDialog.show();   // todo 계속중지되어서주석처리했는데확인해주세여
+                            setClosedDate(currentLat,currentLon, tempRadius*2);
+>>>>>>> a1ae48e963e34f0ad0d8238ad0b7df013c3417df
                         }
 
                         myAdapter.list = array;
@@ -294,7 +300,11 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
         Call<CommonResponse<PlaceInfoDto>> callRelionInfo;
 
         //contenttype이 관광지를를 가져옴
+<<<<<<< HEAD
         callRelionInfo = laziTripperKoreanTourService.getPlaceInfoByCity(pageNum, page, "B", "Y", "AND", "LaziTripper", cityCode, contentTypeId);
+=======
+        callRelionInfo = laziTripperKoreanTourService.getPlaceInfoByCity(pageNum,page,"B","Y","AND","LaziTripper",cityCode, contentTypeId);
+>>>>>>> a1ae48e963e34f0ad0d8238ad0b7df013c3417df
         callRelionInfo.enqueue(new Callback<CommonResponse<PlaceInfoDto>>() {
             @Override
             public void onResponse(Call<CommonResponse<PlaceInfoDto>> call, Response<CommonResponse<PlaceInfoDto>> response) {
@@ -479,8 +489,14 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
                 Intent intent = new Intent(ChoosePlaceActivity.this, PlaceDetailActivity.class);
                 View sharedView = ivChoosePlace;
                 ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(ChoosePlaceActivity.this, sharedView, getString(R.string.transitionImageName));
+<<<<<<< HEAD
                 intent.putExtra("placeInfo", infodto);
                 startActivity(intent, transitionActivityOptions.toBundle());
+=======
+                intent.putExtra("placeInfo",infodto);
+                startActivity(intent,transitionActivityOptions.toBundle());
+                finish(); //  추가했습니당
+>>>>>>> a1ae48e963e34f0ad0d8238ad0b7df013c3417df
 
             }
         });
@@ -655,7 +671,11 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         radius = 3;
                         loadingDialog.show();
+<<<<<<< HEAD
                         setClosedDate(currentLat, currentLat, radius);
+=======
+                        setClosedDate(currentLat, currentLat,radius);
+>>>>>>> a1ae48e963e34f0ad0d8238ad0b7df013c3417df
                     }
                 })
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
