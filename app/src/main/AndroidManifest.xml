@@ -80,9 +80,7 @@
         <activity
             android:name=".views.TravelSummaryActivity"
             android:screenOrientation="portrait"
-            android:label="@string/title_activity_travel_summary" >
-
-        </activity>
+            android:label="@string/title_activity_travel_summary" />
         <activity android:name=".views.KeywordSelectActivity"
             android:screenOrientation="portrait"  />
         <activity android:name=".views.HomeActivity" />
@@ -96,7 +94,6 @@
             android:theme="@style/Theme.Transparent"
             android:name=".views.TempScheduleActivity"></activity>
 
-
         <activity android:name=".views.KeywordActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
@@ -104,6 +101,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".views.LoginActivity" />
         </activity>
+
 
 
     </application>
