@@ -4,5 +4,6 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <integer name="anim_duration_long">200</integer>
+    <dimen name="header_size">64dp</dimen>
 
 </resources>
