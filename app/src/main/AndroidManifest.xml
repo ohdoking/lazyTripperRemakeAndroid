@@ -30,8 +30,7 @@
             android:screenOrientation="portrait"  />
         <activity
             android:name=".views.SplashActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -76,6 +75,7 @@
             android:value="@string/google_maps_key" />
 
         <activity android:name=".views.ProfileActivity"
+            android:theme="@style/AppTheme.NoActionBar.Gray"
             android:screenOrientation="portrait" />
         <activity
             android:name=".views.TravelSummaryActivity"

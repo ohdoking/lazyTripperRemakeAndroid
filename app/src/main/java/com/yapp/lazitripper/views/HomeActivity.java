@@ -60,8 +60,8 @@ public class HomeActivity extends BaseAppCompatActivity {
         sharedPreferenceStore = new SharedPreferenceStore(getApplicationContext(), ConstantStore.STORE);
         myRef = FirebaseDatabase.getInstance().getReference("lazitripper");
         ImageView rightImage = getRightImageView();
-
-        uuid = (String)sharedPreferenceStore.getPreferences(ConstantStore.UUID, String.class);
+        rightImage.setImageResource(R.drawable.ic_person_black_36dp);
+        uuid = (String) sharedPreferenceStore.getPreferences(ConstantStore.UUID, String.class);
 
         TextView emailTv = (TextView) findViewById(R.id.textView2);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -70,10 +70,17 @@ public class HomeActivity extends BaseAppCompatActivity {
         if (user != null) {
             userName = user.getDisplayName();
             //shared에 유저명 추가
-            sharedPreferenceStore.savePreferences(ConstantStore.USERNAME,userName);
+            sharedPreferenceStore.savePreferences(ConstantStore.USERNAME, userName);
         }
         //username이 길면 밑의 text가 짤림
         emailTv.setText(userName + "님,\n편하게 여행을\n만들어보세요:-)");
+        //오른쪽 마이페이지 버튼
+        rightImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(HomeActivity.this,ProfileActivity.class));
+            }
+        });
 
         //여행 만들기
         Button btnMakeRoot = (Button) findViewById(R.id.btnMakeRoot);
@@ -96,23 +103,23 @@ public class HomeActivity extends BaseAppCompatActivity {
                     key = day.getKey();
                     //현재는 무조건 리스트의 가장 첫번째 날만 작성 가능하도록 해 둠
                     date = day.getDayRemaining().get(0);
-                    Log.e(TAG,"remaining day : " + date);
-                    if(day.getKey() != null) isdata = true;
+                    Log.e(TAG, "remaining day : " + date);
+                    if (day.getKey() != null) isdata = true;
                 }
-                if(isdata){
+                if (isdata) {
                     try {
                         SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy-MM-dd");
                         tempDate = sdFormat.parse(date);
                         pickDate.setStartDate(tempDate);
                         pickDate.setFinishDate(tempDate);
                         pickDate.setPeriod(1L);
-                    }catch (ParseException e) {
+                    } catch (ParseException e) {
                         e.printStackTrace();
                     }
 
 //                    notification();
-                }else{
-                    sharedPreferenceStore.savePreferences(ConstantStore.REMAINFLAG,"false");
+                } else {
+                    sharedPreferenceStore.savePreferences(ConstantStore.REMAINFLAG, "false");
                 }
             }
 
@@ -123,17 +130,17 @@ public class HomeActivity extends BaseAppCompatActivity {
 
     }
 
-    private void notification(){
+    private void notification() {
         AlertDialog.Builder alert_confirm = new AlertDialog.Builder(HomeActivity.this);
         alert_confirm.setMessage("이전에 작성 중이던 루트가 있습니다. 마저 작성하시겠습니까?").setCancelable(false).setPositiveButton("확인",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //YES
-                        sharedPreferenceStore.savePreferences(ConstantStore.KEY,key);
+                        sharedPreferenceStore.savePreferences(ConstantStore.KEY, key);
 //                        sharedPreferenceStore.savePreferences(ConstantStore.DATEKEY, pickDate);
 //                        sharedPreferenceStore.savePreferences(ConstantStore.SCHEDULE_DATE, pickDate);
-                        sharedPreferenceStore.savePreferences(ConstantStore.REMAINFLAG,"true");
+                        sharedPreferenceStore.savePreferences(ConstantStore.REMAINFLAG, "true");
                         //전체일정과 선택일정이 같음(하루만 가능하게)
                         Intent i = new Intent(HomeActivity.this, ChooseCityActivity.class);
                         startActivity(i);
@@ -147,7 +154,7 @@ public class HomeActivity extends BaseAppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         //취소를 누른경우 needSelect를 삭제함
 
-                        sharedPreferenceStore.savePreferences(ConstantStore.REMAINFLAG,"false");
+                        sharedPreferenceStore.savePreferences(ConstantStore.REMAINFLAG, "false");
                         DatabaseReference userRef = myRef.child("user").child(uuid);
                         DatabaseReference needSelectRef = userRef.child("needSelect");
                         userRef.child("Travel").child(key).setValue(null);
@@ -166,28 +173,28 @@ public class HomeActivity extends BaseAppCompatActivity {
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event){
+    public boolean onTouchEvent(MotionEvent event) {
 
         int action = MotionEventCompat.getActionMasked(event);
         String DEBUG_TAG = "dd";
-        switch(action) {
-            case (MotionEvent.ACTION_DOWN) :
-                Log.d(DEBUG_TAG,"Action was DOWN");
+        switch (action) {
+            case (MotionEvent.ACTION_DOWN):
+                Log.d(DEBUG_TAG, "Action was DOWN");
                 return true;
-            case (MotionEvent.ACTION_MOVE) :
-                Log.d(DEBUG_TAG,"Action was MOVE");
+            case (MotionEvent.ACTION_MOVE):
+                Log.d(DEBUG_TAG, "Action was MOVE");
                 return true;
-            case (MotionEvent.ACTION_UP) :
-                Log.d(DEBUG_TAG,"Action was UP");
+            case (MotionEvent.ACTION_UP):
+                Log.d(DEBUG_TAG, "Action was UP");
                 return true;
-            case (MotionEvent.ACTION_CANCEL) :
-                Log.d(DEBUG_TAG,"Action was CANCEL");
+            case (MotionEvent.ACTION_CANCEL):
+                Log.d(DEBUG_TAG, "Action was CANCEL");
                 return true;
-            case (MotionEvent.ACTION_OUTSIDE) :
-                Log.d(DEBUG_TAG,"Movement occurred outside bounds " +
+            case (MotionEvent.ACTION_OUTSIDE):
+                Log.d(DEBUG_TAG, "Movement occurred outside bounds " +
                         "of current screen element");
                 return true;
-            default :
+            default:
                 return super.onTouchEvent(event);
         }
     }
