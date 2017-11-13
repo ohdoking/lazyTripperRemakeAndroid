@@ -9,7 +9,12 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <!--<item name="android:windowLightStatusBar">true</item>-->
-
+    </style>
+    <style name="AppTheme.NoActionBar.Gray" parent="AppTheme">
+        <!-- Customize your theme here. -->
+        <item name="windowActionBar">false</item>
+        <item name="android:statusBarColor">#dddddd</item>
+        <item name="windowNoTitle">true</item>
     </style>
     <style name="SwipeFling">
         <item name="rotation_degrees">15</item>
@@ -84,10 +89,6 @@
         <item name="android:windowFullscreen">true</item>
     </style>
 
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
 
     <!--<style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />-->
 

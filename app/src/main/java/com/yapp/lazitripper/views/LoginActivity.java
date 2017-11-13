@@ -120,7 +120,7 @@ public class LoginActivity extends FragmentActivity {
                     loadingDialog.dismiss();
 
                     Intent i = new Intent(LoginActivity.this, KeywordActivity.class);
-
+                    i.putExtra("init",true);//KeywordActivity Flag 추가
                     startActivity(i);
                     finish();
                     overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.fade_in);
@@ -169,8 +169,9 @@ public class LoginActivity extends FragmentActivity {
     public void onStart() {
         super.onStart();
         // 로그인 되어있으면 바로 접속
+        //KeywordActivity -> HomeActivity 수정
         if (isLoggedIn()) {
-            Intent i = new Intent(LoginActivity.this, KeywordActivity.class);
+            Intent i = new Intent(LoginActivity.this, HomeActivity.class);
             startActivity(i);
             finish();
         } else {
@@ -193,7 +194,9 @@ public class LoginActivity extends FragmentActivity {
 
     public boolean isLoggedIn() {
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
-        return accessToken != null;
+     //   return accessToken != null;
+        return true;//지금 facebook key hash가 invalid 된 상태기 때문에 그냥 넘겨버리기~
+
     }
 
     @Override
