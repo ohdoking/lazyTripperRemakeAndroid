@@ -1,15 +1,9 @@
 package com.yapp.lazitripper.dto;
 
 import java.io.Serializable;
-import java.util.List;
 
 /*
 
-    resultCode 결과코드 응답 결과코드
-	resultMsg 결과메시지 응답 결과메시지
-	numOfRows 한 페이지 결과 수
-	pageNo 현재 페이지 번호
-	totalCount 전체 결과 수
 	contentid 콘텐츠ID
 	contenttypeid 콘텐츠타입ID 관광타입(관광지, 숙박 등) ID
 	booktour 교과서 여행지 여부
@@ -47,11 +41,6 @@ import java.util.List;
 
 public class CommonInfoDto implements Serializable {
 
-    private int resultCode;
-    private int numOfRows;
-    private int pageNo;
-    private int totalCount;
-    private String resultMsg;
     private String contentid;
     private String contenttypeid;
     private int booktour;
@@ -65,54 +54,15 @@ public class CommonInfoDto implements Serializable {
     private String firstImage2;
     private int areacode;
     private int sigungucode;
-    private int cat1;
-    private int cat2;
-    private int cat3;
+    private String cat1;
+    private String cat2;
+    private String cat3;
     private String adrr1;
     private String adrr2;
     private String zipcode;
     private String mapx;
     private String mapy;
 
-    public int getResultCode() {
-        return resultCode;
-    }
-
-    public void setResultCode(int resultCode) {
-        this.resultCode = resultCode;
-    }
-
-    public int getNumOfRows() {
-        return numOfRows;
-    }
-
-    public void setNumOfRows(int numOfRows) {
-        this.numOfRows = numOfRows;
-    }
-
-    public int getPageNo() {
-        return pageNo;
-    }
-
-    public void setPageNo(int pageNo) {
-        this.pageNo = pageNo;
-    }
-
-    public int getTotalCount() {
-        return totalCount;
-    }
-
-    public void setTotalCount(int totalCount) {
-        this.totalCount = totalCount;
-    }
-
-    public String getResultMsg() {
-        return resultMsg;
-    }
-
-    public void setResultMsg(String resultMsg) {
-        this.resultMsg = resultMsg;
-    }
 
     public String getContentid() {
         return contentid;
@@ -218,27 +168,27 @@ public class CommonInfoDto implements Serializable {
         this.sigungucode = sigungucode;
     }
 
-    public int getCat1() {
+    public String getCat1() {
         return cat1;
     }
 
-    public void setCat1(int cat1) {
+    public void setCat1(String cat1) {
         this.cat1 = cat1;
     }
 
-    public int getCat2() {
+    public String getCat2() {
         return cat2;
     }
 
-    public void setCat2(int cat2) {
+    public void setCat2(String cat2) {
         this.cat2 = cat2;
     }
 
-    public int getCat3() {
+    public String getCat3() {
         return cat3;
     }
 
-    public void setCat3(int cat3) {
+    public void setCat3(String cat3) {
         this.cat3 = cat3;
     }
 
@@ -290,13 +240,7 @@ public class CommonInfoDto implements Serializable {
         this.overview = overview;
     }
 
-    public CommonInfoDto(int resultCode, int numOfRows, int pageNo, int totalCount, String resultMsg, String contentid, String contenttypeid) {
-
-        this.resultCode = resultCode;
-        this.numOfRows = numOfRows;
-        this.pageNo = pageNo;
-        this.totalCount = totalCount;
-        this.resultMsg = resultMsg;
+    public CommonInfoDto( String contentid, String contenttypeid) {
         this.contentid = contentid;
         this.contenttypeid = contenttypeid;
     }

@@ -11,10 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.wx.wheelview.adapter.ArrayWheelAdapter;
-import com.wx.wheelview.widget.WheelView;
 import com.yapp.lazitripper.R;
 import com.yapp.lazitripper.common.ConstantIntent;
 import com.yapp.lazitripper.dto.AllTravelInfo;
