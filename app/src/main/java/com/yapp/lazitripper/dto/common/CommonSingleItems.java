@@ -19,10 +19,10 @@ import com.google.gson.annotations.SerializedName;
         rnum	일련번호	일련번호
 */
 
-public class CommonItems<T> {
+public class CommonSingleItems<T> {
     @SerializedName("items")
     @Expose
-    private CommonItem<T> items;
+    private CommonSingleItem<T> items;
 
     @SerializedName("numOfRows")
     @Expose
@@ -35,11 +35,11 @@ public class CommonItems<T> {
     @SerializedName("totalCount")
     @Expose
     private Integer totalCount;
-    public CommonItem<T> getItems() {
+    public CommonSingleItem<T> getItems() {
         return items;
     }
 
-    public void setItems(CommonItem<T> items) {
+    public void setItems(CommonSingleItem<T> items) {
         this.items = items;
     }
 

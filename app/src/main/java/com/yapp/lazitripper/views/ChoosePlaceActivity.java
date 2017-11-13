@@ -480,6 +480,7 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
                 View sharedView = ivChoosePlace;
                 ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(ChoosePlaceActivity.this, sharedView, getString(R.string.transitionImageName));
                 intent.putExtra("placeInfo", infodto);
+                intent.putExtra("day",day);
                 startActivity(intent, transitionActivityOptions.toBundle());
 
             }
