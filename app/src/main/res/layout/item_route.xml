@@ -3,52 +3,56 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:paddingLeft="@dimen/mypage_margin_size"
+    android:paddingRight="@dimen/mypage_margin_size"
     android:layout_height="120dp">
 
     <RelativeLayout
+        android:id="@+id/rl_item_route_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/iv_item_route_backgound"
             android:layout_width="match_parent"
+            android:foreground="@drawable/dimmed_background"
             android:layout_height="120dp" />
 
-        <RelativeLayout
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="16dp">
+
+        <TextView
+            android:id="@+id/travel_title"
+            android:layout_width="wrap_content"
+            android:textStyle="bold"
+            android:layout_height="wrap_content"
+            android:text="타이틀 제목"
+            android:textColor="#ffffff"
+            android:textSize="22sp" />
+
+        <TextView
+            android:id="@+id/travel_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="16dp">
+            android:layout_below="@+id/travel_title"
+            android:layout_marginTop="3dp"
+            android:text="2017.2.12 작성"
+            android:textColor="#ffffff"
+            android:textSize="11sp" />
 
-            <TextView
-                android:id="@+id/travel_title"
-                android:layout_width="wrap_content"
-                android:textStyle="bold"
-                android:layout_height="wrap_content"
-                android:text="타이틀 제목"
-                android:textColor="#ffffff"
-                android:textSize="22sp" />
-
-            <TextView
-                android:id="@+id/travel_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/travel_title"
-                android:layout_marginTop="3dp"
-                android:text="2017.2.12 작성"
-                android:textColor="#ffffff"
-                android:textSize="11sp" />
-
-        </RelativeLayout>
-
-        <ImageView
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="13dp"
-            android:src="@drawable/button_next_list" />
     </RelativeLayout>
+
+    <ImageView
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="13dp"
+        android:src="@drawable/button_next_list" />
 
 </RelativeLayout>

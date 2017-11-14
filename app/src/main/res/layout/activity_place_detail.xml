@@ -18,13 +18,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="260dp">
 
-                <ImageView
-                    android:id="@+id/backgroundImage"
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="260dp"
-                    android:layout_alignParentTop="true"
-                    android:background="@color/gray"
-                    android:transitionName="@string/transitionImageName" />
+                    android:foreground="#4c000000">
+
+                    <ImageView
+                        android:id="@+id/backgroundImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="260dp"
+                        android:layout_alignParentTop="true"
+                        android:background="@color/gray"
+                        android:transitionName="@string/transitionImageName" />
+                </RelativeLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -47,8 +53,8 @@
                         android:id="@+id/tv_place_detail_location"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="제주도"
                         android:layout_marginLeft="5dp"
+                        android:text="제주도"
                         android:textColor="@android:color/white"
                         android:textSize="22sp" />
                 </LinearLayout>

@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,8 +47,10 @@ public class ProfileActivity extends BaseAppCompatActivity {
     private DatabaseReference rDatabase;
     private List<Object> travelTotalList;
     private ImageView ivProfileItemBg;
+    private RelativeLayout rlProfileItemBg;
     private static String TAG = "dongs";
     private ListView listView;
+    private View listViewFooter;
     private TextView tvProfileKeywordEdit;
     private ProgressBar progressBar;
     private ArrayList<TravelRouteDto> travelRouteList;
@@ -74,16 +77,7 @@ public class ProfileActivity extends BaseAppCompatActivity {
                 startActivity(i);
             }
         });
-        ((Button)findViewById(R.id.bt_profile_logout)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                LoginManager.getInstance().logOut();
-                Intent i = new Intent(ProfileActivity.this, LoginActivity.class);
-                startActivity(i);
-                finish();
-            }
-        });
+        listViewFooter = getLayoutInflater().inflate(R.layout.item_route_footer,null,false);
 
         travelTotalList = new ArrayList<>();
         travelRouteList = new ArrayList<>();
@@ -100,6 +94,17 @@ public class ProfileActivity extends BaseAppCompatActivity {
 
 
         listView = (ListView) findViewById(R.id.my_route_lv);
+        listView.addFooterView(listViewFooter);
+        ((Button)listViewFooter.findViewById(R.id.bt_profile_logout)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                LoginManager.getInstance().logOut();
+                Intent i = new Intent(ProfileActivity.this, LoginActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
 
         getTravelList(ProfileActivity.this);
         //// TODO: 2017-03-26 My Travel Route와 DB 동기화, 터치이벤트 넣고 해당 item 클릭했을 때 상세보기(TravelSummary로?)
@@ -152,9 +157,12 @@ public class ProfileActivity extends BaseAppCompatActivity {
                         travelRouteMap.put(dataSnap.getKey(), travelRouteList);
                     }
                     travelTotalList.add(travelRouteMap);
+                    travelTotalList.add(travelRouteMap);
+                    travelTotalList.add(travelRouteMap);
+                    travelTotalList.add(travelRouteMap);
                 }
-
-
+//                .setLayoutParams(new RelativeLayout.LayoutParams(Layouarams.FILL_PARENT, theSizeIWant));
+                listView.setMinimumHeight(130*travelTotalList.size());
                 ScrollInfiniteAdapter adapter = new ScrollInfiniteAdapter(ctx, travelTotalList, R.layout.item_route, 5, 5) {
                     @Override
                     public View getView(final int position, View convertView, ViewGroup parent) {
@@ -187,6 +195,7 @@ public class ProfileActivity extends BaseAppCompatActivity {
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .bitmapTransform(new CenterCrop(ProfileActivity.this),new RoundedCornersTransformation( ProfileActivity.this,60, 2))
                                 .into(ivProfileItemBg);
+
                         String[] firstList = stringKeyList[0].toString().split("@");
 
                         String firstDate = firstList[0];
