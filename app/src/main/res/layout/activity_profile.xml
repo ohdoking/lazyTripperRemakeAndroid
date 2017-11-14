@@ -101,7 +101,7 @@
                 android:id="@+id/tag_group"
                 style="@style/TagGroup.Beauty_Gray"
                 app:atg_horizontalPadding="11dp"
-                app:atg_horizontalSpacing="14dp"
+                app:atg_horizontalSpacing="12dp"
                 app:atg_textSize="14sp"
                 app:atg_verticalPadding="5dp"
                 app:atg_verticalSpacing="6dp" />

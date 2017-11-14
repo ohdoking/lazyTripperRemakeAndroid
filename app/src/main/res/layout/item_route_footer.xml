@@ -6,9 +6,8 @@
         android:id="@+id/bt_profile_logout"
         android:layout_width="match_parent"
         android:layout_height="54dp"
-        android:layout_below="@+id/my_route_lv"
         android:background="#f2f2f2"
-        android:text="로그아웃"
+        android:text="@string/logout"
         android:textColor="#9b9b9b" />
 
 </LinearLayout>

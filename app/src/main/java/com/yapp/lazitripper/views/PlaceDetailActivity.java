@@ -78,7 +78,7 @@ public class PlaceDetailActivity extends BaseAppCompatActivity {
         myRef.child("info").child("serviceCode").child(handledata.getCat3()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String data =dataSnapshot.getValue(String.class);
+                String data = dataSnapshot.getValue(String.class);
                 tvPlaceDetailCategory.setText(data);
 
             }
@@ -94,10 +94,14 @@ public class PlaceDetailActivity extends BaseAppCompatActivity {
         landMark.setTel(handledata.getTel());
         landMark.setAddress(handledata.getAddr1());
         landMark.setTitle(handledata.getTitle());
-        if(handledata.getTel() == null)
+        if (handledata.getTel() == null) {
+            llPlaceDetail.setVisibility(View.INVISIBLE);
+        } else {
+            tel.setText(handledata.getTel());
             llPlaceDetail.setVisibility(View.VISIBLE);
-        tel.setText(handledata.getTel());
-        tvPlaceDetailDays.setText("DAY "+intent.getIntExtra("day",0));
+
+        }
+        tvPlaceDetailDays.setText("DAY " + intent.getIntExtra("day", 0));
         tvPlaceDetaillocation.setText((new ChoosePlaceActivity().makeTitleName(3, handledata.getAreacode())).split(" ")[1]);
         close.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,7 +124,7 @@ public class PlaceDetailActivity extends BaseAppCompatActivity {
             @Override
             public void onResponse(Call<CommonSingleResponse<CommonInfoDto>> call, Response<CommonSingleResponse<CommonInfoDto>> response) {
                 commonInfoDto = response.body().getResponse().getBody().getItems().getItem();
-                tvPlaceDetailContents.setText(commonInfoDto.getOverview().replaceAll("&nbsp;", "").replaceAll("<br>", "").replaceAll("<br/>", ""));
+                tvPlaceDetailContents.setText(commonInfoDto.getOverview().replaceAll("&nbsp;", "").replaceAll("<", "").replaceAll(">", "").replaceAll("/", "").replaceAll("br", ""));
             }
 
             @Override

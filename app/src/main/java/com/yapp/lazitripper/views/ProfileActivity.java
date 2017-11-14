@@ -2,6 +2,7 @@ package com.yapp.lazitripper.views;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -47,6 +48,7 @@ public class ProfileActivity extends BaseAppCompatActivity {
     private DatabaseReference rDatabase;
     private List<Object> travelTotalList;
     private ImageView ivProfileItemBg;
+    private Button btProfileLogout ;
     private RelativeLayout rlProfileItemBg;
     private static String TAG = "dongs";
     private ListView listView;
@@ -95,7 +97,9 @@ public class ProfileActivity extends BaseAppCompatActivity {
 
         listView = (ListView) findViewById(R.id.my_route_lv);
         listView.addFooterView(listViewFooter);
-        ((Button)listViewFooter.findViewById(R.id.bt_profile_logout)).setOnClickListener(new View.OnClickListener() {
+        btProfileLogout = ((Button)listViewFooter.findViewById(R.id.bt_profile_logout));
+        btProfileLogout.setPaintFlags(btProfileLogout.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        btProfileLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();

@@ -3,6 +3,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:background="@android:color/white"
     android:layout_height="match_parent">
 
     <RelativeLayout
@@ -88,7 +89,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="섭지코지"
-                        android:textColor="#fffedf6b"
+                        android:textColor="#ffd300"
                         android:textSize="28sp"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -115,6 +116,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:text="Jeju Island"
+                        android:textColor="@color/place_detail_text"
                         android:textSize="16sp" />
                 </LinearLayout>
 
@@ -138,6 +140,7 @@
                         android:id="@+id/tel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/place_detail_text"
                         android:layout_marginLeft="5dp"
                         android:text="1544-9506"
                         android:textSize="16sp" />
@@ -149,15 +152,18 @@
                     android:layout_height="2dp"
                     android:layout_below="@id/layout_tel"
                     android:layout_marginTop="24dp"
-                    android:background="@color/gray" />
+                    android:background="#dddddd" />
             </RelativeLayout>
 
             <TextView
                 android:id="@+id/tv_place_detail_category"
-                android:layout_width="110dp"
+                android:layout_width="wrap_content"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
                 android:layout_height="36dp"
                 android:layout_marginLeft="25dp"
                 android:layout_marginTop="26dp"
+                android:textColor="@color/place_detail_text"
                 android:background="@drawable/placedetail_category_background"
                 android:gravity="center"
                 android:text="자연생태관광지" />
@@ -168,6 +174,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="25dp"
                 android:layout_marginRight="25dp"
+                android:textColor="@color/place_detail_text"
                 android:layout_marginTop="16dp"
                 android:text="설명 받아오는중..."
                 android:textSize="16dp" />
