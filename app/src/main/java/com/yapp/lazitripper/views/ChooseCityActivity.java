@@ -1,7 +1,6 @@
 package com.yapp.lazitripper.views;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -29,7 +28,6 @@ import com.yapp.lazitripper.store.ConstantStore;
 import com.yapp.lazitripper.store.SharedPreferenceStore;
 import com.yapp.lazitripper.views.bases.BaseAppCompatActivity;
 import com.yapp.lazitripper.views.component.weekcalendar2.HorizontalCalendar;
-import com.yapp.lazitripper.views.component.weekcalendar2.HorizontalCalendarListener;
 import com.yapp.lazitripper.views.dialog.LoadingDialog;
 
 import java.text.DateFormat;
