@@ -10,7 +10,6 @@ import com.bumptech.glide.Glide;
 import com.yapp.lazitripper.R;
 import com.yapp.lazitripper.dto.TravelRouteDto;
 
-
 public class DayItemViewHolder extends RecyclerView.ViewHolder {
 
     private TextView textDay;

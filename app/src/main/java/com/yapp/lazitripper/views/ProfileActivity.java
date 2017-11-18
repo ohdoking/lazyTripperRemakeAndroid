@@ -203,26 +203,10 @@ public class ProfileActivity extends BaseAppCompatActivity {
                         String[] firstList = stringKeyList[0].toString().split("@");
 
                         String firstDate = firstList[0];
-                        String firstCity;
-                        if (firstList.length > 1)
-                            firstCity = makeTitleName(Integer.parseInt(firstList[1]));
-                        else
-                            firstCity = stringKeyList[0].toString();
-                        String[] lastList = stringKeyList[stringKeyList.length - 1].toString().split("@");
-
-                        String lastDate = lastList[0];
-                        String lastCity;
-                        if (lastList.length > 1)
-                            lastCity = makeTitleName(Integer.parseInt(lastList[1]));
-                        else
-                            lastCity = stringKeyList[stringKeyList.length - 1].toString();
-
 
                         TextView travelDatatv = (TextView) view.findViewById(R.id.travel_date);
                         travelDatatv.setText(firstDate + "작성");
 
-                        TextView travel_title = (TextView) view.findViewById(R.id.travel_title);
-                        travel_title.setText(firstCity.trim().equals(lastCity)? firstCity+" 여행일지" : firstCity +"에서 "+lastCity+"까지 여행일지");
                         return view;
                     }
                 };

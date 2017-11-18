@@ -6,11 +6,20 @@ import java.util.List;
 
 public class AllTravelInfo implements Serializable {
 
+    private String travelTitle;
     private int totalDay;
     private List<TravelInfo> allTraveInfo;
 
     public AllTravelInfo(){
         allTraveInfo = new ArrayList<TravelInfo>() ;
+    }
+
+    public String getTravelTitle() {
+        return travelTitle;
+    }
+
+    public void setTravelTitle(String travelTitle) {
+        this.travelTitle = travelTitle;
     }
 
     public int getTotalDay() {

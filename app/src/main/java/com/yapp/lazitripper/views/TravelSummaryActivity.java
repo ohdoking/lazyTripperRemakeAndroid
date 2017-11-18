@@ -86,15 +86,14 @@ public class TravelSummaryActivity extends BaseAppCompatActivity  {
             String title = editTitle.getText().toString();
 
             if(title.length() >= 1) {
-                mDatabase.child("lazitripper").child("user").child(user.getUid()).child(title).setValue(allTravelInfo);
-                //finish();
+                allTravelInfo.setTravelTitle(title);
+                mDatabase.child("lazitripper").child("user").child(user.getUid()).child("Travel").child(title).setValue(allTravelInfo);
+                finish();
             }
             else{
                 Toast.makeText(getApplicationContext(), R.string.get_title , Toast.LENGTH_SHORT).show();
             }
             Toast.makeText(getApplicationContext(), R.string.save_completed, Toast.LENGTH_LONG).show();
-        } else {
-            // No user is signed in todo 예외처리필요하나?
         }
 
     }

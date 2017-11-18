@@ -70,7 +70,6 @@ public class LoginActivity extends FragmentActivity {
                 Log.d(TAG, "facebook:onSuccess:" + loginResult.getAccessToken());
                 handleFacebookAccessToken(loginResult.getAccessToken());
 
-
                 GraphRequest request = GraphRequest.newMeRequest(
                         loginResult.getAccessToken(),
                         new GraphRequest.GraphJSONObjectCallback() {
@@ -195,8 +194,10 @@ public class LoginActivity extends FragmentActivity {
     public boolean isLoggedIn() {
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
      //   return accessToken != null;
-        return true;//지금 facebook key hash가 invalid 된 상태기 때문에 그냥 넘겨버리기~
-
+        if(accessToken != null)
+            return true;//지금 facebook key hash가 invalid 된 상태기 때문에 그냥 넘겨버리기~
+        else
+            return false;
     }
 
     @Override

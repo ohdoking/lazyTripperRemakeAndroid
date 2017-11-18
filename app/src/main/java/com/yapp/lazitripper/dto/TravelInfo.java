@@ -36,6 +36,8 @@ public class TravelInfo implements Serializable {
         this.cityCode = cityCode;
     }
 
+    public void setCityName(){}
+
     public String getCityName(){
         String name = null;
 
