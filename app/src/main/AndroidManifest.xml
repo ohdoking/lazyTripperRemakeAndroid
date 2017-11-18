@@ -12,9 +12,8 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-    <uses-permission android:name="android.permission.WRITE_OWNER_DATA"/>
-    <uses-permission android:name="android.permission.READ_OWNER_DATA"/>
+    <uses-permission android:name="android.permission.WRITE_OWNER_DATA" />
+    <uses-permission android:name="android.permission.READ_OWNER_DATA" />
 
     <application
         android:name=".common.LazitripperApplication"
@@ -24,29 +23,34 @@
         android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".views.MainActivity"
+        <activity
+            android:name=".views.MainActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".views.ChoosePlaceActivity"
-            android:screenOrientation="portrait"  />
+        <activity
+            android:name=".views.ChoosePlaceActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".views.SplashActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar.Gray"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".views.PlaceDetailActivity"
+        <activity
+            android:name=".views.PlaceDetailActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
-        <activity android:name=".views.ChooseCityActivity"
-            android:screenOrientation="portrait"  />
-        <activity android:name=".views.TempActivity"
-            android:screenOrientation="portrait"  />
-        <activity android:name=".views.LoginActivity"
-            android:screenOrientation="portrait"  />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".views.ChooseCityActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".views.TempActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".views.LoginActivity"
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -59,9 +63,11 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".views.DatePickActivity"
+        <activity
+            android:name=".views.DatePickActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".views.TimeLineActivity"
+        <activity
+            android:name=".views.TimeLineActivity"
             android:screenOrientation="portrait" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -76,34 +82,34 @@
             android:value="@string/google_maps_key" />
 
         <activity android:name=".views.ProfileActivity"
+            android:theme="@style/AppTheme.NoActionBar.Gray"
             android:screenOrientation="portrait" />
         <activity
             android:name=".views.TravelSummaryActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_travel_summary" />
-        <activity android:name=".views.KeywordSelectActivity"
-            android:screenOrientation="portrait"  />
-        <activity android:name=".views.HomeActivity" />
-
-        <activity android:name=".views.TravelDiaryActivity"
-            android:screenOrientation="portrait" >
-        </activity>
-
+            android:label="@string/title_activity_travel_summary"
+            android:screenOrientation="portrait" />
         <activity
+            android:name=".views.KeywordSelectActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".views.HomeActivity" />
+        <activity
+            android:name=".views.TravelDiaryActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".views.TempScheduleActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Transparent"
-            android:name=".views.TempScheduleActivity"></activity>
-
-        <activity android:name=".views.KeywordActivity"
+            android:theme="@style/Theme.Transparent" />
+        <activity
+            android:name=".views.KeywordActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".views.LoginActivity" />
         </activity>
+        <activity android:name=".views.CityPickActivity">
 
-
-
+        </activity>
     </application>
 
 </manifest>

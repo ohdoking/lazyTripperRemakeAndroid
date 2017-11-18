@@ -34,10 +34,6 @@ import java.util.ArrayList;
 * */
 public class PlaceInfoDto implements Serializable {
 
-    public PlaceInfoDto(){
-
-    }
-
     public PlaceInfoDto(String title, String addr1, String tel, ArrayList<Review> review, double rating_tot){
         this.title = title;
         this.addr1 = addr1;
@@ -45,6 +41,8 @@ public class PlaceInfoDto implements Serializable {
         this.review = review;
         this.rating_tot = rating_tot;
     }
+
+    public PlaceInfoDto(){}
 
     private ArrayList<Review> review;
     private double rating_tot;

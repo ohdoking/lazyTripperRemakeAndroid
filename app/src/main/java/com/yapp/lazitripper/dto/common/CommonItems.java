@@ -35,7 +35,6 @@ public class CommonItems<T> {
     @SerializedName("totalCount")
     @Expose
     private Integer totalCount;
-
     public CommonItem<T> getItems() {
         return items;
     }

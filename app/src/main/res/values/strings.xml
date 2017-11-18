@@ -19,6 +19,7 @@
     <string name="title_activity_travel_summary">Map</string>
     <string name="transitionImageName">ImageName!</string>
     <string name="back_cause">"한번 더 뒤로 가기 버튼을 누르시면 저장되지 않은 내용이 전부 사라집니다."</string>
+    <string name="logout">로그아웃</string>
 
     <string name="alert4below">하루에 4군데 이상은 가기 힘듭니다. 계속 하시겠습니까?</string>
     <string name="alert5below">하루에 추가할 수 있는 최대 일정에 도달했습니다. 더 이상의 일정 선택은 불가능합니다.</string>
@@ -28,9 +29,19 @@
     <string name="title_text">20170819 작성한 여행일지</string>
     <string name="item_text">1일차 (부산)</string>
     <string name="AND">and</string>
+
+    <string name="number_ex">1</string>
+    <string name="item_location">부산</string>
+    <string name="title_ex">몽상드애월</string>
+    <string name="item_day_text">DAY  </string>
+    <string name="address_ex">제주특별자치도 애월읍 애월북서길 56-1</string>
     <string name="more1">하루에 한 곳 이상의 장소를 선택해야 합니다</string>
+    <string name="get_title">여행일지의 제목을 입력해주세요.</string>
+    <string name="save_completed">저장되었습니다</string>
 
     <string name="title_activity_test">TestActivity</string>
     <string name="title_activity_test2">Test2Activity</string>
 
+
 </resources>
+

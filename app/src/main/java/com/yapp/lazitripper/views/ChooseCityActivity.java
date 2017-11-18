@@ -1,7 +1,6 @@
 package com.yapp.lazitripper.views;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -29,7 +28,6 @@ import com.yapp.lazitripper.store.ConstantStore;
 import com.yapp.lazitripper.store.SharedPreferenceStore;
 import com.yapp.lazitripper.views.bases.BaseAppCompatActivity;
 import com.yapp.lazitripper.views.component.weekcalendar2.HorizontalCalendar;
-import com.yapp.lazitripper.views.component.weekcalendar2.HorizontalCalendarListener;
 import com.yapp.lazitripper.views.dialog.LoadingDialog;
 
 import java.text.DateFormat;
@@ -154,7 +152,7 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
                     String key = remainingDay.getKey();
                     remainList = remainingDay.getDayRemaining();
                 }
-
+/* todo 계속 에러떠서 주석처리합니다 ㅠㅠ
                 if(remainList != null){
                     chooseDates = getDaysBetweenDates(pickDate.getStartDate(), pickDate.getFinishDate(), remainList);
 
@@ -192,7 +190,7 @@ public class ChooseCityActivity extends BaseAppCompatActivity {
                         }
                     });
 
-                }
+                }*/
 
 
             }

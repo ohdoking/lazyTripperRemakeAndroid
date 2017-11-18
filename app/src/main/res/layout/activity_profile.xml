@@ -1,34 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <ImageView
+        android:id="@+id/iv_profile_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="@dimen/mypage_margin_size"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/arrow" />
 
     <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+        android:paddingTop="8dp">
 
-
-
-    <RelativeLayout
+        <RelativeLayout
             android:id="@+id/profile_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#e6e6e6"
-            >
+            android:layout_height="wrap_content">
 
             <de.hdodenhof.circleimageview.CircleImageView
 
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/user_profile_photo"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                app:civ_border_width="2dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="5dp"
+                android:scaleType="centerCrop"
                 android:src="@drawable/pickatu"
                 app:civ_border_color="#ffffff"
-                android:scaleType="centerCrop"
-                android:layout_marginBottom="5dp"
-                android:layout_centerHorizontal="true"
-                />
+                app:civ_border_width="2dp" />
             <!--android:src="@drawable/profile"-->
 
 
@@ -37,49 +45,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="76dp"
-                android:textColor="#4a4a4a"
+                android:layout_marginTop="56dp"
+                android:text="홍길동"
+                android:textColor="#363636"
                 android:textSize="15sp"
-                />
-
-
-            <RelativeLayout
-                android:id="@+id/travel_plan"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="#e6e6e6"
-                android:layout_below="@+id/user_profile_name"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="27.8dp"
-                >
-
-            <ImageView
-                android:id="@+id/travel_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/plane"
-                android:text="12"
-                android:textColor="#9b9b9b"
-                android:textSize="14sp"
-                />
-
-            <TextView
-                android:id="@+id/travel_day"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="12"
-                android:textColor="#9b9b9b"
-                android:textSize="14sp"
-                android:layout_toRightOf="@+id/travel_icon"
-                android:layout_centerHorizontal="true"
-                />
-
-            </RelativeLayout>
+                android:textStyle="bold" />
 
 
         </RelativeLayout>
-
 
 
         <RelativeLayout
@@ -87,36 +60,30 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/profile_layout"
-            android:layout_marginTop="14.2dp"
-            >
+            android:layout_marginLeft="@dimen/mypage_margin_size"
+            android:layout_marginRight="@dimen/mypage_margin_size"
+            android:layout_marginTop="26dp">
 
             <TextView
                 android:id="@+id/my_travel_key_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="My Travel Keyword"
-                android:textColor="#9b9b9b"
-                android:textSize="12sp"
-                android:layout_marginLeft="10dp" />
+                android:text="관심 키워드"
+                android:textColor="@android:color/black"
+                android:textSize="12sp" />
 
 
             <TextView
                 android:id="@+id/my_travel_key_update"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Update"
-                android:textColor="#9b9b9b"
-                android:textSize="12sp"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="10dp" />
+                android:layout_marginRight="10dp"
+                android:text="수정"
+                android:textColor="#c6c6c6"
+                android:textSize="12sp"
+                android:textStyle="bold" />
 
-            <View android:id="@+id/separator2"
-                android:background="#d8d8d8"
-                android:layout_width = "350dp"
-                android:layout_height="1dip"
-                android:layout_below="@+id/my_travel_key_title"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="2dp" />
 
         </RelativeLayout>
 
@@ -125,68 +92,63 @@
             android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/my_travel_key_layout"
-            android:layout_marginTop="13dp"
-            android:layout_centerHorizontal="true">
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="@dimen/mypage_margin_size"
+            android:layout_marginRight="@dimen/mypage_margin_size"
+            android:layout_marginTop="13dp">
 
             <me.gujun.android.taggroup.TagGroup
                 android:id="@+id/tag_group"
                 style="@style/TagGroup.Beauty_Gray"
-                />
+                app:atg_horizontalPadding="11dp"
+                app:atg_horizontalSpacing="12dp"
+                app:atg_textSize="14sp"
+                app:atg_verticalPadding="5dp"
+                app:atg_verticalSpacing="6dp" />
 
         </RelativeLayout>
 
+        <View
+            android:id="@+id/separator2"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_below="@+id/tag_layout"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:background="#eeeeee" />
+
         <RelativeLayout
-        android:id="@+id/my_route_title_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tag_layout"
-        android:layout_marginTop="5dp"
-        >
-
-
-
-
-        <TextView
-            android:id="@+id/my_route_title"
+            android:id="@+id/my_route_title_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="My Travel Route"
-            android:textColor="#9b9b9b"
-            android:textSize="12sp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="42dp"
-            />
+            android:layout_below="@+id/separator2"
+            android:layout_marginLeft="@dimen/mypage_margin_size"
+            android:layout_marginRight="@dimen/mypage_margin_size"
+            android:layout_marginTop="34dp">
+
+
+            <TextView
+                android:id="@+id/my_route_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="나의 여행 일지"
+                android:textColor="#101010"
+                android:textSize="12sp" />
         </RelativeLayout>
 
-
-
-
-
-
-
-        <RelativeLayout
-            android:id="@+id/my_route_layout"
+        <ListView
+            android:id="@+id/my_route_lv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="5dp"
             android:layout_below="@+id/my_route_title_layout"
-            >
-
-            <!--<include-->
-            <!--layout="@layout/activity_route"-->
-            <!--/>-->
-
-
-            <ListView
-                android:id="@+id/my_route_lv"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                />
-
-
-        </RelativeLayout>
+            android:layout_marginTop="15dp"
+            android:divider="#ffffff"
+            android:dividerHeight="15dp"
+            android:scrollbars="none" />
 
 
     </RelativeLayout>
 
+
+</RelativeLayout>
 

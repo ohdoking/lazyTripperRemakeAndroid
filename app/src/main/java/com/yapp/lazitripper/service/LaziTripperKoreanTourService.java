@@ -4,6 +4,7 @@ import com.yapp.lazitripper.dto.CommonInfoDto;
 import com.yapp.lazitripper.dto.PlaceInfoDto;
 import com.yapp.lazitripper.dto.RegionCodeDto;
 import com.yapp.lazitripper.dto.common.CommonResponse;
+import com.yapp.lazitripper.dto.common.CommonSingleResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -123,7 +124,7 @@ public interface LaziTripperKoreanTourService {
 
 
     @GET("rest/KorService/detailCommon")
-    Call<CommonInfoDto> getPlaceInfoByDetailCommon(
+    Call<CommonSingleResponse<CommonInfoDto>> getPlaceInfoByDetailCommon(
             @Query("MobileOS") String MobileOS,
             @Query("MobileApp") String MobileApp,
             @Query("contentId") Integer contentId,

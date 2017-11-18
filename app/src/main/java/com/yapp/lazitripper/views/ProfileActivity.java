@@ -2,26 +2,25 @@ package com.yapp.lazitripper.views;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.ViewTarget;
-import com.facebook.Profile;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.facebook.login.LoginManager;
 import com.frosquivel.scrollinfinite.ScrollInfiniteAdapter;
-import com.frosquivel.scrollinfinite.ScrollInfiniteListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,11 +28,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.yapp.lazitripper.R;
-
 import com.yapp.lazitripper.dto.TravelRouteDto;
 import com.yapp.lazitripper.store.ConstantStore;
 import com.yapp.lazitripper.store.SharedPreferenceStore;
+import com.yapp.lazitripper.util.RoundedCornersTransformation;
 import com.yapp.lazitripper.views.bases.BaseAppCompatActivity;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -47,33 +47,59 @@ public class ProfileActivity extends BaseAppCompatActivity {
     private String uuid;
     private DatabaseReference rDatabase;
     private List<Object> travelTotalList;
+    private ImageView ivProfileItemBg;
+    private Button btProfileLogout ;
+    private RelativeLayout rlProfileItemBg;
     private static String TAG = "dongs";
     private ListView listView;
+    private View listViewFooter;
+    private TextView tvProfileKeywordEdit;
     private ProgressBar progressBar;
     private ArrayList<TravelRouteDto> travelRouteList;
-    private HashMap<String,ArrayList<TravelRouteDto>> travelRouteMap;
-
-
-
+    private HashMap<String, ArrayList<TravelRouteDto>> travelRouteMap;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        setMyHeader();
 
-        ImageView leftImage = getLeftImageView();
-        leftImage.setImageResource(R.drawable.arrow);
-        leftImage.setOnClickListener(new View.OnClickListener() {
+        ( (ImageView) findViewById(R.id.iv_profile_back)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
+
             }
         });
-        ImageView rightImage = getRightImageView();
-        rightImage.setImageResource(R.drawable.logout_icon);
-        rightImage.setOnClickListener(new View.OnClickListener() {
+        ((TextView)findViewById(R.id.my_travel_key_update)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ProfileActivity.this,KeywordActivity.class);
+                i.putExtra("init",false);//KeywordActivity Flag 추가
+                startActivity(i);
+            }
+        });
+        listViewFooter = getLayoutInflater().inflate(R.layout.item_route_footer,null,false);
+
+        travelTotalList = new ArrayList<>();
+        travelRouteList = new ArrayList<>();
+        travelRouteMap = new HashMap<>();
+        rDatabase = FirebaseDatabase.getInstance().getReference("lazitripper");
+
+//        로그인을 제껴놔서 주석처리
+//        String userId = Profile.getCurrentProfile().getId();
+//        String profileURL = "http://graph.facebook.com/" + userId + "/picture?type=large";
+//        ImageView profileImageView = (ImageView) findViewById(R.id.user_profile_photo);
+//        Glide.with(this).load(profileURL).into(profileImageView);
+//        TextView nameText = (TextView) findViewById(R.id.user_profile_name);
+//        nameText.setText(Profile.getCurrentProfile().getName());
+
+
+        listView = (ListView) findViewById(R.id.my_route_lv);
+        listView.addFooterView(listViewFooter);
+        btProfileLogout = ((Button)listViewFooter.findViewById(R.id.bt_profile_logout));
+        btProfileLogout.setPaintFlags(btProfileLogout.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        btProfileLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
@@ -84,38 +110,30 @@ public class ProfileActivity extends BaseAppCompatActivity {
             }
         });
 
-
-
-
-        travelTotalList = new ArrayList<>();
-        travelRouteList = new ArrayList<>();
-        travelRouteMap = new HashMap<>();
-        rDatabase =  FirebaseDatabase.getInstance().getReference("lazitripper");
-
-
-
-        String userId = Profile.getCurrentProfile().getId();
-        String profileURL = "http://graph.facebook.com/" + userId + "/picture?type=large";
-        ImageView profileImageView = (ImageView) findViewById(R.id.user_profile_photo);
-        Glide.with(this).load(profileURL).into(profileImageView);
-        TextView nameText = (TextView) findViewById(R.id.user_profile_name);
-        nameText.setText(Profile.getCurrentProfile().getName());
-
-
-        listView = (ListView) findViewById(R.id.my_route_lv);
-
         getTravelList(ProfileActivity.this);
         //// TODO: 2017-03-26 My Travel Route와 DB 동기화, 터치이벤트 넣고 해당 item 클릭했을 때 상세보기(TravelSummary로?)
         // SP 에서 저장된 테그들의 정보를 가져옴.
 
         SharedPreferenceStore<String[]> sharedPreferenceStore = new SharedPreferenceStore<String[]>(getApplicationContext(), ConstantStore.STORE);
         String[] tagList = sharedPreferenceStore.getPreferences(ConstantStore.TAGS, String[].class);
+
+        //태그 그룹에 # 추가
+        int index =0;
+        if(tagList.length!=0)
+        for(String tag : tagList){
+            tagList[index] =  "#" + tag;
+            index++;
+        }
+        else {
+            tagList = new String[1];
+            tagList[0] = "#태그를 선택해주세요";
+        }
         TagGroup mTagGroup = (TagGroup) findViewById(R.id.tag_group);
         mTagGroup.setTags(tagList);
 
     }
 
-    private void getTravelList(Activity context){
+    private void getTravelList(Activity context) {
         //EdQjmUKrGEWqX355Lct5EFiccR23
         //mDH4gS4mJDaKLqmfbosrvHVBkHE3
         //TP2TT0sMJgVv36vakWyW72Saz4r2
@@ -128,95 +146,70 @@ public class ProfileActivity extends BaseAppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                TextView travelDay = (TextView)findViewById(R.id.travel_day);
-                travelDay.setText(dataSnapshot.getChildrenCount() + "");
-
-
-                for(DataSnapshot route : dataSnapshot.getChildren()){
+                for (DataSnapshot route : dataSnapshot.getChildren()) {
                     travelRouteMap = new HashMap<>();
                     Iterator<DataSnapshot> iterator = route.getChildren().iterator();
-                    while(iterator.hasNext()){
+                    while (iterator.hasNext()) {
                         DataSnapshot dataSnap = iterator.next();
                         travelRouteList = new ArrayList<>();
                         //Log.e(TAG,dataSnap.toString());
                         Iterator<DataSnapshot> routeIterator = dataSnap.getChildren().iterator();
-                        while(routeIterator.hasNext()) {
+                        while (routeIterator.hasNext()) {
                             DataSnapshot routeDataSnap = routeIterator.next();
                             travelRouteList.add(routeDataSnap.getValue(TravelRouteDto.class));
                         }
-                        travelRouteMap.put(dataSnap.getKey(),travelRouteList);
+                        travelRouteMap.put(dataSnap.getKey(), travelRouteList);
                     }
                     travelTotalList.add(travelRouteMap);
+                    travelTotalList.add(travelRouteMap);
+                    travelTotalList.add(travelRouteMap);
+                    travelTotalList.add(travelRouteMap);
                 }
-
-
-
-
-
-
-
-                ScrollInfiniteAdapter adapter = new ScrollInfiniteAdapter(ctx, travelTotalList, R.layout.activity_route, 5, 5){
+//                .setLayoutParams(new RelativeLayout.LayoutParams(Layouarams.FILL_PARENT, theSizeIWant));
+                listView.setMinimumHeight(130*travelTotalList.size());
+                ScrollInfiniteAdapter adapter = new ScrollInfiniteAdapter(ctx, travelTotalList, R.layout.item_route, 5, 5) {
                     @Override
-                    public View getView(int position, View convertView, ViewGroup parent) {
+                    public View getView(final int position, View convertView, ViewGroup parent) {
 
-                        View view=null;
+                        View view = null;
 
-
-                        HashMap<String,ArrayList<TravelRouteDto>> routeMap = (HashMap<String,ArrayList<TravelRouteDto>>)getItem(position);
-
+                        HashMap<String, ArrayList<TravelRouteDto>> routeMap = (HashMap<String, ArrayList<TravelRouteDto>>) getItem(position);
                         Object[] keyList = routeMap.keySet().toArray();
-
                         String[] stringKeyList = Arrays.copyOf(keyList, keyList.length, String[].class);
-
 
                         Arrays.sort(stringKeyList);
 
-                        if(convertView == null){
-                            view = LayoutInflater.from(getContext()).inflate(R.layout.activity_route, null);
+                        if (convertView == null) {
+                            view = LayoutInflater.from(getContext()).inflate(R.layout.item_route, null);
 
-
-                        }else{
+                        } else {
                             view = convertView;
                         }
+                        view.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Toast.makeText(ProfileActivity.this,"Position : "+position+"여기 연결해야되는 액티비티 머야",Toast.LENGTH_SHORT).show();
+                            }
+                        });
 
-                        RelativeLayout rootview = (RelativeLayout)view.findViewById(R.id.my_route_rl);
+                        ivProfileItemBg = (ImageView) view.findViewById(R.id.iv_item_route_backgound);
                         Glide.with(ctx)
                                 .load(routeMap.get(stringKeyList[0]).get(0).getImageURL())
+                                .centerCrop()
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                .placeholder(R.drawable.default_thumbnail)
-                                .into(new ViewTarget<RelativeLayout, GlideDrawable>(rootview) {
-                                    @Override
-                                    public void onResourceReady(GlideDrawable resource, GlideAnimation anim) {
-                                        RelativeLayout myView = this.view;
-                                        // Set your resource on myView and/or start your animation here.
-                                        myView.setBackground(resource);
-                                    }
-                                });
+                                .bitmapTransform(new CenterCrop(ProfileActivity.this),new RoundedCornersTransformation( ProfileActivity.this,60, 2))
+                                .into(ivProfileItemBg);
 
                         String[] firstList = stringKeyList[0].toString().split("@");
 
                         String firstDate = firstList[0];
-                        String firstCity = makeTitleName(Integer.parseInt(firstList[1]));
-
-                        String[] lastList = stringKeyList[stringKeyList.length-1].toString().split("@");
-
-                        String lastDate = lastList[0];
-                        String lastCity = makeTitleName(Integer.parseInt(lastList[1]));
-
 
                         TextView travelDatatv = (TextView) view.findViewById(R.id.travel_date);
-                        travelDatatv.setText(firstDate + " - " + lastDate);
+                        travelDatatv.setText(firstDate + "작성");
 
-                        TextView travel_space1 = (TextView) view.findViewById(R.id.travel_space1);
-                        travel_space1.setText(firstCity);
-
-                        TextView travel_space2 = (TextView) view.findViewById(R.id.travel_space2);
-                        travel_space2.setText(lastCity);
                         return view;
                     }
                 };
-
-
 
 
                 //View footer = LayoutInflater.from(ctx).inflate(R.layout.progress_bar, null);
@@ -226,6 +219,7 @@ public class ProfileActivity extends BaseAppCompatActivity {
                 //listView.setOnScrollListener(new ScrollInfiniteListener(adapter,progressBar));
 
             }
+
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
@@ -241,41 +235,59 @@ public class ProfileActivity extends BaseAppCompatActivity {
         String name = null;
 
         switch (cityCode) {
-            case 1    : name = "서울";
+            case 1:
+                name = "서울";
                 break;
-            case 2   : name = "인천";
+            case 2:
+                name = "인천";
                 break;
-            case 3  : name = "대전";
+            case 3:
+                name = "대전";
                 break;
-            case 4  : name = "대구";
+            case 4:
+                name = "대구";
                 break;
-            case 5  : name = "광주";
+            case 5:
+                name = "광주";
                 break;
-            case 6  : name = "부산";
+            case 6:
+                name = "부산";
                 break;
-            case 7  : name = "울산";
+            case 7:
+                name = "울산";
                 break;
-            case 8  : name = "세종특별자치시";
+            case 8:
+                name = "세종특별자치시";
                 break;
-            case 31  : name = "경기도";
+            case 31:
+                name = "경기도";
                 break;
-            case 32  : name = "강원도";
+            case 32:
+                name = "강원도";
                 break;
-            case 33  : name = "충청북도";
+            case 33:
+                name = "충청북도";
                 break;
-            case 34  : name = "충청남도";
+            case 34:
+                name = "충청남도";
                 break;
-            case 35  : name = "경상북도";
+            case 35:
+                name = "경상북도";
                 break;
-            case 36  : name = "경상남도";
+            case 36:
+                name = "경상남도";
                 break;
-            case 37  : name = "전라북도";
+            case 37:
+                name = "전라북도";
                 break;
-            case 38  : name = "전라남도";
+            case 38:
+                name = "전라남도";
                 break;
-            case 39  : name = "제주도";
+            case 39:
+                name = "제주도";
                 break;
-            default    : new Exception("no place code");
+            default:
+                new Exception("no place code");
                 break;
         }
         return name;

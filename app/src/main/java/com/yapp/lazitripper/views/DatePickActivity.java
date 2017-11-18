@@ -60,7 +60,7 @@ public class DatePickActivity extends BaseAppCompatActivity {
                             datePick.setText("30");
                         }
                         else if(Integer.parseInt(datePick.getText().toString()) <= 30 && Integer.parseInt(datePick.getText().toString()) > 0) {
-                            Intent i = new Intent(DatePickActivity.this, ChooseCityActivity.class);
+                            Intent i = new Intent(DatePickActivity.this, CityPickActivity.class);
                             i.putExtra("date", datePick.getText().toString());
                             startActivity(i);
                             finish();

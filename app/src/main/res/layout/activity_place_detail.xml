@@ -3,6 +3,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:background="@android:color/white"
     android:layout_height="match_parent">
 
     <RelativeLayout
@@ -18,19 +19,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="260dp">
 
-                <ImageView
-                    android:id="@+id/backgroundImage"
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="260dp"
-                    android:layout_alignParentTop="true"
-                    android:background="@color/gray"
-                    android:transitionName="@string/transitionImageName" />
+                    android:foreground="#4c000000">
+
+                    <ImageView
+                        android:id="@+id/backgroundImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="260dp"
+                        android:layout_alignParentTop="true"
+                        android:background="@color/gray"
+                        android:transitionName="@string/transitionImageName" />
+                </RelativeLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="25dp"
-                    android:layout_marginTop="40dp"
+                    android:layout_marginTop="30dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -42,17 +49,12 @@
                         android:textSize="22sp"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="  /"
-                        android:textColor="@android:color/white"
-                        android:textSize="22sp" />
 
                     <TextView
                         android:id="@+id/tv_place_detail_location"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
                         android:text="제주도"
                         android:textColor="@android:color/white"
                         android:textSize="22sp" />
@@ -60,13 +62,13 @@
 
                 <ImageView
                     android:id="@+id/iv_place_detail_close"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
                     android:layout_marginRight="20dp"
-                    android:layout_marginTop="40dp"
-                    android:src="@drawable/ic_close" />
+                    android:layout_marginTop="25dp"
+                    android:src="@drawable/icon_exit_white" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -87,7 +89,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="섭지코지"
-                        android:textColor="#fffedf6b"
+                        android:textColor="#ffd300"
                         android:textSize="28sp"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -106,7 +108,7 @@
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:src="@drawable/ic_map_black_36dp" />
+                        android:src="@drawable/icon_location" />
 
                     <TextView
                         android:id="@+id/addr"
@@ -114,6 +116,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:text="Jeju Island"
+                        android:textColor="@color/place_detail_text"
                         android:textSize="16sp" />
                 </LinearLayout>
 
@@ -124,19 +127,20 @@
                     android:layout_alignParentStart="true"
                     android:layout_below="@+id/layout_addr"
                     android:layout_marginLeft="23dp"
-                    android:layout_marginTop="09dp"
+                    android:layout_marginTop="9dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:src="@drawable/ic_local_phone_black_36dp" />
+                        android:src="@drawable/icon_tel" />
 
                     <TextView
                         android:id="@+id/tel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/place_detail_text"
                         android:layout_marginLeft="5dp"
                         android:text="1544-9506"
                         android:textSize="16sp" />
@@ -148,15 +152,18 @@
                     android:layout_height="2dp"
                     android:layout_below="@id/layout_tel"
                     android:layout_marginTop="24dp"
-                    android:background="@color/gray" />
+                    android:background="#dddddd" />
             </RelativeLayout>
 
             <TextView
                 android:id="@+id/tv_place_detail_category"
-                android:layout_width="110dp"
+                android:layout_width="wrap_content"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
                 android:layout_height="36dp"
                 android:layout_marginLeft="25dp"
                 android:layout_marginTop="26dp"
+                android:textColor="@color/place_detail_text"
                 android:background="@drawable/placedetail_category_background"
                 android:gravity="center"
                 android:text="자연생태관광지" />
@@ -167,8 +174,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="25dp"
                 android:layout_marginRight="25dp"
+                android:textColor="@color/place_detail_text"
                 android:layout_marginTop="16dp"
-                android:text="자연생태관광지자연생태관광지자연생태관광지자연생태관광지자연생태관광지자연생태관광지자연생태관광지자연생태관광지자연생태관광지자연생태관광지자연생태관광지자연생태관광지자연생태관광지자연생태관광지자연생태관광지"
+                android:text="설명 받아오는중..."
                 android:textSize="16dp" />
         </LinearLayout>
 
