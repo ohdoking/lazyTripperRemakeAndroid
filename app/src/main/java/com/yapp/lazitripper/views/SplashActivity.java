@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.yapp.lazitripper.R;
+import com.yapp.lazitripper.util.FirebaseService;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -12,6 +13,8 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        FirebaseService.getInstance().setFirebase();
         /****** Create Thread that will sleep for 5 seconds *************/
         Thread background = new Thread() {
             public void run() {

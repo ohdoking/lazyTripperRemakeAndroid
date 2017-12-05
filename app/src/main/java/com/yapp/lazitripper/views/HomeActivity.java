@@ -38,17 +38,15 @@ import com.yapp.lazitripper.views.bases.BaseAppCompatActivity;
 import java.util.ArrayList;
 import java.util.List;
 
-
 // 메인 화면
 
 public class HomeActivity extends BaseAppCompatActivity {
 
     private final String TAG = "HomeActivity";
-    private PickDate pickDate;
-    private DatabaseReference myRef;
     private SharedPreferenceStore sharedPreferenceStore;
+    private FirebaseUser user;
     private List<AllTravelInfo> travelList = new ArrayList<>();
-    private String uuid, userName ="";
+    private String userName;
     private RecyclerView recyclerTavel;
     private RecentTravelAdapter adapter;
 
@@ -58,24 +56,15 @@ public class HomeActivity extends BaseAppCompatActivity {
         setContentView(R.layout.activity_home);
         setHeader();
 
-        FirebaseService.getInstance().setFirebase();
-
-        pickDate = new PickDate();
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        userName = user.getDisplayName();
 
         sharedPreferenceStore = new SharedPreferenceStore(getApplicationContext(), ConstantStore.STORE);
-        myRef = FirebaseDatabase.getInstance().getReference("lazitripper");
-        recyclerTavel = (RecyclerView)findViewById(R.id.recycler_home_travel_list);
-        ImageView rightImage = getRightImageView();
-        rightImage.setImageResource(R.drawable.ic_person_black_36dp);
+        sharedPreferenceStore.savePreferences(ConstantStore.USERNAME, user.getDisplayName());
 
-        TextView emailTv = (TextView) findViewById(R.id.textView2);
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        viewSetting();
 
-        LinearLayoutManager manager = new LinearLayoutManager(getApplicationContext());
-        adapter = new RecentTravelAdapter(getApplicationContext(), travelList, R.layout.item_route);
-        recyclerTavel.setAdapter(adapter);
-        recyclerTavel.setLayoutManager(manager);
-
+        // 파이어베이스에서 데이터 받아오는 속도가 느려서 속도 지연시킴
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
 
@@ -86,25 +75,26 @@ public class HomeActivity extends BaseAppCompatActivity {
             }
         }, 2000);
 
-        uuid = user.getUid();
+    }
 
-        if (user != null) {
-            userName = user.getDisplayName();
-            sharedPreferenceStore.savePreferences(ConstantStore.USERNAME, userName);             //shared에 유저명 추가
+    public void viewSetting() {
 
-        }
+        recyclerTavel = (RecyclerView) findViewById(R.id.recycler_home_travel_list);
+        ImageView rightImage = getRightImageView();
+        rightImage.setImageResource(R.drawable.ic_person_black_36dp);
 
-        emailTv.setText(userName + "님,\n편하게 여행을\n만들어보세요:-)");
+        TextView tvEmail = (TextView) findViewById(R.id.text_email_home);
+
+        tvEmail.setText(userName + "님,\n편하게 여행을\n만들어보세요:-)");
         //오른쪽 마이페이지 버튼
         rightImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(HomeActivity.this,ProfileActivity.class));
+                startActivity(new Intent(HomeActivity.this, ProfileActivity.class));
             }
         });
 
-        //여행 만들기
-        Button btnMakeRoot = (Button) findViewById(R.id.btnMakeRoot);
+        Button btnMakeRoot = (Button) findViewById(R.id.btnMakeRoot); //여행 만들기
         btnMakeRoot.setOnClickListener(
                 new Button.OnClickListener() {
                     public void onClick(View v) {
@@ -116,19 +106,19 @@ public class HomeActivity extends BaseAppCompatActivity {
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
-        //FirebaseService.getInstance().setFirebase();
-        //recentTravelListSetting();
 
+        travelList = FirebaseService.getInstance().getTravelList();
+        recentTravelListSetting();
     }
 
-    private void recentTravelListSetting(){
-        LinearLayoutManager manager = new LinearLayoutManager(this);
+    private void recentTravelListSetting() {
+
         adapter = new RecentTravelAdapter(getApplicationContext(), travelList, R.layout.item_route);
         recyclerTavel.setAdapter(adapter);
         recyclerTavel.setHasFixedSize(true);
-        recyclerTavel.setLayoutManager(manager);
+        recyclerTavel.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         adapter.notifyDataSetChanged();
     }
 

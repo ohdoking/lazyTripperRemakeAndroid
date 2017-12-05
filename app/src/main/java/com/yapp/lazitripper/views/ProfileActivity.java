@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.frosquivel.scrollinfinite.ScrollInfiniteAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -87,12 +88,12 @@ public class ProfileActivity extends BaseAppCompatActivity {
         rDatabase = FirebaseDatabase.getInstance().getReference("lazitripper");
 
 //        로그인을 제껴놔서 주석처리
-//        String userId = Profile.getCurrentProfile().getId();
-//        String profileURL = "http://graph.facebook.com/" + userId + "/picture?type=large";
-//        ImageView profileImageView = (ImageView) findViewById(R.id.user_profile_photo);
-//        Glide.with(this).load(profileURL).into(profileImageView);
-//        TextView nameText = (TextView) findViewById(R.id.user_profile_name);
-//        nameText.setText(Profile.getCurrentProfile().getName());
+        String userId = Profile.getCurrentProfile().getId();
+        String profileURL = "http://graph.facebook.com/" + userId + "/picture?type=large";
+        ImageView profileImageView = (ImageView) findViewById(R.id.user_profile_photo);
+        Glide.with(this).load(profileURL).into(profileImageView);
+        TextView nameText = (TextView) findViewById(R.id.user_profile_name);
+        nameText.setText(Profile.getCurrentProfile().getName());
 
 
         listView = (ListView) findViewById(R.id.my_route_lv);
