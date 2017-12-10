@@ -25,7 +25,7 @@ public class RecentTravelViewHolder extends RecyclerView.ViewHolder{
         this.context = context;
         travelTitle = (TextView)view.findViewById(R.id.travel_title);
         travelDate = (TextView)view.findViewById(R.id.travel_date);
-        ivProfileItemBg = (ImageView) view.findViewById(R.id.iv_item_route_backgound);
+        ivProfileItemBg = (ImageView) view.findViewById(R.id.iv_item_route_background);
 
     }
 

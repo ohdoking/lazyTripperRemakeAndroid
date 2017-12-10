@@ -193,7 +193,7 @@ public class ProfileActivity extends BaseAppCompatActivity {
                             }
                         });
 
-                        ivProfileItemBg = (ImageView) view.findViewById(R.id.iv_item_route_backgound);
+                        ivProfileItemBg = (ImageView) view.findViewById(R.id.iv_item_route_background);
                         Glide.with(ctx)
                                 .load(routeMap.get(stringKeyList[0]).get(0).getImageURL())
                                 .centerCrop()

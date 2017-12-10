@@ -14,7 +14,6 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        FirebaseService.getInstance().setFirebase();
         /****** Create Thread that will sleep for 5 seconds *************/
         Thread background = new Thread() {
             public void run() {
