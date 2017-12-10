@@ -33,6 +33,7 @@ import com.yapp.lazitripper.store.ConstantStore;
 import com.yapp.lazitripper.store.SharedPreferenceStore;
 import com.yapp.lazitripper.util.FirebaseService;
 import com.yapp.lazitripper.views.adapters.RecentTravelAdapter;
+import com.yapp.lazitripper.views.adapters.RecyclerItemClickListener;
 import com.yapp.lazitripper.views.bases.BaseAppCompatActivity;
 
 import java.util.ArrayList;
@@ -56,6 +57,7 @@ public class HomeActivity extends BaseAppCompatActivity {
         setContentView(R.layout.activity_home);
         setHeader();
 
+        FirebaseService.getInstance().setFirebase();
         user = FirebaseAuth.getInstance().getCurrentUser();
         userName = user.getDisplayName();
 
@@ -116,11 +118,18 @@ public class HomeActivity extends BaseAppCompatActivity {
     private void recentTravelListSetting() {
 
         adapter = new RecentTravelAdapter(getApplicationContext(), travelList, R.layout.item_route);
+        recyclerTavel.addOnItemTouchListener(new RecyclerItemClickListener(this, recyclerTavel, new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent intent = new Intent(getApplicationContext(), MyTravelActivity.class);
+                intent.putExtra(MyTravelActivity.DELIVER_ITEM, travelList.get(position));
+                startActivity(intent);
+            }
+        }));
         recyclerTavel.setAdapter(adapter);
         recyclerTavel.setHasFixedSize(true);
         recyclerTavel.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         adapter.notifyDataSetChanged();
     }
-
 
 }

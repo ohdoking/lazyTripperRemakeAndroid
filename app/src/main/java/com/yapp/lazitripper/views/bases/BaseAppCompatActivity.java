@@ -49,6 +49,8 @@ public class BaseAppCompatActivity extends AppCompatActivity {
         ActionBar.LayoutParams params = new ActionBar.LayoutParams(ActionBar.LayoutParams.WRAP_CONTENT,
                 ActionBar.LayoutParams.WRAP_CONTENT);
         actionBar.setCustomView(mCustomView, params);
+
+        getSupportActionBar().setElevation(0);
     }
 
     public void setSummaryHeader(){
