@@ -13,11 +13,12 @@ import com.yapp.lazitripper.dto.TravelInfo;
 import com.yapp.lazitripper.util.FirebaseService;
 import com.yapp.lazitripper.views.adapters.DayItemAdapter;
 import com.yapp.lazitripper.views.adapters.RecentTravelAdapter;
+import com.yapp.lazitripper.views.bases.BaseAppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyTravelActivity extends AppCompatActivity {
+public class MyTravelActivity extends BaseAppCompatActivity {
 
     private RecyclerView recyclerTavel;
     private DayItemAdapter adapter;
@@ -29,6 +30,7 @@ public class MyTravelActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_travel);
+        setHeader();
 
         travelList = (AllTravelInfo) getIntent().getSerializableExtra(DELIVER_ITEM);
 

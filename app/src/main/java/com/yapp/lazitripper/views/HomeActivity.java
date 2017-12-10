@@ -57,7 +57,6 @@ public class HomeActivity extends BaseAppCompatActivity {
         setContentView(R.layout.activity_home);
         setHeader();
 
-        FirebaseService.getInstance().setFirebase();
         user = FirebaseAuth.getInstance().getCurrentUser();
         userName = user.getDisplayName();
 
@@ -66,16 +65,9 @@ public class HomeActivity extends BaseAppCompatActivity {
 
         viewSetting();
 
-        // 파이어베이스에서 데이터 받아오는 속도가 느려서 속도 지연시킴
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
+        travelList = FirebaseService.getInstance().getTravelList();
+        recentTravelListSetting();
 
-            @Override
-            public void run() {
-                travelList = FirebaseService.getInstance().getTravelList();
-                recentTravelListSetting();
-            }
-        }, 2000);
 
     }
 
@@ -111,8 +103,6 @@ public class HomeActivity extends BaseAppCompatActivity {
     public void onResume() {
         super.onResume();
 
-        travelList = FirebaseService.getInstance().getTravelList();
-        recentTravelListSetting();
     }
 
     private void recentTravelListSetting() {

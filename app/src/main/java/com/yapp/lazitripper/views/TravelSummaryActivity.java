@@ -87,15 +87,13 @@ public class TravelSummaryActivity extends BaseAppCompatActivity {
 
             if (title.length() >= 1) {
                 allTravelInfo.setTravelTitle(title);
-                mDatabase.child("lazitripper").child("user").child(user.getUid()).child("Trav" +
-                        " el").child(title).setValue(allTravelInfo);
+                mDatabase.child("lazitripper").child("user").child(user.getUid()).child("Travel").child(title).setValue(allTravelInfo);
                 finish();
             } else {
                 Toast.makeText(getApplicationContext(), R.string.get_title, Toast.LENGTH_SHORT).show();
             }
             Toast.makeText(getApplicationContext(), R.string.save_completed, Toast.LENGTH_LONG).show();
         }
-
     }
 
     void init() {
@@ -125,7 +123,6 @@ public class TravelSummaryActivity extends BaseAppCompatActivity {
             PlaceInfoDto firstPlace = list.get(0).getPlaceInfoDtoList().get(0);
 
             LatLng latLng = new LatLng(firstPlace.getMapy(), firstPlace.getMapx());
-
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12));
 
             int i = 1;

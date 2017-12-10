@@ -14,7 +14,7 @@ import java.util.List;
 
 public class FirebaseService {
 
-    private static FirebaseService firebaseManager;
+    private static volatile FirebaseService firebaseManager;
     private DatabaseReference mDatabase;
     private FirebaseUser user;
     private static ArrayList<AllTravelInfo> travelList = new ArrayList<>();
@@ -34,7 +34,7 @@ public class FirebaseService {
 
     public List<AllTravelInfo> getTravelList() {
 
-        if (travelList == null)
+        if (travelList.size() == 0)
             setFirebase();
         return travelList;
     }
@@ -48,14 +48,17 @@ public class FirebaseService {
 
     public void setFirebase() {
 
+        travelList.clear();
+
         mDatabase.child("user").child(user.getUid()).child("Travel")
                 .addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                         info = dataSnapshot.getValue(AllTravelInfo.class);
 
-                        if (!travelList.contains(info) && info != null)
-                            travelList.add(info);
+                        if (!travelList.contains(info) && info.getTravelTitle() != null)
+                            if(info.getTravelTitle().length() > 0)
+                                travelList.add(info);
                     }
 
                     @Override

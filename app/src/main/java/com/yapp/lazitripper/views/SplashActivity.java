@@ -17,8 +17,7 @@ public class SplashActivity extends AppCompatActivity {
 
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         //   return accessToken != null;
-        if (accessToken != null)
-            FirebaseService.getInstance().setFirebase();
+
         /****** Create Thread that will sleep for 5 seconds *************/
         Thread background = new Thread() {
             public void run() {
