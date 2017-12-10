@@ -9,11 +9,19 @@
     <ImageView
         android:id="@+id/iv_profile_back"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="@dimen/mypage_margin_size"
         android:layout_marginTop="16dp"
         android:src="@drawable/arrow" />
+    <ImageView
+        android:id="@+id/iv_profile_logout"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/mypage_margin_size"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/icon_logout" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -136,15 +144,14 @@
                 android:textSize="12sp" />
         </RelativeLayout>
 
-        <ListView
-            android:id="@+id/my_route_lv"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_profile_travel_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/my_route_title_layout"
             android:layout_marginTop="15dp"
-            android:divider="#ffffff"
-            android:dividerHeight="15dp"
-            android:scrollbars="none" />
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
 
 
     </RelativeLayout>

@@ -1,63 +1,38 @@
 package com.yapp.lazitripper.views;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Paint;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
-import com.frosquivel.scrollinfinite.ScrollInfiniteAdapter;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.yapp.lazitripper.R;
-import com.yapp.lazitripper.dto.TravelRouteDto;
+import com.yapp.lazitripper.dto.AllTravelInfo;
 import com.yapp.lazitripper.store.ConstantStore;
 import com.yapp.lazitripper.store.SharedPreferenceStore;
-import com.yapp.lazitripper.util.RoundedCornersTransformation;
+import com.yapp.lazitripper.util.FirebaseService;
+import com.yapp.lazitripper.views.adapters.RecentTravelAdapter;
+import com.yapp.lazitripper.views.adapters.RecyclerItemClickListener;
 import com.yapp.lazitripper.views.bases.BaseAppCompatActivity;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import me.gujun.android.taggroup.TagGroup;
 
 public class ProfileActivity extends BaseAppCompatActivity {
-    private ArrayList<String> tagList;
-    private String uuid;
-    private DatabaseReference rDatabase;
-    private List<Object> travelTotalList;
-    private ImageView ivProfileItemBg;
-    private Button btProfileLogout ;
-    private RelativeLayout rlProfileItemBg;
     private static String TAG = "dongs";
-    private ListView listView;
-    private View listViewFooter;
-    private TextView tvProfileKeywordEdit;
-    private ProgressBar progressBar;
-    private ArrayList<TravelRouteDto> travelRouteList;
-    private HashMap<String, ArrayList<TravelRouteDto>> travelRouteMap;
+    private List<AllTravelInfo> travelList = new ArrayList<>();
+    private RecentTravelAdapter adapter;
+    private RecyclerView recyclerTavel;
+
 
 
     @Override
@@ -72,6 +47,17 @@ public class ProfileActivity extends BaseAppCompatActivity {
 
             }
         });
+        ( (ImageView) findViewById(R.id.iv_profile_logout)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                LoginManager.getInstance().logOut();
+                Intent i = new Intent(ProfileActivity.this, LoginActivity.class);
+                startActivity(i);
+                finish();
+
+            }
+        });
         ((TextView)findViewById(R.id.my_travel_key_update)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,40 +66,19 @@ public class ProfileActivity extends BaseAppCompatActivity {
                 startActivity(i);
             }
         });
-        listViewFooter = getLayoutInflater().inflate(R.layout.item_route_footer,null,false);
-
-        travelTotalList = new ArrayList<>();
-        travelRouteList = new ArrayList<>();
-        travelRouteMap = new HashMap<>();
-        rDatabase = FirebaseDatabase.getInstance().getReference("lazitripper");
-
-//        로그인을 제껴놔서 주석처리
+        recyclerTavel = (RecyclerView) findViewById(R.id.recycler_profile_travel_list);
         String userId = Profile.getCurrentProfile().getId();
         String profileURL = "http://graph.facebook.com/" + userId + "/picture?type=large";
         ImageView profileImageView = (ImageView) findViewById(R.id.user_profile_photo);
         Glide.with(this).load(profileURL).into(profileImageView);
         TextView nameText = (TextView) findViewById(R.id.user_profile_name);
         nameText.setText(Profile.getCurrentProfile().getName());
-
-
-        listView = (ListView) findViewById(R.id.my_route_lv);
-        listView.addFooterView(listViewFooter);
-        btProfileLogout = ((Button)listViewFooter.findViewById(R.id.bt_profile_logout));
-        btProfileLogout.setPaintFlags(btProfileLogout.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        btProfileLogout.setOnClickListener(new View.OnClickListener() {
+        recyclerTavel.addOnItemTouchListener(new RecyclerItemClickListener(ProfileActivity.this, recyclerTavel, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
-            public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                LoginManager.getInstance().logOut();
-                Intent i = new Intent(ProfileActivity.this, LoginActivity.class);
-                startActivity(i);
-                finish();
+            public void onItemClick(View view, int position) {
+                Toast.makeText(getApplicationContext(),position+"번째",Toast.LENGTH_LONG);
             }
-        });
-
-        getTravelList(ProfileActivity.this);
-        //// TODO: 2017-03-26 My Travel Route와 DB 동기화, 터치이벤트 넣고 해당 item 클릭했을 때 상세보기(TravelSummary로?)
-        // SP 에서 저장된 테그들의 정보를 가져옴.
+        }));
 
         SharedPreferenceStore<String[]> sharedPreferenceStore = new SharedPreferenceStore<String[]>(getApplicationContext(), ConstantStore.STORE);
         String[] tagList = sharedPreferenceStore.getPreferences(ConstantStore.TAGS, String[].class);
@@ -134,16 +99,27 @@ public class ProfileActivity extends BaseAppCompatActivity {
 
     }
 
-    private void getTravelList(Activity context) {
-        //EdQjmUKrGEWqX355Lct5EFiccR23
-        //mDH4gS4mJDaKLqmfbosrvHVBkHE3
-        //TP2TT0sMJgVv36vakWyW72Saz4r2
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        travelList = FirebaseService.getInstance().getTravelList();
+        recentTravelListSetting();
+    }
+
+    private void recentTravelListSetting() {
+
+        adapter = new RecentTravelAdapter(getApplicationContext(), travelList, R.layout.item_route);
+        recyclerTavel.setAdapter(adapter);
+        recyclerTavel.setHasFixedSize(true);
+        recyclerTavel.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        adapter.notifyDataSetChanged();
+    }
 
 
-        final Activity ctx = context;
+     /*   final Activity ctx = context;
         rDatabase.child("user").child("mDH4gS4mJDaKLqmfbosrvHVBkHE3").child("Travel").addValueEventListener(new ValueEventListener() {
-
-
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -226,9 +202,7 @@ public class ProfileActivity extends BaseAppCompatActivity {
                 // Failed to read value
                 Log.e("fail", "Failed to read value.", error.toException());
             }
-        });
-
-    }
+        });*/
 
     //지역 코드를 지역 명으로 변환해준다
     private String makeTitleName(Integer cityCode) {
