@@ -6,19 +6,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.yapp.lazitripper.dto.AllTravelInfo;
+import com.yapp.lazitripper.dto.TravelInfo;
 import com.yapp.lazitripper.dto.TravelRouteDto;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class DayItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class DayItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
-    private List<TravelRouteDto> itemList = new ArrayList<>();
+    private List<TravelInfo> itemList = new ArrayList<>();
     private int item_layout;
 
-    public DayItemAdapter(Context context, List<TravelRouteDto> itemList, int item_layout){
+    public DayItemAdapter(Context context, List<TravelInfo> itemList, int item_layout) {
 
         this.context = context;
         this.itemList = itemList;
@@ -28,12 +30,9 @@ public class DayItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View view;
-        RecyclerView.ViewHolder viewHolder;
+        View view = LayoutInflater.from(parent.getContext()).inflate(item_layout, parent, false);
 
-        view = LayoutInflater.from(parent.getContext()).inflate(item_layout, parent, false);
-
-        viewHolder = new DayItemViewHolder(context, view);
+        RecyclerView.ViewHolder viewHolder = new DayItemViewHolder(context, view);
 
         return viewHolder;
     }
@@ -50,7 +49,7 @@ public class DayItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     @Override
-    public int getItemViewType(int position){
+    public int getItemViewType(int position) {
         return 0;
     }
 

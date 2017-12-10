@@ -80,7 +80,6 @@ public class LoginActivity extends FragmentActivity {
                                 // Application code
                                 try {
                                     email = object.getString("email");
-                                    String birthday = object.getString("birthday"); // 01/31/1980 format
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }

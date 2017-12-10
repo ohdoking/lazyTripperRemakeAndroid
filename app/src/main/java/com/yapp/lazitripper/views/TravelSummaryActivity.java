@@ -42,7 +42,7 @@ import java.util.List;
 * 여행 추천 결과 화면
 * */
 
-public class TravelSummaryActivity extends BaseAppCompatActivity  {
+public class TravelSummaryActivity extends BaseAppCompatActivity {
 
     private AllTravelInfo allTravelInfo = new AllTravelInfo();
     private List<TravelInfo> list;
@@ -58,7 +58,7 @@ public class TravelSummaryActivity extends BaseAppCompatActivity  {
         setContentView(R.layout.activity_travel_summary);
         setSummaryHeader();
 
-        allTravelInfo = (AllTravelInfo)getIntent().getSerializableExtra(ConstantIntent.AllTRAVELINFO);
+        allTravelInfo = (AllTravelInfo) getIntent().getSerializableExtra(ConstantIntent.AllTRAVELINFO);
         list = allTravelInfo.getAllTraveInfo();
         saveBtn.setOnClickListener(clickListener); // 상단 저장 버튼 클릭리스너 연결
 
@@ -70,8 +70,8 @@ public class TravelSummaryActivity extends BaseAppCompatActivity  {
     ImageView.OnClickListener clickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            switch (v.getId()){
-                case R.id.img_arrow_header :
+            switch (v.getId()) {
+                case R.id.img_arrow_header:
                     saveDatabase();
             }
         }
@@ -85,13 +85,13 @@ public class TravelSummaryActivity extends BaseAppCompatActivity  {
         if (user != null) {
             String title = editTitle.getText().toString();
 
-            if(title.length() >= 1) {
+            if (title.length() >= 1) {
                 allTravelInfo.setTravelTitle(title);
-                mDatabase.child("lazitripper").child("user").child(user.getUid()).child("Travel").child(title).setValue(allTravelInfo);
+                mDatabase.child("lazitripper").child("user").child(user.getUid()).child("Trav" +
+                        " el").child(title).setValue(allTravelInfo);
                 finish();
-            }
-            else{
-                Toast.makeText(getApplicationContext(), R.string.get_title , Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getApplicationContext(), R.string.get_title, Toast.LENGTH_SHORT).show();
             }
             Toast.makeText(getApplicationContext(), R.string.save_completed, Toast.LENGTH_LONG).show();
         }
@@ -100,11 +100,11 @@ public class TravelSummaryActivity extends BaseAppCompatActivity  {
 
     void init() {
 
-        com.google.android.gms.maps.MapFragment mapFragment = (com.google.android.gms.maps.MapFragment)getFragmentManager().findFragmentById(R.id.map_summary);
+        com.google.android.gms.maps.MapFragment mapFragment = (com.google.android.gms.maps.MapFragment) getFragmentManager().findFragmentById(R.id.map_summary);
         mapFragment.getMapAsync(mapReadyCallback);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_travel_list);
-        adapter = new PlaceInfoAdapter(this,allTravelInfo);
+        adapter = new PlaceInfoAdapter(this, allTravelInfo);
 
         LinearLayoutManager manager = new LinearLayoutManager(this);
 
@@ -128,19 +128,19 @@ public class TravelSummaryActivity extends BaseAppCompatActivity  {
 
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12));
 
-            int i=1;
-            for(PlaceInfoDto item : list.get(0).getPlaceInfoDtoList()){ // Day1의 리스트 마커로
+            int i = 1;
+            for (PlaceInfoDto item : list.get(0).getPlaceInfoDtoList()) { // Day1의 리스트 마커로
                 getMarker(i++, item);
             }
 
         }
     };
 
-    Marker getMarker(int index, PlaceInfoDto item){
+    Marker getMarker(int index, PlaceInfoDto item) {
 
         View marker = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.item_custom_marker, null);
         TextView markerText = (TextView) marker.findViewById(R.id.text_marker);
-        markerText.setText(index+"");
+        markerText.setText(index + "");
 
         LatLng latLng = new LatLng(item.getMapy(), item.getMapx());
         Marker markerTemp = googleMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(this, marker))));
@@ -150,25 +150,25 @@ public class TravelSummaryActivity extends BaseAppCompatActivity  {
     }
 
 
-    void setHeaderContent(){
-        TextView textDayDigit = (TextView)findViewById(R.id.text_header_day_digit);
-        TextView textDayList = (TextView)findViewById(R.id.text_header_day_list);
-        TextView textDate = (TextView)findViewById(R.id.text_header_date);
+    void setHeaderContent() {
+        TextView textDayDigit = (TextView) findViewById(R.id.text_header_day_digit);
+        TextView textDayList = (TextView) findViewById(R.id.text_header_day_list);
+        TextView textDate = (TextView) findViewById(R.id.text_header_date);
 
         String dateDigit = "DAY ";
-        String dateList =  "";
+        String dateList = "";
 
-        for(int i=0; i< list.size(); i++){
-            if(i==0){
-                dateDigit +=  (i+1);
+        for (int i = 0; i < list.size(); i++) {
+            if (i == 0) {
+                dateDigit += (i + 1);
                 dateList += list.get(i).getCityName();
+            } else {
+                dateDigit += "/" + (i + 1);
+                dateList += "/" + list.get(i).getCityName();
             }
-            else{
-                dateDigit += "/" + (i+1);
-                dateList +=  "/" + list.get(i).getCityName();}
         }
 
-        String dateString = new java.text.SimpleDateFormat ("yyyy.MM.dd").format(new java.util.Date()) + " 작성";
+        String dateString = new java.text.SimpleDateFormat("yyyy.MM.dd").format(new java.util.Date()) + " 작성";
 
         textDayDigit.setText(dateDigit);
         textDayList.setText(dateList);
@@ -187,5 +187,6 @@ public class TravelSummaryActivity extends BaseAppCompatActivity  {
         Bitmap bitmap = Bitmap.createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         view.draw(canvas);
-        return bitmap; }
+        return bitmap;
+    }
 }
