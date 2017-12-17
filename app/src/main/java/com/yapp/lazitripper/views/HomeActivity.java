@@ -1,34 +1,18 @@
 package com.yapp.lazitripper.views;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.yapp.lazitripper.R;
-
 import com.yapp.lazitripper.dto.AllTravelInfo;
-import com.yapp.lazitripper.dto.PickDate;
-import com.yapp.lazitripper.dto.RemainingDay;
 import com.yapp.lazitripper.store.ConstantStore;
 import com.yapp.lazitripper.store.SharedPreferenceStore;
 import com.yapp.lazitripper.util.FirebaseService;
@@ -50,6 +34,7 @@ public class HomeActivity extends BaseAppCompatActivity {
     private String userName;
     private RecyclerView recyclerTavel;
     private RecentTravelAdapter adapter;
+    private TextView tvHomeTravel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,8 +60,8 @@ public class HomeActivity extends BaseAppCompatActivity {
 
         recyclerTavel = (RecyclerView) findViewById(R.id.recycler_home_travel_list);
         ImageView rightImage = getRightImageView();
-        rightImage.setImageResource(R.drawable.ic_person_black_36dp);
-
+        rightImage.setImageResource(R.drawable.icon_profile);
+        tvHomeTravel = (TextView)findViewById(R.id.tv_home_travel);
         TextView tvEmail = (TextView) findViewById(R.id.text_email_home);
 
         tvEmail.setText(userName + "님,\n편하게 여행을\n만들어보세요:-)");
@@ -107,6 +92,10 @@ public class HomeActivity extends BaseAppCompatActivity {
 
     private void recentTravelListSetting() {
 
+        if(travelList==null || travelList.size()==0) {
+            tvHomeTravel.setVisibility(View.GONE);
+            recyclerTavel.setVisibility(View.GONE);
+        }
         adapter = new RecentTravelAdapter(getApplicationContext(), travelList, R.layout.item_route);
         recyclerTavel.addOnItemTouchListener(new RecyclerItemClickListener(this, recyclerTavel, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
