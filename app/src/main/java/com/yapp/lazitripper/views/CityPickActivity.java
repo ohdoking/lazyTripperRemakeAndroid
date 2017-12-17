@@ -86,10 +86,24 @@ public class CityPickActivity extends AppCompatActivity implements AdapterView.O
     private Button nextBtn;
 
     private ArrayList<String> cities = new ArrayList<String>();
-    private ArrayList<String> dates = new ArrayList<String>();
 
-    private ArrayAdapter<String> cityAdapter;
-    private ArrayAdapter<String> dateAdapter;
+    private ArrayList<String> dates1 = new ArrayList<String>();
+    private ArrayList<String> dates2 = new ArrayList<String>();
+    private ArrayList<String> dates3 = new ArrayList<String>();
+    private ArrayList<String> dates4 = new ArrayList<String>();
+    private ArrayList<String> dates5 = new ArrayList<String>();
+
+
+
+    private ArrayAdapter<CharSequence> cityAdapter;
+
+    private ArrayAdapter<String> dateAdapter1;
+    private ArrayAdapter<String> dateAdapter2;
+    private ArrayAdapter<String> dateAdapter3;
+    private ArrayAdapter<String> dateAdapter4;
+    private ArrayAdapter<String> dateAdapter5;
+
+
 
     public LaziTripperKoreanTourClient laziTripperKoreanTourClient;
     public LaziTripperKoreanTourService laziTripperKoreanTourService;
@@ -144,59 +158,71 @@ public class CityPickActivity extends AppCompatActivity implements AdapterView.O
         dateSpinner10 = (Spinner) findViewById(R.id.date_spinner_10);
 
 
-        cityAdapter = new ArrayAdapter<String>(this,android.
-                R.layout.simple_spinner_item ,cities);
-
-        dateAdapter = new ArrayAdapter<String>(this,android.
-                R.layout.simple_spinner_item ,dates);
-
+        dateAdapter1 = new ArrayAdapter<String>(this,android.
+                R.layout.simple_spinner_item ,dates1);
+        dateAdapter2 = new ArrayAdapter<String>(this,android.
+                R.layout.simple_spinner_item ,dates2);
+        dateAdapter3 = new ArrayAdapter<String>(this,android.
+                R.layout.simple_spinner_item ,dates3);
+        dateAdapter4 = new ArrayAdapter<String>(this,android.
+                R.layout.simple_spinner_item ,dates4);
+        dateAdapter5 = new ArrayAdapter<String>(this,android.
+                R.layout.simple_spinner_item ,dates5);
 
         nextBtn = (Button)findViewById(R.id.next);
 
         Intent intent = getIntent();
         date = intent.getStringExtra("date");
-        Log.d("date", "date is " + date);
-        for(int i = 1; i <= Integer.valueOf(date); i++){
-            dates.add(String.valueOf(i));
-        }
-        dateAdapter.notifyDataSetChanged();
+//        dates1 = (ArrayList<String>) makeDateSpinner(0,Integer.valueOf(date)).clone();
+
+        dates1.addAll(makeDateSpinner(0,Integer.valueOf(date)));
+        dateAdapter1.notifyDataSetChanged();
+        dateSpinner1.invalidate();
+
+        Log.d("cityPickActivity", "make date : " + dateAdapter1.getCount() + " " + dates1.size());
+
 
         // Specify the layout to use when the list of choices appears
-        dateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dateAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dateAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dateAdapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dateAdapter4.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dateAdapter5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         // Apply the adapter to the spinner
-        dateSpinner1.setAdapter(dateAdapter);
+        dateSpinner1.setAdapter(dateAdapter1);
 
         laziTripperKoreanTourClient = new LaziTripperKoreanTourClient(getApplicationContext());
         laziTripperKoreanTourService = laziTripperKoreanTourClient.getLiziTripperService();
 
         //@TODO 국가 정보를 받아서 지역을 뿌려준다.
-        Call<CommonResponse<RegionCodeDto>> callRelionInfo = laziTripperKoreanTourService.getRelionInfo(100,1,"AND","LaziTripper");
+//        Call<CommonResponse<RegionCodeDto>> callRelionInfo = laziTripperKoreanTourService.getRelionInfo(100,1,"AND","LaziTripper");
+//
+//        callRelionInfo.enqueue(new Callback<CommonResponse<RegionCodeDto>>() {
+//            @Override
+//            public void onResponse(Call<CommonResponse<RegionCodeDto>> call, Response<CommonResponse<RegionCodeDto>> response) {
+//                regionCodeDtoList = response.body().getResponse().getBody().getItems().getItems();
+//                int index = regionCodeDtoList.size();
+//                cities.add("여행지를 선택하세요");
+//                for ( int i = 0 ; i < index ; i++){
+//                    cities.add(regionCodeDtoList.get(i).getName());
+//                }
+//                cityAdapter.notifyDataSetChanged();
+//                //loadingDialog.dismiss();
+//
+//                //cityDropDown.setWheelData(list);
+//                //cityDropDown.deferNotifyDataSetChanged();
+//                isData = true;
+//            }
+//
+//            @Override
+//            public void onFailure(Call<CommonResponse<RegionCodeDto>> call, Throwable t) {
+//                Log.i(" ",t.getMessage());
+//            }
+//        });
 
-        callRelionInfo.enqueue(new Callback<CommonResponse<RegionCodeDto>>() {
-            @Override
-            public void onResponse(Call<CommonResponse<RegionCodeDto>> call, Response<CommonResponse<RegionCodeDto>> response) {
-                regionCodeDtoList = response.body().getResponse().getBody().getItems().getItems();
-                int index = regionCodeDtoList.size();
-                cities.add("여행지를 선택하세요");
-                for ( int i = 0 ; i < index ; i++){
-                    cities.add(regionCodeDtoList.get(i).getName());
-                }
-                cityAdapter.notifyDataSetChanged();
-                //loadingDialog.dismiss();
-
-                //cityDropDown.setWheelData(list);
-                //cityDropDown.deferNotifyDataSetChanged();
-                isData = true;
-            }
-
-            @Override
-            public void onFailure(Call<CommonResponse<RegionCodeDto>> call, Throwable t) {
-                Log.i(" ",t.getMessage());
-            }
-        });
-
-
+        cityAdapter = ArrayAdapter.createFromResource(this,
+                R.array.cities, android.R.layout.simple_spinner_item);
 
         // Specify the layout to use when the list of choices appears
         cityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -204,27 +230,7 @@ public class CityPickActivity extends AppCompatActivity implements AdapterView.O
         // Apply the adapter to the spinner
         citySpinner1.setAdapter(cityAdapter);
 
-//        citySpinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//
-//
-//                if(parent.getSelectedItemPosition() != 0 && !dateSpinner1.getSelectedItem().toString().equals(date)) {
-//                    ((TextView) parent.getChildAt(0)).setTextColor(Color.BLACK);
-//                    cityPickLayout2.setVisibility(View.VISIBLE);
-//                    citySpinner2.setAdapter(cityAdapter);
-//                    dateSpinner2.setAdapter(dateAdapter);
-//                }else{
-//                    ((TextView) parent.getChildAt(0)).setTextColor(Color.GRAY);
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//
-//            }
-//        });
+
 
         citySpinner1.setOnItemSelectedListener(this);
         citySpinner2.setOnItemSelectedListener(this);
@@ -285,25 +291,7 @@ public class CityPickActivity extends AppCompatActivity implements AdapterView.O
         });
     }
 
-    void renderSecondSpinner(){
 
-
-        //cityDropDown.setWheelAdapter(new ArrayWheelAdapter(this)); // 文本数据源
-        //cityDropDown.setSkin(WheelView.Skin.Holo); // common皮肤
-        cities.add("무");
-        //ityDropDown.setWheelData(cities);
-//        cityDropDown.setOnWheelItemSelectedListener(new WheelView.OnWheelItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(int position, Object o) {
-//
-//                if(isData){
-//                    cityNum = regionCodeDtoList.get(position).getCode();
-////                    Toast.makeText(getBaseContext(), "You have selected City : " + cityNum,
-////                            Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
-    }
 
 
     //TODO 삭제해야할 목객체
@@ -462,46 +450,63 @@ public class CityPickActivity extends AppCompatActivity implements AdapterView.O
         switch(spinner.getId()){
             case R.id.city_spinner_1 :
                 Log.d("city1", "city");
-                date1 = Integer.parseInt(dateSpinner1.getSelectedItem().toString());
+                if(dateSpinner1.getSelectedItem() != null) {
+                    date1 = Integer.parseInt(dateSpinner1.getSelectedItem().toString());
 
-                if(parent.getSelectedItemPosition() != 0 && date1 < Integer.parseInt(date)) {
+                    if (parent.getSelectedItemPosition() != 0 && date1 < Integer.parseInt(date)) {
 
-                    cityPickLayout2.setVisibility(View.VISIBLE);
-                    citySpinner2.setAdapter(cityAdapter);
-                    dateSpinner2.setAdapter(dateAdapter);
+                        cityPickLayout2.setVisibility(View.VISIBLE);
+                        citySpinner2.setAdapter(cityAdapter);
 
-                    cityNum += 1;
+                        dates2.clear();
+                        dates2.addAll(makeDateSpinner(date1, Integer.parseInt(date)));
+                        dateAdapter2.notifyDataSetChanged();
+                        dateSpinner2.setAdapter(dateAdapter2);
+                        dateSpinner2.invalidate();
 
+                        cityNum += 1;
+
+                    } else {
+                        if(parent.getChildAt(0) != null) {
+                            ((TextView) parent.getChildAt(0)).setTextColor(Color.GRAY);
+                        }
+                    }
                 }
-                else{
-                    ((TextView) parent.getChildAt(0)).setTextColor(Color.GRAY);
-                }
-
                 break;
             case R.id.city_spinner_2 :
-                date1 = Integer.parseInt(dateSpinner1.getSelectedItem().toString());
-                date2 = Integer.parseInt(dateSpinner2.getSelectedItem().toString());
-                totalDate = date1 + date2;
+                if(dateSpinner2.getSelectedItem() != null) {
+                    date1 = Integer.parseInt(dateSpinner1.getSelectedItem().toString());
+                    date2 = Integer.parseInt(dateSpinner2.getSelectedItem().toString());
+                    totalDate = date1 + date2;
 
-                if( totalDate < Integer.parseInt(date) && parent.getSelectedItemPosition() != 0) {
+                    if (totalDate < Integer.parseInt(date) && parent.getSelectedItemPosition() != 0) {
 
-                    cityPickLayout3.setVisibility(View.VISIBLE);
-                    citySpinner3.setAdapter(cityAdapter);
-                    dateSpinner3.setAdapter(dateAdapter);
-                    citySpinner3.setOnItemSelectedListener(this);
-                    cityNum += 1;
+                        cityPickLayout3.setVisibility(View.VISIBLE);
+                        citySpinner3.setAdapter(cityAdapter);
+
+                        dates3.clear();
+                        dates3.addAll(makeDateSpinner(date2, Integer.parseInt(date) - date1));
+                        dateAdapter3.notifyDataSetChanged();
+                        dateSpinner3.setAdapter(dateAdapter3);
+                        dateSpinner3.invalidate();
 
 
-                }
-                else if(totalDate == Integer.parseInt(date)){
-                    cityPickLayout3.setVisibility(View.GONE);
-                    cityPickLayout4.setVisibility(View.GONE);
-                    cityPickLayout5.setVisibility(View.GONE);
-                    cityNum = 2;
+                        citySpinner3.setOnItemSelectedListener(this);
+                        cityNum += 1;
 
-                }
-                else{
-                    ((TextView) parent.getChildAt(0)).setTextColor(Color.GRAY);
+
+                    } else if (totalDate == Integer.parseInt(date)) {
+                        cityPickLayout3.setVisibility(View.GONE);
+                        cityPickLayout4.setVisibility(View.GONE);
+                        cityPickLayout5.setVisibility(View.GONE);
+                        cityNum = 2;
+
+                    } else {
+                        if(parent.getChildAt(0) != null) {
+                            ((TextView) parent.getChildAt(0)).setTextColor(Color.GRAY);
+                        }
+                    }
+
                 }
                 break;
 
@@ -513,11 +518,18 @@ public class CityPickActivity extends AppCompatActivity implements AdapterView.O
 
                 if( totalDate < Integer.parseInt(date) && parent.getSelectedItemPosition() != 0) {
 
-                    citySpinner3.setEnabled(false);
-                    dateSpinner3.setEnabled(false);
+//                    citySpinner3.setEnabled(false);
+//                    dateSpinner3.setEnabled(false);
                     cityPickLayout4.setVisibility(View.VISIBLE);
                     citySpinner4.setAdapter(cityAdapter);
-                    dateSpinner4.setAdapter(dateAdapter);
+
+                    dates4.clear();
+                    dates4.addAll( makeDateSpinner(date3, Integer.parseInt(date) - totalDate + date3));
+                    dateAdapter4.notifyDataSetChanged();
+                    dateSpinner4.setAdapter(dateAdapter4);
+                    dateSpinner4.invalidate();
+
+
                     citySpinner4.setOnItemSelectedListener(this);
                     cityNum += 1;
 
@@ -544,11 +556,18 @@ public class CityPickActivity extends AppCompatActivity implements AdapterView.O
                 totalDate = date1 + date2 + date3 + date4;
 
                 if( totalDate < Integer.parseInt(date) && parent.getSelectedItemPosition() != 0) {
-                    citySpinner4.setEnabled(false);
-                    dateSpinner4.setEnabled(false);
+//                    citySpinner4.setEnabled(false);
+//                    dateSpinner4.setEnabled(false);
                     cityPickLayout5.setVisibility(View.VISIBLE);
                     citySpinner5.setAdapter(cityAdapter);
-                    dateSpinner5.setAdapter(dateAdapter);
+
+                    dates5.clear();
+                    dates5.addAll( makeDateSpinner(date4, Integer.parseInt(date) - totalDate + date4));
+                    dateAdapter5.notifyDataSetChanged();
+                    dateSpinner5.setAdapter(dateAdapter5);
+                    dateSpinner5.invalidate();
+
+
                     citySpinner5.setOnItemSelectedListener(this);
                     cityNum += 1;
 
@@ -609,19 +628,118 @@ public class CityPickActivity extends AppCompatActivity implements AdapterView.O
                 else if(date1 < Integer.parseInt(date) && citySpinner1.getSelectedItemPosition() != -1){
                     Log.d("spinner1", "citySpinner position : "+ citySpinner1.getSelectedItemPosition());
 
-                    cityPickLayout2.setVisibility(View.VISIBLE);
-                    citySpinner2.setAdapter(cityAdapter);
-                    dateSpinner2.setAdapter(dateAdapter);
+                    dates2.clear();
+                    dates2.addAll(makeDateSpinner(date1, Integer.parseInt(date)));
+                    dateAdapter2.notifyDataSetChanged();
+                    dateSpinner2.setAdapter(dateAdapter2);
+                    dateSpinner2.invalidate();
 
                     cityNum += 1;
 
                 }else{
                     cityPickLayout2.setVisibility(View.GONE);
 
+
                 }
 
 
                 break;
+
+            case R.id.date_spinner_2:
+                date1 = Integer.parseInt(dateSpinner1.getSelectedItem().toString());
+                date2 = Integer.parseInt(dateSpinner2.getSelectedItem().toString());
+                totalDate = date1 + date2;
+                Log.d("CityPickActivity", "date spinner : "+ totalDate);
+
+                if(totalDate == Integer.parseInt(date)){
+                    Log.d("CityPickActivity", "date spinner : "+ totalDate);
+
+                    cityPickLayout3.setVisibility(View.GONE);
+                    cityNum = 2;
+
+                }else if(parent.getSelectedItemPosition() != 0){
+                    Log.d("CityPickActivity", "parent 2 : " + parent.getSelectedItemPosition());
+                    cityPickLayout3.setVisibility(View.VISIBLE);
+                    citySpinner3.setAdapter(cityAdapter);
+
+                    dates3.clear();
+                    dates3.addAll(makeDateSpinner(date2, Integer.parseInt(date) - date1));
+                    dateAdapter3.notifyDataSetChanged();
+                    dateSpinner3.setAdapter(dateAdapter3);
+                    dateSpinner3.invalidate();
+
+
+                    citySpinner3.setOnItemSelectedListener(this);
+                    cityNum += 1;
+
+                }
+
+                break;
+            case R.id.date_spinner_3:
+                date1 = Integer.parseInt(dateSpinner1.getSelectedItem().toString());
+                date2 = Integer.parseInt(dateSpinner2.getSelectedItem().toString());
+                date3 = Integer.parseInt(dateSpinner3.getSelectedItem().toString());
+                totalDate = date1 + date2 + date3;
+                Log.d("CityPickActivity", "parent 3 : " + parent.getSelectedItemPosition());
+
+                if(totalDate == Integer.parseInt(date)){
+                    Log.d("CityPickActivity", "total parent 3 : " + parent.getSelectedItemPosition());
+
+                    cityPickLayout4.setVisibility(View.GONE);
+                    cityNum = 3;
+
+                }
+                else if(parent.getSelectedItemPosition() != 0){
+                    cityPickLayout4.setVisibility(View.VISIBLE);
+                    citySpinner4.setAdapter(cityAdapter);
+
+                    dates4.clear();
+                    dates4.addAll( makeDateSpinner(date3, Integer.parseInt(date) - totalDate + date3));
+                    dateAdapter4.notifyDataSetChanged();
+                    dateSpinner4.setAdapter(dateAdapter4);
+                    dateSpinner4.invalidate();
+
+
+                    citySpinner4.setOnItemSelectedListener(this);
+                    cityNum += 1;
+
+                }
+                break;
+            case R.id.date_spinner_4:
+                date1 = Integer.parseInt(dateSpinner1.getSelectedItem().toString());
+                date2 = Integer.parseInt(dateSpinner2.getSelectedItem().toString());
+                date3 = Integer.parseInt(dateSpinner3.getSelectedItem().toString());
+                date4 = Integer.parseInt(dateSpinner4.getSelectedItem().toString());
+                totalDate = date1 + date2 + date3 + date4;
+
+                if(totalDate == Integer.parseInt(date)){
+                    cityPickLayout5.setVisibility(View.GONE);
+                    cityNum = 4;
+
+                }
+                else if(parent.getSelectedItemPosition() != 0){
+                    cityPickLayout5.setVisibility(View.VISIBLE);
+                    citySpinner5.setAdapter(cityAdapter);
+
+                    dates5.clear();
+                    dates5.addAll( makeDateSpinner(date4, Integer.parseInt(date) - totalDate + date4));
+                    dateAdapter5.notifyDataSetChanged();
+                    dateSpinner5.setAdapter(dateAdapter5);
+                    dateSpinner5.invalidate();
+
+
+                    citySpinner5.setOnItemSelectedListener(this);
+                    cityNum += 1;
+
+                }
+                break;
+            case R.id.date_spinner_5:
+
+                break;
+
+
+
+
 
         }
     }
@@ -659,5 +777,22 @@ public class CityPickActivity extends AppCompatActivity implements AdapterView.O
 
         }
         return false;
+    }
+
+
+    public ArrayList<String> makeDateSpinner(int selectDate, int allDate){
+
+        ArrayList<String> dates = new ArrayList<String>();
+
+        ArrayAdapter<String> dateAdapter = new ArrayAdapter<String>(this,android.
+                R.layout.simple_spinner_item ,dates);
+
+        allDate = allDate - selectDate;
+        for(int i = 1; i <= allDate; i++){
+            dates.add(String.valueOf(i));
+            Log.d("CityPickActivity", "date : " + String.valueOf(i));
+        }
+
+        return dates;
     }
 }
