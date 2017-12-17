@@ -92,8 +92,10 @@ public class HomeActivity extends BaseAppCompatActivity {
 
     private void recentTravelListSetting() {
 
-        if(travelList==null || travelList.size()==0)
+        if(travelList==null || travelList.size()==0) {
             tvHomeTravel.setVisibility(View.GONE);
+            recyclerTavel.setVisibility(View.GONE);
+        }
         adapter = new RecentTravelAdapter(getApplicationContext(), travelList, R.layout.item_route);
         recyclerTavel.addOnItemTouchListener(new RecyclerItemClickListener(this, recyclerTavel, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
