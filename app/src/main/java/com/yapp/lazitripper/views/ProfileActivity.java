@@ -33,7 +33,6 @@ public class ProfileActivity extends BaseAppCompatActivity {
     private RecentTravelAdapter adapter;
     private RecyclerView recyclerTavel;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

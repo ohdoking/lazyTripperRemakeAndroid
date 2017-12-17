@@ -1,77 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <android.support.design.widget.CollapsingToolbarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
-
-            <LinearLayout
-                android:id="@+id/activity_home"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed">
-
-                <TextView
-                    android:id="@+id/text_email_home"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="50dp"
-                    android:layout_marginRight="90dp"
-                    android:layout_marginTop="70dp"
-                    android:lines="3"
-                    android:text="님,\n편하게 여행지를\n골라보세요:-)"
-                    android:textAlignment="inherit"
-                    android:textColor="#000000"
-                    android:textSize="32sp" />
-
-                <Button
-                    android:id="@+id/btnMakeRoot"
-                    android:layout_width="wrap_content"
-                    android:layout_height="45dp"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="90dp"
-                    android:layout_marginLeft="40dp"
-                    android:layout_marginRight="90dp"
-                    android:layout_marginTop="30dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/bt_corner"
-                    android:paddingLeft="40dp"
-                    android:paddingRight="40dp"
-                    android:text="여행만들기  >"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="25dp"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginRight="50dp"
-                    android:layout_marginTop="30dp"
-                    android:layout_weight="1"
-                    android:text="최근 작성한 여행지"
-                    android:textAlignment="inherit"
-                    android:textColor="#FF767679"
-                    android:textSize="15sp" />
-
-            </LinearLayout>
-        </android.support.design.widget.CollapsingToolbarLayout>
-
-    </android.support.design.widget.AppBarLayout>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_home_travel_list"
+    <LinearLayout
+        android:id="@+id/activity_home"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        android:orientation="vertical"
+        app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-</android.support.design.widget.CoordinatorLayout>
+        <TextView
+            android:id="@+id/text_email_home"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="90dp"
+            android:layout_marginTop="70dp"
+            android:lines="3"
+            android:text="님,\n편하게 여행지를\n골라보세요:-)"
+            android:textAlignment="inherit"
+            android:textColor="#000000"
+            android:textSize="32sp" />
+
+        <Button
+            android:id="@+id/btnMakeRoot"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="50dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="90dp"
+            android:layout_marginTop="30dp"
+            android:layout_weight="1"
+            android:background="@drawable/bt_corner"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp"
+            android:text="여행만들기  >"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="25dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="30dp"
+            android:layout_weight="1"
+            android:text="최근 작성한 여행지"
+            android:textAlignment="inherit"
+            android:textColor="#FF767679"
+            android:textSize="15sp" />
+
+    </LinearLayout>
+
+    <include
+        android:id="@+id/item_route"
+        layout="@layout/item_route"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

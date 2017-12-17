@@ -1,27 +1,25 @@
 package com.yapp.lazitripper.views;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.TextView;
 
-import com.facebook.all.All;
 import com.yapp.lazitripper.R;
-import com.yapp.lazitripper.common.ConstantIntent;
 import com.yapp.lazitripper.dto.AllTravelInfo;
-import com.yapp.lazitripper.dto.TravelInfo;
-import com.yapp.lazitripper.util.FirebaseService;
+import com.yapp.lazitripper.store.ConstantStore;
+import com.yapp.lazitripper.store.SharedPreferenceStore;
 import com.yapp.lazitripper.views.adapters.DayItemAdapter;
-import com.yapp.lazitripper.views.adapters.RecentTravelAdapter;
+import com.yapp.lazitripper.views.adapters.RecyclerItemClickListener;
 import com.yapp.lazitripper.views.bases.BaseAppCompatActivity;
 
-import java.util.ArrayList;
-import java.util.List;
+import me.gujun.android.taggroup.TagGroup;
 
 public class MyTravelActivity extends BaseAppCompatActivity {
 
-    private RecyclerView recyclerTavel;
-    private DayItemAdapter adapter;
+    private RecyclerView recyclerTravel;
     private AllTravelInfo travelList;
 
     public static final String DELIVER_ITEM = "allTravelInfo";
@@ -33,15 +31,67 @@ public class MyTravelActivity extends BaseAppCompatActivity {
         setHeader();
 
         travelList = (AllTravelInfo) getIntent().getSerializableExtra(DELIVER_ITEM);
+        recyclerTravel = (RecyclerView) findViewById(R.id.recycler_travel_list);
+        recyclerTravel.addOnItemTouchListener(new RecyclerItemClickListener(MyTravelActivity.this, recyclerTravel, new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent intent = new Intent(getApplicationContext(), TravelDayActivity.class);
+                intent.putExtra(TravelDayActivity.DELIVER_ITEM, travelList.getAllTraveInfo().get(position));
+                startActivity(intent);
+            }
+        }));
 
-        recyclerTavel = (RecyclerView) findViewById(R.id.recycler_travel_list);
         recentTravelListSetting();
+        setHeaderContent();
+        setTagList();
+
+    }
+
+    private void setTagList(){
+        SharedPreferenceStore<String[]> sharedPreferenceStore = new SharedPreferenceStore<String[]>(getApplicationContext(), ConstantStore.STORE);
+        String[] tagList = sharedPreferenceStore.getPreferences(ConstantStore.TAGS, String[].class);
+
+        //태그 그룹에 # 추가
+        int index = 0;
+        if (tagList.length != 0)
+            for (String tag : tagList) {
+                tagList[index] = "#" + tag;
+                index++;
+            }
+        else {
+            tagList = new String[1];
+            tagList[0] = "#태그를 선택해주세요";
+        }
+        TagGroup mTagGroup = (TagGroup) findViewById(R.id.tag_group);
+        mTagGroup.setTags(tagList);
+    }
+
+    private void setHeaderContent() {
+        TextView textDayDigit = (TextView) findViewById(R.id.text_header_day_digit);
+        TextView textDayList = (TextView) findViewById(R.id.text_header_day_list);
+
+        String dateDigit = "DAY ";
+        String dateList = "";
+
+        for (int i = 0; i < travelList.getTotalDay(); i++) {
+            if (i == 0) {
+                dateDigit += (i + 1);
+                dateList += travelList.getAllTraveInfo().get(i).getCityName();
+            } else if (i == travelList.getAllTraveInfo().size() - 1) {
+                dateDigit += "/" + (i + 1);
+                dateList += "/" + travelList.getAllTraveInfo().get(i).getCityName();
+            }
+        }
+
+        textDayDigit.setText(dateDigit);
+        textDayList.setText(dateList);
+
     }
 
     private void recentTravelListSetting() {
 
-        adapter = new DayItemAdapter(getApplicationContext(), travelList.getAllTraveInfo(), R.layout.item_travel_route);
-        recyclerTavel.setAdapter(adapter);
-        recyclerTavel.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        DayItemAdapter adapter = new DayItemAdapter(getApplicationContext(), travelList.getAllTraveInfo(), DayItemAdapter.SIMPLE);
+        recyclerTravel.setAdapter(adapter);
+        recyclerTravel.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
     }
 }

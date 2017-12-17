@@ -62,8 +62,6 @@ public class BaseAppCompatActivity extends AppCompatActivity {
         mCustomView = LayoutInflater.from(this).inflate(R.layout.header_summary,null);
         actionBar.setCustomView(mCustomView);
 
-        Toolbar parent = (Toolbar) mCustomView.getParent();
-
         ActionBar.LayoutParams params = new ActionBar.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT,
                 ActionBar.LayoutParams.MATCH_PARENT);
         actionBar.setCustomView(mCustomView, params);
@@ -71,8 +69,6 @@ public class BaseAppCompatActivity extends AppCompatActivity {
         saveBtn = (ImageView)findViewById(R.id.img_arrow_header);
         editTitle = (EditText)findViewById(R.id.text_title_header);
     }
-
-
 
 
     public void setMyHeader(){

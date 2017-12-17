@@ -19,13 +19,9 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.yapp.lazitripper.R;
 
+
+import com.yapp.lazitripper.R;
 import com.yapp.lazitripper.dto.AllTravelInfo;
 import com.yapp.lazitripper.dto.PickDate;
 import com.yapp.lazitripper.dto.RemainingDay;
@@ -48,8 +44,6 @@ public class HomeActivity extends BaseAppCompatActivity {
     private FirebaseUser user;
     private List<AllTravelInfo> travelList = new ArrayList<>();
     private String userName;
-    private RecyclerView recyclerTavel;
-    private RecentTravelAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,14 +60,12 @@ public class HomeActivity extends BaseAppCompatActivity {
         viewSetting();
 
         travelList = FirebaseService.getInstance().getTravelList();
-        recentTravelListSetting();
-
+        recentTravelSetting();
 
     }
 
     public void viewSetting() {
 
-        recyclerTavel = (RecyclerView) findViewById(R.id.recycler_home_travel_list);
         ImageView rightImage = getRightImageView();
         rightImage.setImageResource(R.drawable.ic_person_black_36dp);
 
@@ -105,21 +97,8 @@ public class HomeActivity extends BaseAppCompatActivity {
 
     }
 
-    private void recentTravelListSetting() {
+    private void recentTravelSetting() {
 
-        adapter = new RecentTravelAdapter(getApplicationContext(), travelList, R.layout.item_route);
-        recyclerTavel.addOnItemTouchListener(new RecyclerItemClickListener(this, recyclerTavel, new RecyclerItemClickListener.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Intent intent = new Intent(getApplicationContext(), MyTravelActivity.class);
-                intent.putExtra(MyTravelActivity.DELIVER_ITEM, travelList.get(position));
-                startActivity(intent);
-            }
-        }));
-        recyclerTavel.setAdapter(adapter);
-        recyclerTavel.setHasFixedSize(true);
-        recyclerTavel.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        adapter.notifyDataSetChanged();
     }
 
 }

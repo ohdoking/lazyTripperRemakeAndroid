@@ -94,7 +94,6 @@
             android:name=".views.KeywordSelectActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".views.HomeActivity" />
-
         <activity
             android:name=".views.TempScheduleActivity"
             android:screenOrientation="portrait"
@@ -110,7 +109,8 @@
         <activity android:name=".views.CityPickActivity" />
         <activity
             android:name=".views.MyTravelActivity"
-            android:launchMode="singleTask"></activity>
+            android:launchMode="singleTask" />
+        <activity android:name=".views.TravelDayActivity"/>
     </application>
 
 </manifest>

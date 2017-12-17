@@ -57,7 +57,7 @@ public class FirebaseService {
                         info = dataSnapshot.getValue(AllTravelInfo.class);
 
                         if (!travelList.contains(info) && info.getTravelTitle() != null)
-                            if(info.getTravelTitle().length() > 0)
+                            if (info.getTravelTitle().length() > 0)
                                 travelList.add(info);
                     }
 
@@ -81,7 +81,10 @@ public class FirebaseService {
 
                     }
                 });
+    }
 
+    public AllTravelInfo getRecentItem() {
+        return null;
     }
 
     public FirebaseUser getUser() {

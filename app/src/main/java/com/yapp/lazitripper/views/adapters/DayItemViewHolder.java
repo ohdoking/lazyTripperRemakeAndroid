@@ -15,30 +15,30 @@ import com.yapp.lazitripper.dto.TravelInfo;
 import com.yapp.lazitripper.dto.TravelRouteDto;
 import com.yapp.lazitripper.util.RoundedCornersTransformation;
 
-public class DayItemViewHolder extends RecyclerView.ViewHolder {
+class DayItemViewHolder extends RecyclerView.ViewHolder {
 
     private TextView textDay, textName;
     private ImageView ivProfileItemBg;
     private Context context;
 
-    protected DayItemViewHolder(Context context, View view) {
+    DayItemViewHolder(Context context, View view) {
         super(view);
         this.context = context;
-        textDay = (TextView)view.findViewById(R.id.travel_day);
+        textDay = (TextView) view.findViewById(R.id.travel_day);
         textName = (TextView) view.findViewById(R.id.travel_name);
-        ivProfileItemBg = (ImageView)view.findViewById(R.id.iv_item_route_background);
+        ivProfileItemBg = (ImageView) view.findViewById(R.id.iv_item_route_background);
     }
 
 
-    protected void bind(final TravelInfo item) {
+    void bind(final TravelInfo item) {
 
-        textDay.setText(item.getDay()+"");
+        textDay.setText(item.getDay() + "");
         textName.setText(item.getCityName());
         Glide.with(context)
                 .load(item.getPlaceInfoDtoList().get(0).getFirstimage())
                 .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .bitmapTransform(new CenterCrop(context),new RoundedCornersTransformation(context,60, 2))
+                .bitmapTransform(new CenterCrop(context), new RoundedCornersTransformation(context, 60, 2))
                 .into(ivProfileItemBg);
     }
 }
