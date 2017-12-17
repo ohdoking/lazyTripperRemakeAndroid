@@ -4,33 +4,21 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.Typeface
-import android.os.Build
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
-import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.Toolbar
 import android.util.Log
-import android.view.View
-import android.view.ViewStub
 import android.widget.Toast
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.igalata.bubblepicker.BubblePickerListener
 import com.igalata.bubblepicker.adapter.BubblePickerAdapter
-import com.igalata.bubblepicker.model.BubbleGradient
 import com.igalata.bubblepicker.model.PickerItem
-import com.igalata.bubblepicker.rendering.BubblePicker
-
 import com.yapp.lazitripper.R
 import com.yapp.lazitripper.store.ConstantStore
-import com.yapp.lazitripper.store.SharedPreferenceStore
 import com.yapp.lazitripper.views.bases.BaseAppCompatActivity
 import kotlinx.android.synthetic.main.activity_keyword.*
-import kotlinx.android.synthetic.main.chosen_place.*
-import org.slf4j.LoggerFactory
 import java.util.ArrayList
+import kotlin.collections.HashSet
 
 class KeywordActivity : BaseAppCompatActivity() {
 
@@ -169,9 +157,11 @@ class KeywordActivity : BaseAppCompatActivity() {
         btnFinish.setOnClickListener {
             view->
             savePreferences(ConstantStore.TAGS, stringArrayList)
-
-            val i = Intent(this@KeywordActivity, HomeActivity::class.java)
-            startActivity(i)
+            val intent = getIntent()
+            if(intent.getBooleanExtra("init",true)) {
+                val i = Intent(this@KeywordActivity, HomeActivity::class.java)
+                startActivity(i)
+            }
             finish()
             overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.fade_in)
         }
