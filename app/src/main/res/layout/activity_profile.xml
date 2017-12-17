@@ -16,8 +16,8 @@
         android:src="@drawable/arrow" />
     <ImageView
         android:id="@+id/iv_profile_logout"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_alignParentRight="true"
         android:layout_marginRight="@dimen/mypage_margin_size"
         android:layout_marginTop="16dp"

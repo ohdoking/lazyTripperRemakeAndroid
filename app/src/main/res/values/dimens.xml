@@ -5,6 +5,6 @@
     <dimen name="fab_margin">16dp</dimen>
     <integer name="anim_duration_long">200</integer>
     <dimen name="header_size">64dp</dimen>
-    <dimen name="mypage_margin_size">26dp</dimen>
+    <dimen name="mypage_margin_size">22dp</dimen>
 
 </resources>
