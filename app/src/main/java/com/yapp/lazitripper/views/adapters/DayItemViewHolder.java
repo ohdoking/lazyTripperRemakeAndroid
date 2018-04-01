@@ -7,28 +7,38 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.yapp.lazitripper.R;
+import com.yapp.lazitripper.dto.AllTravelInfo;
+import com.yapp.lazitripper.dto.TravelInfo;
 import com.yapp.lazitripper.dto.TravelRouteDto;
+import com.yapp.lazitripper.util.RoundedCornersTransformation;
 
-public class DayItemViewHolder extends RecyclerView.ViewHolder {
+class DayItemViewHolder extends RecyclerView.ViewHolder {
 
-    private TextView textDay;
-    private ImageView imgBack;
+    private TextView textDay, textName;
+    private ImageView ivProfileItemBg;
     private Context context;
 
-    protected DayItemViewHolder(Context context, View view) {
+    DayItemViewHolder(Context context, View view) {
         super(view);
         this.context = context;
-        textDay = (TextView)view.findViewById(R.id.text_item_route);
-        imgBack = (ImageView)view.findViewById(R.id.img_item_route);
+        textDay = (TextView) view.findViewById(R.id.travel_day);
+        textName = (TextView) view.findViewById(R.id.travel_name);
+        ivProfileItemBg = (ImageView) view.findViewById(R.id.iv_item_route_background);
     }
 
 
-    protected void bind(final TravelRouteDto dayItem) {
+    void bind(final TravelInfo item) {
 
-        textDay.setText(dayItem.getTitle());
-        Glide.with(context).load(dayItem.getImageURL())
-                .into(imgBack);
-
+        textDay.setText(item.getDay() + "");
+        textName.setText(item.getCityName());
+        Glide.with(context)
+                .load(item.getPlaceInfoDtoList().get(0).getFirstimage())
+                .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .bitmapTransform(new CenterCrop(context), new RoundedCornersTransformation(context, 60, 2))
+                .into(ivProfileItemBg);
     }
 }

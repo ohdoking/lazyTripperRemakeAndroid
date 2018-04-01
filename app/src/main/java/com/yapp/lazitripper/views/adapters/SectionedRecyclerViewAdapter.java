@@ -17,9 +17,9 @@ import java.util.List;
 public abstract class SectionedRecyclerViewAdapter<VH extends SectionedViewHolder>
     extends RecyclerView.Adapter<VH> implements ItemProvider {
 
-  protected static final int VIEW_TYPE_FOOTER = -3;
-  protected static final int VIEW_TYPE_HEADER = -2;
-  protected static final int VIEW_TYPE_ITEM = -1;
+  protected static final int VIEW_TYPE_FOOTER = 3;
+  protected static final int VIEW_TYPE_HEADER = 2;
+  protected static final int VIEW_TYPE_ITEM = 1;
   private static final String TAG = "SectionedRVAdapter";
   private PositionManager positionManager;
   private LinearLayoutManager layoutManager;

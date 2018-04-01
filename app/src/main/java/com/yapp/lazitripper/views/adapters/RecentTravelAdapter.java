@@ -44,7 +44,6 @@ public class RecentTravelAdapter extends RecyclerView.Adapter<RecentTravelViewHo
 
     @Override
     public int getItemCount() {
-        Log.e("adapter", "");
         return travelList.size();
     }
 

@@ -29,6 +29,7 @@
     <string name="title_text">20170819 작성한 여행일지</string>
     <string name="item_text">1일차 (부산)</string>
     <string name="AND">and</string>
+    <string name="day">DAY </string>
 
     <string name="number_ex">1</string>
     <string name="item_location">부산</string>

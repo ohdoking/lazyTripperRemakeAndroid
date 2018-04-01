@@ -1,37 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="64dp"
     android:background="@color/calendar_bg"
-    android:gravity="center"
-    android:orientation="horizontal">
+    android:gravity="center">
 
     <ImageView
         android:layout_marginLeft="16dp"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_gravity="left|center"
-        android:gravity="left"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_alignParentLeft="true"
         android:scaleType="centerInside"
         android:onClick="menuClickEvent"
         android:id="@+id/drawer_imageview"/>
 
-    <ImageView
-        android:layout_width="260dp"
-        android:layout_height="wrap_content"
-        android:maxHeight="64dp"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:src="@drawable/app_title"
-        android:id="@+id/actionbar_titleview"/>
+
 
     <ImageView
         android:layout_marginRight="16dp"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_gravity="center"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_alignParentRight="true"
         android:scaleType="centerInside"
         android:onClick="menuClickEvent"
         android:id="@+id/drawer_imageview_done"/>
 
-</LinearLayout>
+</RelativeLayout>
