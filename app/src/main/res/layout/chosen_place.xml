@@ -1,21 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="530dp"
+    android:layout_height="450dp"
     android:layout_gravity="center"
-    android:background="#ff556677"
+    android:layout_marginEnd="33dp"
+    android:layout_marginStart="33dp"
+    android:background="@drawable/corner_rounnd"
+    android:elevation="2dp"
     android:id="@+id/background">
-
+<!--
+android:background="#ff556677"
+-->
     <ImageView
         android:id="@+id/backgroundImage"
         android:layout_width="match_parent"
         android:transitionName="@string/transitionImageName"
-        android:layout_height="530dp" />
+        android:background="@drawable/corner_rounnd"
+        android:scaleType="fitXY"
+        android:layout_height="fill_parent" />
 
-    <LinearLayout
+
+   <!-- <LinearLayout
         android:id="@+id/frameview"
         android:layout_width="match_parent"
-        android:layout_height="530dp"
+        android:layout_height="434dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -94,6 +102,6 @@
                 android:textColor="#ffffffff"
                 android:textSize="14sp" />
         </LinearLayout>
-    </LinearLayout>
+    </LinearLayout>-->
 
-</FrameLayout>
+</LinearLayout>

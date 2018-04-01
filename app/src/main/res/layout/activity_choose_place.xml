@@ -7,10 +7,10 @@
         android:id="@+id/activity_choose_place"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingTop="10dp">
+        android:orientation="vertical">
 
-        <TextView
+       <!--
+       <TextView
             android:id="@+id/discription_count"
             android:layout_width="match_parent"
             android:layout_height="30dp"
@@ -18,13 +18,88 @@
             android:text="오른쪽으로 넘긴 여행지가 루트에 추가되요"
             android:textAlignment="center"
             android:textSize="12sp" />
+        -->
 
-    <com.yapp.lazitripper.flinglibrary.SwipeFlingAdapterView
-        android:layout_width="match_parent"
-        android:layout_height="530dp"
-        android:id="@+id/frame">
+        <com.yapp.lazitripper.flinglibrary.SwipeFlingAdapterView
+            android:layout_width="match_parent"
+            android:layout_height="470dp"
+            android:id="@+id/frame">
+        </com.yapp.lazitripper.flinglibrary.SwipeFlingAdapterView>
 
-    </com.yapp.lazitripper.flinglibrary.SwipeFlingAdapterView>
+        <LinearLayout
+            android:id="@+id/frameview"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="10dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp">
+
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textSize="24sp"
+                    android:textColor="#ffd300"
+                    android:letterSpacing="-0.0"
+                    android:text="몽상드애월"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="15.6dp"
+                    android:layout_height="14.5dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/map_icon" />
+
+                <TextView
+                    android:id="@+id/addr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="#0f1620"
+                    android:letterSpacing="-0.0"
+                    android:text="제주특별자치도 애월읍 애월북서길 56-1"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="15.6dp"
+                    android:layout_height="14.5dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/icon_tel" />
+
+                <TextView
+                    android:id="@+id/tel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="#0f1620"
+                    android:letterSpacing="-0.0"
+                    android:text="064-799-8900"
+                    />
+            </LinearLayout>
+        </LinearLayout>
 
     </LinearLayout>
     <View
@@ -34,7 +109,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="60dp"
-        android:layout_marginBottom="60dp"
+        android:layout_marginBottom="200dp"
         android:layout_marginEnd="30dp"
         android:layout_marginStart="30dp"
         android:layout_alignParentLeft="true"

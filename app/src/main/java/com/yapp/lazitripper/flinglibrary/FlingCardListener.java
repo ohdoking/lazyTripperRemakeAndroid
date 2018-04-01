@@ -68,6 +68,8 @@ public class FlingCardListener implements View.OnTouchListener {
         this.BASE_ROTATION_DEGREES = rotation_degrees;
         this.mFlingListener = flingListener;
 
+        //바깥의 view 에 데이터를 담기 위해 change 이벤트 실행
+        mFlingListener.onChange(dataObject);
     }
 
 
@@ -343,6 +345,8 @@ public class FlingCardListener implements View.OnTouchListener {
         void onClick(Object dataObject, View frame);
 
         void onScroll(float scrollProgressPercent);
+
+        void onChange(Object dataObject);
     }
 
 }

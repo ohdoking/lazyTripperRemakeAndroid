@@ -6,8 +6,10 @@ import android.content.res.TypedArray;
 import android.database.DataSetObserver;
 import android.graphics.PointF;
 import android.os.Build;
+import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
@@ -39,6 +41,7 @@ public class SwipeFlingAdapterView extends BaseFlingAdapterView {
     private OnItemClickListener mOnItemClickListener;
     private FlingCardListener flingCardListener;
     private PointF mLastTouchPoint;
+    private OnItemChangeListener mOnItemChangeListener;
 
 
     public SwipeFlingAdapterView(Context context) {
@@ -74,6 +77,9 @@ public class SwipeFlingAdapterView extends BaseFlingAdapterView {
         }
         if(context instanceof OnItemClickListener){
             mOnItemClickListener = (OnItemClickListener) context;
+        }
+        if(context instanceof OnItemChangeListener){
+            mOnItemChangeListener = (OnItemChangeListener) context;
         }
         setAdapter(mAdapter);
     }
@@ -247,6 +253,14 @@ public class SwipeFlingAdapterView extends BaseFlingAdapterView {
                     public void onScroll(float scrollProgressPercent) {
                         mFlingListener.onScroll(scrollProgressPercent);
                     }
+
+                    @Override
+                    public void onChange(Object dataObject){
+                        if(mOnItemChangeListener!=null){
+                            mOnItemChangeListener.onItemChanged(getContext(), dataObject);
+                        }
+
+                    }
                 });
 
                 mActiveCard.setOnTouchListener(flingCardListener);
@@ -298,6 +312,10 @@ public class SwipeFlingAdapterView extends BaseFlingAdapterView {
         this.mOnItemClickListener = onItemClickListener;
     }
 
+    public void setOnItemChangeListener(OnItemChangeListener onItemChangeListener) {
+        this.mOnItemChangeListener = onItemChangeListener;
+    }
+
 
 
 
@@ -331,6 +349,10 @@ public class SwipeFlingAdapterView extends BaseFlingAdapterView {
         void onRightCardExit(Object dataObject);
         void onAdapterAboutToEmpty(int itemsInAdapter);
         void onScroll(float scrollProgressPercent);
+    }
+
+    public interface OnItemChangeListener {
+        void onItemChanged(Context context, Object dataObject);
     }
 
 

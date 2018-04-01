@@ -1,5 +1,6 @@
 package com.yapp.lazitripper.views;
 
+import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.graphics.Target;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,6 +25,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.FitCenter;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQuery;
@@ -44,6 +49,7 @@ import com.yapp.lazitripper.network.LaziTripperKoreanTourClient;
 import com.yapp.lazitripper.service.LaziTripperKoreanTourService;
 import com.yapp.lazitripper.store.ConstantStore;
 import com.yapp.lazitripper.store.SharedPreferenceStore;
+import com.yapp.lazitripper.util.RoundedCornersTransformation;
 import com.yapp.lazitripper.util.TravelRoute;
 import com.yapp.lazitripper.views.bases.BaseAppCompatActivity;
 import com.yapp.lazitripper.views.dialog.LoadingDialog;
@@ -158,7 +164,7 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
 
         //12 관광지 데이터를 가져옴
         getPlaceData(12);
-        discriptionCountTextView.setText(makeSentence(thisCount));
+        //discriptionCountTextView.setText(makeSentence(thisCount));
         renderItem();
 
         nextDayImageView.setOnClickListener(new View.OnClickListener() {
@@ -176,10 +182,15 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
             @Override
             public void onClick(View v) {
                 allTravelInfo.getAllTraveInfo().get(day - 1).setPlaceInfoDtoList(placeInfoDtoList);
-                Intent i = new Intent(ChoosePlaceActivity.this, TempScheduleActivity.class);
-                i.putExtra(ConstantIntent.TEMPSCHEDULELIST, allTravelInfo);
-                i.putExtra(ConstantIntent.CURRENTDAY, day);
-                startActivity(i);
+                if(allTravelInfo.getAllTraveInfo().get(0).getPlaceInfoDtoList().size() != 0){
+                    Intent i = new Intent(ChoosePlaceActivity.this, TempScheduleActivity.class);
+                    i.putExtra(ConstantIntent.TEMPSCHEDULELIST, allTravelInfo);
+                    i.putExtra(ConstantIntent.CURRENTDAY, day);
+                    startActivity(i);
+                }
+                else{
+                    Toast.makeText(ChoosePlaceActivity.this, R.string.more1, Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -192,7 +203,7 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
     void initView() {
         loadingDialog = new LoadingDialog(ChoosePlaceActivity.this);
         flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
-        discriptionCountTextView = (TextView) findViewById(R.id.discription_count);
+        //discriptionCountTextView = (TextView) findViewById(R.id.discription_count);
         overlayView = findViewById(R.id.overlay);
         titlePlaceNameTextView = (TextView) mCustomView.findViewById(R.id.place_name);
         nextDayImageView = (ImageView) mCustomView.findViewById(R.id.next_day);
@@ -331,10 +342,10 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
     public static class ViewHolder {
         public ImageView background;
         public TextView name;
-        public TextView _addr;
+        /*public TextView _addr;
         public TextView addr;
         public TextView _tel;
-        public TextView tel;
+        public TextView tel;*/
     }
 
     public class MyAdapter extends BaseAdapter {
@@ -368,11 +379,15 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
 
                 viewHolder = new ViewHolder();
                 viewHolder.background = (ImageView) rowView.findViewById(R.id.backgroundImage);
-                viewHolder.name = (TextView) rowView.findViewById(R.id.name);
+                /*viewHolder.name = (TextView) rowView.findViewById(R.id.name);
                 viewHolder._addr = (TextView) rowView.findViewById(R.id._addr);
                 viewHolder.addr = (TextView) rowView.findViewById(R.id.addr);
                 viewHolder._tel = (TextView) rowView.findViewById(R.id._tel);
-                viewHolder.tel = (TextView) rowView.findViewById(R.id.tel);
+                viewHolder.tel = (TextView) rowView.findViewById(R.id.tel);*/
+
+                /*viewHolder.name = (TextView) ((Activity) context).findViewById(R.id.name);
+                viewHolder.addr = (TextView) ((Activity) context).findViewById(R.id.addr);
+                viewHolder.tel = (TextView) ((Activity) context).findViewById(R.id.tel);*/
 
                 rowView.setTag(viewHolder);
 
@@ -381,12 +396,24 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
             }
             final PlaceInfoDto curItem = list.get(position);
 
-            Glide.with(context).load(curItem.getFirstimage()).override(485, 710).centerCrop().into(viewHolder.background);
-            viewHolder.name.setText(curItem.getTitle());
+            Glide.with(context)
+                    .load(curItem.getFirstimage())
+                    .override(485, 700)
+                    .error(R.drawable.landmark_icon)
+                    //.transform(new FitCenter(),new RoundedCornersTransformation(getApplicationContext(), 15, 0))
+                    .bitmapTransform(new RoundedCornersTransformation(getApplicationContext(), 20, 0))
+                    //.crossFade()
+                    //.transform(new RoundedCornersTransformation(getApplicationContext(),50, 4))
+                    //.resizeDimen(R.dimen.list_detail_image_size, R.dimen.list_detail_image_size)
+                    //.centerCrop()
+                    //.fitCenter()
+                    .into(viewHolder.background);
+            viewHolder.background.setClipToOutline(true);
+            /*iewHolder.name.setText(curItem.getTitle());
             viewHolder._addr.setText("ADD");
             viewHolder.addr.setText(curItem.getAddr1());
             viewHolder._tel.setText("TEL");
-            viewHolder.tel.setText(curItem.getTel());
+            viewHolder.tel.setText(curItem.getTel());*/
 
             return rowView;
         }
@@ -460,7 +487,7 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
 
 
                 thisCount++;
-                discriptionCountTextView.setText(makeSentence(thisCount));
+                //discriptionCountTextView.setText(makeSentence(thisCount));
 
             }
 
@@ -485,6 +512,21 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
 
             }
         });
+
+        flingContainer.setOnItemChangeListener(new SwipeFlingAdapterView.OnItemChangeListener(){
+            @Override
+            public void onItemChanged(Context context, Object dataObject){
+                TextView name = (TextView) ((Activity) context).findViewById(R.id.name);
+                TextView addr = (TextView) ((Activity) context).findViewById(R.id.addr);
+                TextView tel = (TextView) ((Activity) context).findViewById(R.id.tel);
+
+                PlaceInfoDto placeInfoDto = (PlaceInfoDto) dataObject;
+
+                name.setText(placeInfoDto.getTitle());
+                addr.setText(placeInfoDto.getAddr1());
+                tel.setText(placeInfoDto.getTel());
+            }
+        });
     }
 
     @Override
@@ -507,6 +549,7 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
     }
 
     //랜드마크 사이에 음식점 삽입
+    @Deprecated
     private void inputLandMarkAndLandMark(PlaceInfoDto placeInfoDto) {
         if (array.size() != count) {
             placeInfoDtoList.add(((landMarkUseCount * 2) - 1), placeInfoDto);
@@ -516,6 +559,7 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
 
     }
 
+    @Deprecated
     private String makeSentence(int count) {
         //int totalCount;
         //totalCount = placeCount.getAccommodation() + placeCount.getLandMark() + placeCount.getRestaurant();
@@ -592,6 +636,7 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setElevation(0);
 
         mCustomView = LayoutInflater.from(this).inflate(R.layout.choose_place_header, null);
         actionBar.setCustomView(mCustomView);
@@ -601,7 +646,7 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
 
 //        actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.facebook_btn));
 
-        ActionBar.LayoutParams params = new ActionBar.LayoutParams(ActionBar.LayoutParams.WRAP_CONTENT,
+        ActionBar.LayoutParams params = new ActionBar.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT,
                 ActionBar.LayoutParams.WRAP_CONTENT);
         actionBar.setCustomView(mCustomView, params);
     }
