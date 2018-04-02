@@ -21,6 +21,7 @@ import android.view.animation.LinearInterpolator;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -520,11 +521,22 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
                 TextView addr = (TextView) ((Activity) context).findViewById(R.id.addr);
                 TextView tel = (TextView) ((Activity) context).findViewById(R.id.tel);
 
-                PlaceInfoDto placeInfoDto = (PlaceInfoDto) dataObject;
+                LinearLayout addrLayout = (LinearLayout) ((Activity) context).findViewById(R.id.addr_layout);
+                LinearLayout telLayout = (LinearLayout) ((Activity) context).findViewById(R.id.tel_layout);
 
+                String addrTxt = placeInfoDto.getAddr1();
+                String telTxt = placeInfoDto.getTel();
+
+                PlaceInfoDto placeInfoDto = (PlaceInfoDto) dataObject;
                 name.setText(placeInfoDto.getTitle());
-                addr.setText(placeInfoDto.getAddr1());
-                tel.setText(placeInfoDto.getTel());
+                if(!addrTxt.isEmpty()) {
+                    addrLayout.setVisibility(LinearLayout.VISIBLE);
+                    addr.setText(placeInfoDto.getAddr1());
+                }
+                if(!telTxt.isEmpty()){
+                    telLayout.setVisibility(LinearLayout.VISIBLE);
+                    tel.setText(placeInfoDto.getTel());
+                }
             }
         });
     }
