@@ -16,7 +16,7 @@ android:background="#ff556677"
         android:layout_width="match_parent"
         android:transitionName="@string/transitionImageName"
         android:background="@drawable/corner_rounnd"
-        android:scaleType="fitXY"
+        android:scaleType="centerCrop"
         android:layout_height="fill_parent" />
 
 
