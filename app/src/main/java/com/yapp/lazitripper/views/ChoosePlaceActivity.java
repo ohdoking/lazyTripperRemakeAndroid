@@ -529,11 +529,11 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
 
                 PlaceInfoDto placeInfoDto = (PlaceInfoDto) dataObject;
                 name.setText(placeInfoDto.getTitle());
-                if(!addrTxt.isEmpty()) {
+                if(addrTxt != null && !addrTxt.isEmpty()) {
                     addrLayout.setVisibility(LinearLayout.VISIBLE);
                     addr.setText(placeInfoDto.getAddr1());
                 }
-                if(!telTxt.isEmpty()){
+                if(telTxt != null && !telTxt.isEmpty()){
                     telLayout.setVisibility(LinearLayout.VISIBLE);
                     tel.setText(placeInfoDto.getTel());
                 }
