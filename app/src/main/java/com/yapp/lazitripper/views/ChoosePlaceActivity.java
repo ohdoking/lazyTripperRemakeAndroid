@@ -524,18 +524,25 @@ public class ChoosePlaceActivity extends BaseAppCompatActivity {
                 LinearLayout addrLayout = (LinearLayout) ((Activity) context).findViewById(R.id.addr_layout);
                 LinearLayout telLayout = (LinearLayout) ((Activity) context).findViewById(R.id.tel_layout);
 
+                PlaceInfoDto placeInfoDto = (PlaceInfoDto) dataObject;
+
                 String addrTxt = placeInfoDto.getAddr1();
                 String telTxt = placeInfoDto.getTel();
 
-                PlaceInfoDto placeInfoDto = (PlaceInfoDto) dataObject;
                 name.setText(placeInfoDto.getTitle());
                 if(addrTxt != null && !addrTxt.isEmpty()) {
                     addrLayout.setVisibility(LinearLayout.VISIBLE);
                     addr.setText(placeInfoDto.getAddr1());
                 }
+                else {
+                    addrLayout.setVisibility(LinearLayout.INVISIBLE);
+                }
                 if(telTxt != null && !telTxt.isEmpty()){
                     telLayout.setVisibility(LinearLayout.VISIBLE);
                     tel.setText(placeInfoDto.getTel());
+                }
+                else{
+                    telLayout.setVisibility(LinearLayout.INVISIBLE);
                 }
             }
         });
